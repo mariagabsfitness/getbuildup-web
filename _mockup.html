@@ -257,12 +257,12 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .tcard .who{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:auto}
 
 /* ---------- before / after row ---------- */
-.bagrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-.ba{border-radius:var(--r-sm);overflow:hidden;position:relative;aspect-ratio:3/4;display:grid;grid-template-columns:1fr 1fr}
+.bagrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ba{border-radius:var(--r-md);overflow:hidden;position:relative;aspect-ratio:3/2;display:grid;grid-template-columns:1fr 1fr}
 .ba .h{position:relative;overflow:hidden}
 .ba .h.b{background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 9px),linear-gradient(150deg,#4a4a4a,#1d1d1d)}
 .ba .h.a{background:repeating-linear-gradient(135deg,rgba(0,0,0,.03) 0 2px,transparent 2px 9px),linear-gradient(150deg,#f0f0f0,#bdbdbd)}
-.ba .h em{position:absolute;left:0;right:0;bottom:0;font-style:normal;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;text-align:center;padding:6px 2px}
+.ba .h em{position:absolute;left:0;right:0;bottom:0;font-style:normal;font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-align:center;padding:9px 2px}
 .ba .h.b em{color:rgba(255,255,255,.7);background:rgba(0,0,0,.35)}
 .ba .h.a em{color:#444;background:rgba(255,255,255,.6)}
 
@@ -409,7 +409,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
   .signup{grid-template-columns:1fr}
   .allin{grid-template-columns:1fr}
   .tiles4{grid-template-columns:repeat(2,1fr)}
-  .bagrid{grid-template-columns:repeat(3,1fr)}
+  .bagrid{grid-template-columns:repeat(2,1fr);gap:14px}
   .nhero .txt{padding:64px 24px}
   .nhero .pic{min-height:300px}
   .ftr-grid{grid-template-columns:repeat(2,1fr);gap:34px}
@@ -435,7 +435,14 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
   .pcard p{font-size:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .pcard .arrow,.pcard .soonnote{font-size:9.5px;letter-spacing:.12em}
   .recipes{grid-template-columns:repeat(2,1fr)}
-  .bagrid{grid-template-columns:repeat(2,1fr)}
+  .bagrid{
+    display:grid;grid-template-columns:none;grid-auto-flow:column;
+    grid-auto-columns:84vw;gap:12px;
+    overflow-x:auto;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;padding-bottom:14px;
+    scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.3) transparent;
+  }
+  .bagrid>*{scroll-snap-align:start}
   .treviews{grid-template-columns:repeat(6,minmax(74vw,1fr))}
   .allin .collage{min-height:230px}
   .phones{grid-template-columns:1fr}
