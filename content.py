@@ -1,6 +1,24 @@
 # -*- coding: utf-8 -*-
-"""Todo el contenido editable del sitio de BuildUp.
-Para cambiar textos, precios o datos, edita aqui y vuelve a correr: python3 build.py"""
+"""CONTENIDO DEL SITIO getbuildup.app
+
+Este es el unico archivo que hace falta tocar para cambiar textos, precios,
+programas, recetas o preguntas frecuentes. Al guardar un cambio aqui, la web
+se regenera y se publica sola en un minuto.
+
+TRES REGLAS para no romper nada:
+
+  1. Cambia SOLO lo que esta entre comillas.
+     Bien:  "importe": "$179.99"
+     Mal:   "importe" : $179.99     <- sin comillas, rompe
+
+  2. No borres comas, corchetes [ ] ni llaves { }.
+
+  3. Si un texto lleva comillas por dentro, usa comillas simples:
+     "corta": "Lo que llaman 'busy girls'"
+
+Si algo se rompe, NO pasa nada: la publicacion falla y la web se queda
+como estaba. Nunca se cae. Avisame y lo arreglo.
+"""
 
 SITE = {
     "nombre": "BuildUp",
