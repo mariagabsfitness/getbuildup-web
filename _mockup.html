@@ -1,0 +1,1470 @@
+<title>BuildUp Mockup Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ink:#000000;
+  --charcoal:#222222;
+  --grey:#666666;
+  --muted:#888888;
+  --line:#DDDDDD;
+  --line-soft:#EEEEEE;
+  --wash:#F5F5F5;
+  --surface:#F7F7F7;
+  --paper:#FFFFFF;
+  --success:#249689;
+  --display:"Inter Tight",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --max:1180px;
+  --r-sm:8px; --r-md:16px; --r-lg:24px;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--body);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- type ---------- */
+h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balance;letter-spacing:-.01em}
+.eyebrow{font-family:var(--body);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0}
+.section-kicker{font-family:var(--body);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);text-align:center;margin:0 0 14px}
+.h-section{font-family:var(--display);font-size:clamp(22px,3.4vw,32px);font-weight:600;letter-spacing:.16em;text-transform:uppercase;text-align:center;margin:0}
+.lede{color:var(--grey);max-width:62ch;margin:0 auto}
+.eyebrow::before,.section-kicker::before,.inside .kicker::before{content:"";display:inline-block;width:22px;height:1px;background:currentColor;vertical-align:middle;margin-right:11px;opacity:.55}
+.trialnote{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.62);margin:16px 0 0}
+.plan .trial{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:4px 10px;margin-top:9px;color:var(--charcoal)}
+.center{text-align:center}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.section{padding:84px 0}
+.section.tight{padding:60px 0}
+.section.wash{background:var(--wash)}
+.section.ink{background:var(--ink);color:#fff}
+.section.ink .h-section,.section.ink h3{color:#fff}
+.section.ink .lede,.section.ink .section-kicker{color:rgba(255,255,255,.66)}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
+.hdr-in{max-width:var(--max);margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:28px;flex-wrap:nowrap}
+.logo{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.03em;line-height:1;display:flex;align-items:center;gap:2px;flex:1 0 auto}
+.logo b{font-weight:700}
+.logo span{font-weight:700;color:var(--ink)}
+.nav{display:flex;gap:34px;flex:1;justify-content:center;flex-wrap:nowrap}
+.nav a{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;color:var(--charcoal);padding:4px 0;border-bottom:1px solid transparent;transition:border-color .18s}
+.nav a:hover,.nav a.on{border-bottom-color:var(--ink)}
+.hdr-cta{display:flex;align-items:center;gap:14px;flex:1 0 auto;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--body);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;padding:13px 26px;border-radius:999px;background:var(--ink);color:#fff;border:1px solid var(--ink);transition:background .18s,color .18s,transform .18s}
+.btn:hover{background:#fff;color:var(--ink);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+.btn.on-dark{background:#fff;color:var(--ink);border-color:#fff}
+.btn.on-dark:hover{background:transparent;color:#fff}
+.btn.wide{padding:15px 44px}
+.burger{display:none;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;align-items:center;justify-content:center}
+.burger span{display:block;width:15px;height:1px;background:var(--ink);position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:15px;height:1px;background:var(--ink)}
+.burger span::before{top:-5px}.burger span::after{top:5px}
+
+/* ---------- media placeholders ---------- */
+.media{position:relative;overflow:hidden;background:
+   repeating-linear-gradient(135deg,rgba(0,0,0,.028) 0 2px,transparent 2px 9px),
+   linear-gradient(160deg,#e9e9e9 0%,#d6d6d6 45%,#bdbdbd 100%);
+   display:block}
+.media.dark{background:
+   repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 9px),
+   linear-gradient(160deg,#3a3a3a 0%,#1c1c1c 60%,#0a0a0a 100%)}
+.media .tag{position:absolute;left:14px;bottom:12px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.5);border:1px solid rgba(0,0,0,.22);padding:4px 8px;border-radius:3px;background:rgba(255,255,255,.55);backdrop-filter:blur(2px)}
+.media.dark .tag{color:rgba(255,255,255,.66);border-color:rgba(255,255,255,.3);background:rgba(0,0,0,.28)}
+.media .inner{position:absolute;inset:0;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.zoom{overflow:hidden}
+.zoom .media{transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.zoom:hover .media{transform:scale(1.06)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:390px;display:grid;place-items:center;text-align:center;color:#fff;padding:96px 24px;overflow:hidden}
+.hero .media{position:absolute;inset:0}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.58))}
+.hero-in{position:relative;z-index:2;max-width:820px}
+.hero .eyebrow{color:rgba(255,255,255,.8)}
+.hero h1{font-size:clamp(26px,5vw,44px);letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:14px 0 0;line-height:1.24}
+.hero p.sub{color:rgba(255,255,255,.82);margin:16px auto 0;max-width:56ch}
+.hero .btn{margin-top:28px}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line-soft)}
+.stat{background:var(--wash);padding:38px 22px;text-align:center}
+.stat .n{font-family:var(--display);font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.stat .d{font-size:13px;color:var(--grey);margin-top:8px}
+
+/* ---------- membership ---------- */
+.member{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
+.member .shot{aspect-ratio:4/5;border-radius:var(--r-lg)}
+.plan{border:1px solid var(--line);border-radius:var(--r-md);padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;position:relative;margin-top:14px;background:#fff;transition:border-color .18s,box-shadow .18s}
+.plan:hover{border-color:var(--charcoal)}
+.plan.sel{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.plan .dot{width:19px;height:19px;border-radius:50%;border:1px solid var(--line);flex:none;display:grid;place-items:center;order:2;margin-left:auto}
+.plan.sel .dot{border-color:var(--ink)}
+.plan.sel .dot::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--ink)}
+.plan .mini{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.plan .nm{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:4px 0 2px}
+.plan .pr{font-size:14px;color:var(--charcoal);font-variant-numeric:tabular-nums}
+.plan .rn{font-size:12px;color:var(--muted);font-style:italic}
+.ribbon{position:absolute;top:-11px;right:16px;background:var(--ink);color:#fff;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+
+/* ---------- phones ---------- */
+.phones{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+.phones.three{grid-template-columns:repeat(3,1fr);max-width:840px;margin:0 auto}
+.pcol{text-align:center}
+.phone{width:100%;max-width:186px;margin:0 auto;aspect-ratio:9/19;border-radius:26px;border:1px solid var(--line);background:#fff;padding:7px;box-shadow:0 8px 25px rgba(0,0,0,.07)}
+.section.ink .phone{border-color:rgba(255,255,255,.22);background:#111;box-shadow:none}
+.screen{height:100%;border-radius:20px;background:var(--surface);overflow:hidden;display:flex;flex-direction:column;gap:6px;padding:9px 8px}
+.section.ink .screen{background:#1a1a1a}
+.sbar{height:7px;border-radius:2px;background:var(--line);width:38%}
+.section.ink .sbar{background:#333}
+.scard{border-radius:9px;background:#fff;border:1px solid var(--line-soft);flex:1;min-height:0;position:relative;overflow:hidden}
+.section.ink .scard{background:#222;border-color:#2c2c2c}
+.scard.fill{background:repeating-linear-gradient(135deg,rgba(0,0,0,.03) 0 2px,transparent 2px 8px),linear-gradient(160deg,#dedede,#b9b9b9)}
+.srow{height:9px;border-radius:3px;background:var(--line-soft);margin:7px}
+.pcol h3{font-family:var(--display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin:20px 0 7px}
+.pcol p{font-size:13px;color:var(--grey);margin:0;max-width:26ch;margin-inline:auto}
+
+/* ---------- program grid ---------- */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pcard{border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line-soft);background:#fff;display:flex;flex-direction:column;text-align:left;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,0,0,.09)}
+.pcard .thumb{aspect-ratio:4/3;overflow:hidden;position:relative}
+.pcard .thumb .media{position:absolute;inset:0}
+.pcard:hover .thumb .media{transform:scale(1.07)}
+.pcard .body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pcard h3{font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:.02em}
+.pcard p{margin:0;font-size:13.5px;color:var(--grey);flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--grey)}
+.chip.solid{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.soon{background:var(--wash);color:var(--muted)}
+.arrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:inline-flex;gap:8px;align-items:center;margin-top:2px}
+.pcard:hover .arrow span{transform:translateX(4px)}
+.arrow span{transition:transform .25s}
+
+/* ---------- recipes ---------- */
+.recipes{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.rcard{border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line-soft);background:#fff;text-align:left;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s}
+.rcard:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.08)}
+.rcard .thumb{aspect-ratio:1/1;overflow:hidden;position:relative}
+.rcard .thumb .media{position:absolute;inset:0}
+.rcard:hover .thumb .media{transform:scale(1.08)}
+.rcard .body{padding:13px 14px 16px}
+.rcard h4{font-family:var(--display);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;line-height:1.35}
+.macros{display:flex;gap:9px;margin-top:9px;font-size:10px;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+.macros b{color:var(--charcoal);font-weight:600}
+.rcard .thumb .rcat{position:absolute;top:10px;left:10px;z-index:2;font-size:9px;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.9);color:var(--charcoal);border-radius:999px;padding:4px 9px}
+
+/* ---------- videos ---------- */
+.vids{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.vid{position:relative;aspect-ratio:3/4;border-radius:var(--r-md);overflow:hidden;border:1px solid rgba(0,0,0,.06);display:block;width:100%}
+.section.ink .vid{border-color:rgba(255,255,255,.14)}
+.vid .media{position:absolute;inset:0;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.vid:hover .media{transform:scale(1.05)}
+.vid .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center;transition:transform .25s}
+.vid:hover .play{transform:translate(-50%,-50%) scale(1.08)}
+.vid .play::after{content:"";width:0;height:0;border-left:14px solid var(--ink);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.vid .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 16px 14px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.72));color:#fff}
+.vid .cap b{font-family:var(--display);font-size:13px;letter-spacing:.1em;text-transform:uppercase;display:block}
+.vid .cap i{font-style:normal;font-size:11px;color:rgba(255,255,255,.72);letter-spacing:.06em}
+.vid.playing .play{opacity:0}
+.vid .bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.25)}
+.vid .bar i{display:block;height:100%;width:0;background:#fff;transition:width .2s linear}
+
+/* ---------- comparator ---------- */
+.compare{position:relative;max-width:880px;margin:0 auto;aspect-ratio:16/8;border-radius:var(--r-md);overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize;border:1px solid rgba(255,255,255,.16)}
+@media (max-width:767px){.compare{aspect-ratio:4/3}}
+.section:not(.ink) .compare{border-color:var(--line)}
+.compare .side{position:absolute;inset:0}
+.compare .after{background:repeating-linear-gradient(135deg,rgba(0,0,0,.03) 0 2px,transparent 2px 9px),linear-gradient(150deg,#f0f0f0,#c9c9c9 60%,#a8a8a8)}
+.compare .before{background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 9px),linear-gradient(150deg,#4a4a4a,#242424 60%,#101010);clip-path:inset(0 50% 0 0)}
+.compare .lbl{position:absolute;top:14px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;padding:5px 11px;border-radius:999px}
+.compare .lbl.b{left:14px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.compare .lbl.a{right:14px;background:rgba(0,0,0,.06);color:#333;border:1px solid rgba(0,0,0,.18)}
+.compare .handle{position:absolute;top:0;bottom:0;width:2px;background:#fff;left:50%;transform:translateX(-1px);box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.compare .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.28);font-size:12px;color:var(--ink);letter-spacing:.1em}
+.compare-hint{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:16px}
+.section.ink .compare-hint{color:rgba(255,255,255,.55)}
+
+/* ---------- program detail ---------- */
+.inside{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.trio{position:relative;display:flex;justify-content:center;align-items:flex-end;gap:-10px}
+.trio .phone{max-width:150px;margin:0}
+.trio .phone:nth-child(2){max-width:172px;z-index:2;margin:0 -18px}
+.inside .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.inside h2{font-family:var(--display);font-size:clamp(24px,3.6vw,34px);letter-spacing:.14em;text-transform:uppercase;margin:10px 0 18px}
+.inside p{color:var(--grey);margin:0 0 14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.badge{font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:7px 14px;border-radius:6px;background:var(--wash);border:1px solid var(--line);color:var(--charcoal)}
+.badge.k{background:var(--ink);color:#fff;border-color:var(--ink)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:8px}
+.listcard h4{font-family:var(--display);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
+.listcard ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.listcard li{font-size:14px;color:var(--grey);padding-left:18px;position:relative}
+.listcard li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:1px;background:var(--ink)}
+.versions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.ver{font-family:var(--display);font-size:12px;letter-spacing:.08em;padding:9px 15px;border:1px solid var(--line);border-radius:999px;font-variant-numeric:tabular-nums}
+.ver.now{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:s}
+.step{text-align:center}
+.step .num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;margin:0 auto 14px;font-size:11px;font-variant-numeric:tabular-nums;color:var(--grey)}
+.step h4{font-family:var(--display);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:7px}
+.step p{margin:0;font-size:13px;color:var(--grey)}
+
+/* ---------- all-in-one feature block ---------- */
+.allin{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;background:var(--wash);border-radius:var(--r-lg);padding:18px}
+.allin .collage{border-radius:var(--r-md);overflow:hidden;position:relative;min-height:330px}
+.allin .collage .media{position:absolute;inset:0}
+.allin .stackr{display:flex;flex-direction:column;gap:18px}
+.panel{border-radius:var(--r-md);padding:32px 30px;display:flex;flex-direction:column;justify-content:center;gap:10px;flex:1}
+.panel.k{background:var(--ink);color:#fff}
+.panel.k .eyebrow{color:rgba(255,255,255,.6)}
+.panel.k h3{font-family:var(--display);font-size:clamp(19px,2.3vw,25px);letter-spacing:.1em;text-transform:uppercase;color:#fff;line-height:1.3}
+.panel.k .sig{font-size:12.5px;color:rgba(255,255,255,.62)}
+.panel.l{background:#fff;border:1px solid var(--line)}
+.panel.l p{margin:0;color:var(--grey);font-size:15px;max-width:36ch}
+.panel.l .btn{align-self:flex-start;margin-top:8px}
+.tiles4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.tile{background:var(--wash);border-radius:var(--r-md);padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:background .2s}
+.tile:hover{background:var(--line-soft)}
+.tile .ic{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;font-size:14px}
+.tile b{font-family:var(--display);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}
+.tile span{font-size:12.5px;color:var(--muted)}
+
+/* ---------- testimonials (foto + review) ---------- */
+.treviews{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.treviews>*{scroll-snap-align:start}
+.tphoto{border-radius:var(--r-md);overflow:hidden;position:relative;aspect-ratio:3/4}
+.tphoto .media{position:absolute;inset:0}
+.tcard{border:1px solid var(--line);border-radius:var(--r-md);padding:22px 20px;background:#fff;display:flex;flex-direction:column;gap:11px;aspect-ratio:3/4}
+.stars{letter-spacing:.24em;font-size:12px}
+.tcard p{margin:0;color:var(--charcoal);font-size:13.5px;line-height:1.55;overflow:hidden}
+.tcard .who{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:auto}
+
+/* ---------- before / after row ---------- */
+.bagrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.ba{border-radius:var(--r-sm);overflow:hidden;position:relative;aspect-ratio:3/4;display:grid;grid-template-columns:1fr 1fr}
+.ba .h{position:relative;overflow:hidden}
+.ba .h.b{background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 9px),linear-gradient(150deg,#4a4a4a,#1d1d1d)}
+.ba .h.a{background:repeating-linear-gradient(135deg,rgba(0,0,0,.03) 0 2px,transparent 2px 9px),linear-gradient(150deg,#f0f0f0,#bdbdbd)}
+.ba .h em{position:absolute;left:0;right:0;bottom:0;font-style:normal;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;text-align:center;padding:6px 2px}
+.ba .h.b em{color:rgba(255,255,255,.7);background:rgba(0,0,0,.35)}
+.ba .h.a em{color:#444;background:rgba(255,255,255,.6)}
+
+/* ---------- plain page head ---------- */
+.pagehead{padding:78px 0 8px;text-align:center}
+.pagehead h1{font-family:var(--display);font-size:clamp(26px,4.2vw,40px);letter-spacing:.14em;text-transform:uppercase;margin:14px 0 0}
+.pagehead p{color:var(--grey);max-width:60ch;margin:20px auto 0}
+.rule{height:1px;background:var(--line-soft);max-width:var(--max);margin:44px auto 0}
+
+/* ---------- checklist ---------- */
+.checks{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--grey)}
+.check b{flex:none;width:18px;height:18px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:10px;margin-top:2px}
+
+/* ---------- split cards ---------- */
+.splits{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.split{border:1px solid var(--line);border-radius:var(--r-md);padding:22px 20px;background:#fff}
+.split .d{font-family:var(--display);font-size:30px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.split .u{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:6px 0 12px}
+.split p{margin:0;font-size:13px;color:var(--grey)}
+
+/* ---------- nutrition two ways ---------- */
+.ways{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:880px;margin:0 auto}
+.ways.three{grid-template-columns:repeat(3,1fr);max-width:1040px}
+.way{text-align:center}
+.way .thumb{aspect-ratio:4/3;border-radius:var(--r-md);overflow:hidden;position:relative}
+.way .thumb .media{position:absolute;inset:0}
+.way:hover .thumb .media{transform:scale(1.05)}
+.way h3{font-family:var(--display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;margin:20px 0 10px}
+.way p{margin:0 auto;font-size:13.5px;color:var(--grey);max-width:34ch}
+.way .arrow{margin-top:12px}
+
+/* ---------- split hero nutrition ---------- */
+.nhero{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;border-bottom:1px solid var(--line-soft)}
+.nhero .txt{padding:88px 56px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.nhero .txt h1{font-family:var(--display);font-size:clamp(26px,4vw,40px);letter-spacing:.04em;text-transform:uppercase;line-height:1.18}
+.nhero .txt h1 em{font-style:normal;font-weight:400;color:var(--grey)}
+.nhero .pic{min-height:420px;position:relative;overflow:hidden}
+.nhero .pic .media{position:absolute;inset:0}
+
+/* ---------- footer ---------- */
+.ftr{border-top:1px solid var(--line-soft);padding:64px 0 34px;background:#fff}
+.ftr-grid{display:grid;grid-template-columns:1.25fr .9fr 1.15fr 1.15fr;gap:38px}
+.ftr h4{font-family:var(--body);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:600;margin-bottom:18px}
+.ftr ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ftr a,.ftr li{font-size:13.5px;color:var(--grey)}
+.ftr a:hover{color:var(--ink)}
+.ftr-bot{display:flex;justify-content:space-between;align-items:center;margin-top:50px;padding-top:22px;border-top:1px solid var(--line-soft);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.social{display:flex;gap:14px}
+.social a{width:32px;height:32px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-size:11px}
+.social a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:780px;margin:0 auto;border-top:1px solid var(--line-soft)}
+.faq details{border-bottom:1px solid var(--line-soft)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 44px 22px 0;position:relative;font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:6px;top:50%;width:13px;height:13px;margin-top:-6px;
+  background:linear-gradient(var(--ink),var(--ink)) center/13px 1px no-repeat,linear-gradient(var(--ink),var(--ink)) center/1px 13px no-repeat;
+  transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg);background:linear-gradient(var(--ink),var(--ink)) center/13px 1px no-repeat}
+.faq summary:hover{color:var(--grey)}
+.faq .ans{padding:0 44px 24px 0;color:var(--grey);font-size:14.5px;margin:0}
+
+/* ---------- candado "proximamente" ---------- */
+.way.soon{cursor:default;opacity:.92}
+.way.soon .thumb .media{filter:grayscale(1)}
+.way.soon:hover .thumb .media{transform:none}
+.way .soonpill{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-top:12px}
+.way .thumb .lock{position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.55);z-index:2}
+.way .thumb .lock span{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:16px}
+.pcard.soon{cursor:default}
+.pcard.soon:hover{transform:none;box-shadow:none}
+.pcard.soon .thumb .media{filter:grayscale(1);opacity:.85}
+.pcard.soon:hover .thumb .media{transform:none}
+.pcard .soonnote{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* ---------- chat de la comunidad ---------- */
+.chat{display:flex;flex-direction:column;gap:6px;padding:4px 2px;height:100%;overflow:hidden}
+.bub{border-radius:11px;padding:7px 9px;font-size:7.5px;line-height:1.35;max-width:86%}
+.bub.them{background:#fff;border:1px solid var(--line-soft);align-self:flex-start;border-bottom-left-radius:3px}
+.bub.me{background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.bub i{display:block;font-style:normal;font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.bub.me i{color:rgba(255,255,255,.55)}
+
+/* ---------- filas con scroll horizontal ---------- */
+.hscroll,.treviews{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.hscroll::-webkit-scrollbar,.treviews::-webkit-scrollbar{height:6px}
+.hscroll::-webkit-scrollbar-thumb,.treviews::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+
+/* ---------- alta en 3 pasos ---------- */
+.stepper{display:flex;justify-content:center;gap:10px;margin:40px 0 34px;flex-wrap:wrap}
+.stp{display:inline-flex;align-items:center;gap:9px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:9px 16px}
+.stp b{width:18px;height:18px;border-radius:50%;background:var(--line-soft);color:var(--grey);display:grid;place-items:center;font-size:10px;font-weight:600}
+.stp.on{color:var(--ink);border-color:var(--ink)}
+.stp.on b{background:var(--ink);color:#fff}
+.signup{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.scardx{border:1px solid var(--line);border-radius:var(--r-md);padding:28px 26px;background:#fff}
+.scardx h4{font-family:var(--display);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px}
+.scardx label{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:16px 0 7px}
+.scardx input{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff}
+.scardx input:focus{outline:none;border-color:var(--ink)}
+.hint{font-size:12.5px;color:var(--muted);margin:16px 0 0}
+.summary{border-top:1px solid var(--line-soft);margin-top:22px;padding-top:18px;display:flex;flex-direction:column;gap:10px}
+.summary div{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--grey)}
+.summary b{font-family:var(--display);font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.summary .big b{font-size:26px}
+.legalnote{font-size:11.5px;color:var(--muted);margin:16px 0 0;line-height:1.5}
+.donemark{width:62px;height:62px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:26px;margin:0 auto}
+.stores{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+.store{border:1px solid var(--line);border-radius:var(--r-md);padding:15px 26px;text-align:left;transition:border-color .18s}
+.store:hover{border-color:var(--ink)}
+.store b{font-family:var(--display);font-size:15px;display:block}
+.store span{font-size:11.5px;color:var(--muted)}
+.nextsteps{text-align:left;max-width:460px;margin:46px auto 0;border-top:1px solid var(--line-soft);padding-top:28px}
+.nextsteps h4{font-family:var(--display);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px}
+.nextsteps ol{margin:0;padding-left:20px;color:var(--grey);font-size:14.5px;display:flex;flex-direction:column;gap:9px}
+
+/* ---------- sello GDPR (Prighter) ---------- */
+.gdpr{margin-top:46px;padding-top:30px;border-top:1px solid var(--line-soft)}
+.gdprbadge{display:inline-flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:var(--r-md);padding:14px 18px;background:#fff;transition:border-color .18s}
+.gdprbadge:hover{border-color:var(--ink)}
+.gdprbadge .shield{width:34px;height:34px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:15px}
+.gdprbadge .txt{display:flex;flex-direction:column;line-height:1.25}
+.gdprbadge b{font-family:var(--display);font-size:13px;letter-spacing:.04em}
+.gdprbadge i{font-style:normal;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey)}
+.gdprbadge em{font-style:normal;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.gdprbadge .chev{color:var(--muted);font-size:18px;margin-left:6px}
+.gdprby{font-size:11px;color:var(--muted);margin:10px 0 0}
+.gdprby a{border-bottom:1px solid var(--line)}
+
+/* ---------- note bar ---------- */
+.notebar{background:var(--charcoal);color:rgba(255,255,255,.8);font-size:11.5px;letter-spacing:.06em;text-align:center;padding:9px 20px}
+.notebar b{color:#fff;font-weight:600}
+
+/* ---------- responsive ---------- */
+@media (max-width:991px){
+  .phones{grid-template-columns:repeat(2,1fr);gap:34px}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .recipes{grid-template-columns:repeat(3,1fr)}
+  .vids{grid-template-columns:repeat(2,1fr)}
+  .member,.inside,.two-col,.ways,.ways.three,.nhero{grid-template-columns:1fr;gap:36px}
+  .steps,.splits{grid-template-columns:repeat(2,1fr)}
+  .signup{grid-template-columns:1fr}
+  .allin{grid-template-columns:1fr}
+  .tiles4{grid-template-columns:repeat(2,1fr)}
+  .bagrid{grid-template-columns:repeat(3,1fr)}
+  .nhero .txt{padding:64px 24px}
+  .nhero .pic{min-height:300px}
+  .ftr-grid{grid-template-columns:repeat(2,1fr);gap:34px}
+}
+@media (max-width:767px){
+  .nav{position:fixed;inset:64px 0 auto;background:#fff;flex-direction:column;padding:20px 24px 26px;gap:2px;border-bottom:1px solid var(--line);display:none}
+  .nav.open{display:flex}
+  .nav a{padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .burger{display:flex}
+  .hdr-cta .btn{padding:11px 18px;font-size:10.5px}
+  .stats{grid-template-columns:repeat(3,1fr);gap:1px}
+  .stat{padding:22px 8px}
+  .stat .n{font-size:19px}
+  .stat .l{font-size:8.5px;letter-spacing:.1em;margin-top:4px}
+  .stat .d{display:none}
+  .pgrid,.vids,.steps,.splits{grid-template-columns:1fr}
+  .pgrid.two{grid-template-columns:repeat(2,1fr);gap:12px}
+  /* en el móvil manda la foto: solo título y una línea de descripción */
+  .pcard .thumb{aspect-ratio:3/4}
+  .pcard .chips{display:none}
+  .pcard .body{padding:12px 13px 15px;gap:5px}
+  .pcard h3{font-size:14.5px}
+  .pcard p{font-size:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .pcard .arrow,.pcard .soonnote{font-size:9.5px;letter-spacing:.12em}
+  .recipes{grid-template-columns:repeat(2,1fr)}
+  .bagrid{grid-template-columns:repeat(2,1fr)}
+  .treviews{grid-template-columns:repeat(6,minmax(74vw,1fr))}
+  .allin .collage{min-height:230px}
+  .phones{grid-template-columns:1fr}
+  .section{padding:60px 0}
+  .ftr-grid{grid-template-columns:1fr;gap:34px}
+  .ftr-bot{flex-direction:column;gap:16px;align-items:flex-start}
+  .trio .phone:nth-child(1),.trio .phone:nth-child(3){display:none}
+  .trio .phone:nth-child(2){margin:0;max-width:200px}
+
+  /* filas largas: carrusel horizontal en vez de apilar */
+  .hscroll{
+    display:grid;grid-template-columns:none;grid-auto-flow:column;
+    grid-auto-columns:74vw;gap:12px;
+    overflow-x:auto;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;padding-bottom:14px;max-width:none
+  }
+  .hscroll>*{scroll-snap-align:start}
+  .recipes.hscroll{grid-auto-columns:56vw}
+  .phones.hscroll{grid-auto-columns:60vw}
+  .vids.hscroll{grid-auto-columns:68vw}
+  .treviews{grid-template-columns:repeat(6,minmax(72vw,1fr))}
+}
+</style>
+
+<div class="notebar">Mockup de trabajo · <b>BuildUp</b> — todas las imágenes y videos son marcadores de posición; el copy sale del contenido real de la app.</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="#/" class="logo"><b>Build</b><span>Up</span></a>
+    <nav class="nav" id="nav">
+      <a href="#/membresia" data-r="membresia">Membresía</a>
+      <a href="#/programas" data-r="programas">Programas</a>
+      <a href="#/nutricion" data-r="nutricion">Nutrición</a>
+      <a href="#/comunidad" data-r="comunidad">Comunidad</a>
+      <a href="#/login" data-r="login">Iniciar sesión</a>
+    </nav>
+    <div class="hdr-cta">
+      <button class="burger" id="burger" aria-label="Menú"><span></span></button>
+      <a href="#/crear-cuenta" class="btn">Únete</a>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<script>
+/* ============================ DATA ============================ */
+const PROGRAMS = [
+  {
+    slug:"build-shred", name:"Build & Shred", order:1, live:true,
+    focusLine:"Tren inferior · Fuerza y resistencia",
+    short:"Gana masa muscular, definición y resistencia. Fuerza intensa y cardio, con mayor enfoque en tren inferior.",
+    level:"Intermedio · Avanzado",
+    badges:["GYM","CASA","3 / 4 / 5 / 6 días","FUERZA","HIPERTROFIA","RESISTENCIA"],
+    intro:[
+      "Un programa de entrenamiento estructurado para trabajar todo el cuerpo, desarrollar masa muscular, reducir grasa y mejorar tu fuerza y resistencia.",
+      "Ya sea que entrenes en el gimnasio o en casa, cada sesión está diseñada para desafiarte, ayudarte a superar tus límites y mantener una progresión constante.",
+      "Cada día empieza con una rutina de abdominales de ~10 minutos, sigue con el entrenamiento de fuerza (ejercicios solos y supersets) y termina con opciones de cardio a tu nivel."
+    ],
+    focus:["Tren inferior principalmente","Tren superior y abdomen","Fuerza y resistencia"],
+    includes:["Plan de entrenamiento de 8 semanas","Splits de 3, 4, 5 y 6 días","Registro de progreso (pesos y reps)","Versión gym y versión en casa","Alternativas para cada ejercicio","Entrenamiento de abdominales estructurado","Recomendaciones de cardio"],
+    versions:["1.0","2.0","3.0","4.0","5.0","6.0"],
+    splits:[
+      {d:"3",u:"días",p:"2 tren inferior · 1 tren superior"},
+      {d:"4",u:"días",p:"2 tren inferior · 2 tren superior"},
+      {d:"5",u:"días",p:"3 tren inferior · 2 tren superior"},
+      {d:"6",u:"días",p:"3 inferior · 2 superior · 1 cardio y abs"}
+    ],
+    workouts:["Glúteo (upper glutes)","Hombros, bíceps y pecho","Cuádriceps y glúteos","Espalda, tríceps y pecho"]
+  },
+  {
+    slug:"build-sculpt", name:"Build & Sculpt", order:2, live:true,
+    focusLine:"Tren superior · Definición",
+    short:"Esculpe tu cuerpo, construye masa muscular y definición, con mayor enfoque en tren superior.",
+    level:"Intermedio",
+    badges:["GYM","CASA","3 / 4 / 5 días"],
+    intro:[
+      "Build & Sculpt está construido alrededor del tren superior: espalda, hombros, brazos y core, sin dejar de trabajar piernas y glúteos para mantener el equilibrio.",
+      "El objetivo es forma y definición: rangos de repeticiones más altos, control del tempo y trabajo de aislamiento para dar detalle al músculo que ya construiste.",
+      "Igual que el resto de programas, cada ciclo dura 8 semanas y registra tus pesos y repeticiones para aplicar sobrecarga progresiva."
+    ],
+    focus:["Tren superior principalmente","Glúteos y piernas de soporte","Definición y control"],
+    includes:["Plan de entrenamiento de 8 semanas","Splits de 3, 4 y 5 días","Registro de progreso (pesos y reps)","Versión gym y versión en casa","Alternativas para cada ejercicio","Bloques de core y estabilidad","Recomendaciones de cardio"],
+    versions:["1.0","2.0"],
+    splits:[
+      {d:"3",u:"días",p:"2 tren superior · 1 tren inferior"},
+      {d:"4",u:"días",p:"2 tren superior · 2 tren inferior"},
+      {d:"5",u:"días",p:"3 tren superior · 2 tren inferior"},
+      {d:"+",u:"cardio",p:"Opciones LISS y HIIT al final de cada sesión"}
+    ],
+    workouts:["Espalda y bíceps","Hombro y tríceps","Pecho y core","Glúteos y femoral"]
+  },
+  {
+    slug:"buildxpress", name:"BuildXpress", order:3, live:true,
+    focusLine:"45–50 minutos · Cuerpo completo",
+    short:"Rutinas rápidas de 45–50 minutos para ganar músculo y definir. Para las busy girls con poco tiempo.",
+    level:"Todos los niveles",
+    badges:["GYM","CASA","45–50 MIN"],
+    intro:[
+      "BuildXpress comprime el entrenamiento en 45–50 minutos sin perder el estímulo: menos ejercicios, más densidad y supersets bien elegidos.",
+      "Pensado para las semanas en las que la agenda manda. Entras, sigues la rutina en el orden indicado y sales.",
+      "Mantiene el registro de pesos y repeticiones, así que aunque entrenes menos tiempo sigues midiendo tu progreso."
+    ],
+    focus:["Cuerpo completo por sesión","Densidad y supersets","Mínimo tiempo, máximo estímulo"],
+    includes:["Plan de entrenamiento de 8 semanas","Splits de 3, 4 y 5 días","Sesiones de 45–50 minutos","Registro de progreso (pesos y reps)","Versión gym y versión en casa","Alternativas para cada ejercicio","Cardio opcional corto"],
+    versions:["1.0","2.0"],
+    splits:[
+      {d:"3",u:"días",p:"Full body con énfasis rotativo"},
+      {d:"4",u:"días",p:"2 inferior · 2 superior"},
+      {d:"5",u:"días",p:"3 inferior · 2 superior"},
+      {d:"50",u:"min máx",p:"Cada sesión está cronometrada dentro de la app"}
+    ],
+    workouts:["Full body express","Glúteos en 45'","Superior en 45'","Core y cardio"]
+  },
+  {
+    slug:"buildonthego", name:"BuildOnTheGo", order:4, live:false,
+    focusLine:"Sin equipo · Peso corporal",
+    short:"Programa de viaje con rutinas rápidas y sin equipo, usando solo peso corporal. Para seguir entrenando estés donde estés.",
+    level:"Todos los niveles",
+    badges:["SIN EQUIPO","VIAJE","20–35 MIN"],
+    intro:[
+      "BuildOnTheGo existe para las semanas fuera de casa: hotel, casa de tus papás, vacaciones. Cero equipo, cero excusas.",
+      "Cada sesión usa solo peso corporal y se completa en 20 a 35 minutos, en el espacio de una alfombra.",
+      "No sustituye a tu programa principal: es el puente que evita que pierdas el ritmo mientras viajas."
+    ],
+    focus:["Solo peso corporal","Sesiones cortas","Mantener el hábito en viaje"],
+    includes:["Rutinas de 20–35 minutos","Cero equipo necesario","Progresiones y regresiones por ejercicio","Bloques de core","Opciones de cardio sin impacto","Se adapta a cualquier espacio"],
+    versions:["1.0"],
+    splits:[
+      {d:"3",u:"días",p:"Full body con peso corporal"},
+      {d:"4",u:"días",p:"Alterna inferior y superior"},
+      {d:"20",u:"min mín",p:"La sesión más corta del programa"},
+      {d:"0",u:"equipo",p:"Ni una banda ni una mancuerna"}
+    ],
+    workouts:["Full body sin equipo","Glúteos en el cuarto","Core de viaje","Cardio sin impacto"]
+  },
+  {
+    slug:"buildginner", name:"BuildGinner", order:5, live:false,
+    focusLine:"Principiantes · Técnica y bases",
+    short:"Programa para principiantes: rutinas guiadas paso a paso para iniciar tu camino fitness con confianza y bases sólidas.",
+    level:"Principiante",
+    badges:["GYM","CASA","3 / 4 días"],
+    intro:[
+      "Si nunca has entrenado con pesas o llevas mucho tiempo fuera, este es el punto de partida.",
+      "BuildGinner enseña primero el movimiento: cada ejercicio viene con video, señales de técnica y una progresión clara antes de subir la carga.",
+      "En 8 semanas construyes la base de fuerza y el hábito que necesitas para pasar a Build & Shred o Build & Sculpt."
+    ],
+    focus:["Técnica antes que carga","Patrones básicos de fuerza","Construir el hábito"],
+    includes:["Plan de entrenamiento de 8 semanas","Splits de 3 y 4 días","Video y señales de técnica en cada ejercicio","Progresión de carga guiada","Versión gym y versión en casa","Glosario de términos del gym","Recomendaciones de cardio suave"],
+    versions:["1.0"],
+    splits:[
+      {d:"3",u:"días",p:"Full body de aprendizaje"},
+      {d:"4",u:"días",p:"2 inferior · 2 superior"},
+      {d:"8",u:"semanas",p:"Un ciclo completo de adaptación"},
+      {d:"→",u:"siguiente",p:"Salida natural hacia Build & Shred"}
+    ],
+    workouts:["Sentadilla paso a paso","Empuje básico","Tracción básica","Core para empezar"]
+  },
+  {
+    slug:"hyroxready", name:"HyroxReady", order:6, live:false,
+    focusLine:"Competencia · Fuerza y resistencia",
+    short:"Prepárate para HYROX con fuerza, resistencia y trabajo específico de competencia.",
+    level:"Intermedio · Avanzado",
+    badges:["GYM","CASA","HÍBRIDO"],
+    intro:[
+      "HyroxReady combina fuerza pesada con trabajo de resistencia y las estaciones específicas de la competencia.",
+      "Cada semana mezcla bloques de fuerza, intervalos de carrera y simulaciones de estación (trineo, burpees, wall balls, farmer carry).",
+      "El plan te lleva de la base a la semana de competencia con una descarga programada."
+    ],
+    focus:["Fuerza aplicada","Resistencia y carrera","Estaciones de competencia"],
+    includes:["Plan de entrenamiento por bloques","Simulaciones de estación","Intervalos de carrera estructurados","Registro de progreso (pesos y reps)","Versión gym y versión en casa","Semana de descarga previa a competencia","Guía de ritmo y transiciones"],
+    versions:["1.0"],
+    splits:[
+      {d:"4",u:"días",p:"2 fuerza · 2 híbrido"},
+      {d:"5",u:"días",p:"2 fuerza · 2 híbrido · 1 carrera"},
+      {d:"8",u:"estaciones",p:"Trabajo específico de la competencia"},
+      {d:"1",u:"descarga",p:"Semana ligera antes del evento"}
+    ],
+    workouts:["Fuerza pesada","Intervalos de carrera","Simulación de estaciones","Core y transiciones"]
+  }
+];
+const P = Object.fromEntries(PROGRAMS.map(p=>[p.slug,p]));
+
+const RECIPES = [
+  {n:"Arepa crunch de avena",c:"desayuno",k:444,p:46,cb:36,g:12,f:12},
+  {n:"Panquecas de zanahoria",c:"desayuno",k:419,p:48,cb:47,g:3,f:6},
+  {n:"Tostadas francesas",c:"desayuno",k:425,p:37,cb:35,g:15,f:4},
+  {n:"Avocado toast",c:"desayuno",k:442,p:33,cb:39,g:18,f:9},
+  {n:"Protein cereal",c:"desayuno",k:535,p:50,cb:43,g:16,f:5},
+  {n:"Panquecas carb smart",c:"desayuno",k:444,p:44,cb:24,g:18,f:4},
+  {n:"Savory french toast",c:"desayuno",k:409,p:35,cb:31,g:15,f:4},
+  {n:"Panquecas de banana",c:"desayuno",k:537,p:52,cb:48,g:16,f:6},
+  {n:"Cottage avotoast",c:"desayuno",k:465,p:34,cb:49,g:18,f:9},
+  {n:"Protein greek oats",c:"desayuno",k:518,p:50,cb:36,g:20,f:9},
+  {n:"Salmon platter",c:"almuerzo",k:452,p:31,cb:47,g:15,f:8},
+  {n:"Tacos con pavo molido",c:"almuerzo",k:480,p:34,cb:33,g:20,f:7},
+  {n:"Tacos tunacado",c:"almuerzo",k:384,p:26,cb:31,g:18,f:7},
+  {n:"Arroz con pollo",c:"almuerzo",k:298,p:31,cb:37,g:2,f:3},
+  {n:"Arroz frito con pavo",c:"almuerzo",k:309,p:34,cb:37,g:2,f:5},
+  {n:"Tuna pasta",c:"almuerzo",k:317,p:24,cb:42,g:8,f:7},
+  {n:"Mango sushi",c:"almuerzo",k:470,p:34,cb:28,g:27,f:7},
+  {n:"Tuna poke bowl",c:"almuerzo",k:343,p:31,cb:36,g:7,f:4},
+  {n:"Burger 328 cal",c:"almuerzo",k:328,p:35,cb:33,g:7,f:5},
+  {n:"Tacos de lechuga",c:"almuerzo",k:332,p:35,cb:16,g:14,f:7},
+  {n:"Wrap de pollo",c:"almuerzo",k:394,p:42,cb:25,g:16,f:8},
+  {n:"Salmon y esparragos",c:"cena",k:245,p:29,cb:6,g:12,f:4},
+  {n:"Cilantro lime chicken",c:"cena",k:341,p:31,cb:16,g:18,f:7},
+  {n:"Smart sushi",c:"cena",k:393,p:36,cb:18,g:21,f:7},
+  {n:"Botes de atun",c:"cena",k:270,p:23,cb:10,g:15,f:4},
+  {n:"Mahi mahi en salsa",c:"cena",k:380,p:27,cb:21,g:22,f:9},
+  {n:"Shrimp con cauliflower rice",c:"cena",k:383,p:41,cb:14,g:17,f:5},
+  {n:"Fish bowl",c:"cena",k:303,p:25,cb:27,g:9,f:3},
+  {n:"Ceviche mahi mahi",c:"cena",k:341,p:26,cb:28,g:14,f:6},
+  {n:"Tuna nori wrap",c:"cena",k:293,p:25,cb:12,g:16,f:5},
+  {n:"Tartar salmon tacos",c:"cena",k:309,p:29,cb:8,g:17,f:5},
+  {n:"Chocolate yogurt bowl",c:"merienda",k:195,p:25,cb:18,g:3,f:3},
+  {n:"Tuna ricecakes",c:"merienda",k:276,p:24,cb:21,g:10,f:4},
+  {n:"Helado pie de limon",c:"merienda",k:295,p:51,cb:12,g:4,f:1},
+  {n:"Pepino tuna sandwich",c:"merienda",k:227,p:24,cb:15,g:8,f:2},
+  {n:"Fresas con crema",c:"merienda",k:146,p:26,cb:10,g:0,f:3},
+  {n:"Cottage crackers",c:"merienda",k:170,p:17,cb:23,g:3,f:4},
+  {n:"Chocolate mugcake",c:"merienda",k:288,p:25,cb:25,g:10,f:4},
+  {n:"Omelette proteica",c:"merienda",k:148,p:23,cb:10,g:2,f:2},
+  {n:"Batido proteina y colageno",c:"merienda",k:143,p:23,cb:4,g:3,f:1},
+  {n:"Helado de proteina",c:"merienda",k:120,p:25,cb:1,g:0,f:1},
+  {n:"Baked apple yogurt",c:"merienda",k:190,p:16,cb:28,g:2,f:4}
+];
+
+const TESTIMONIALS = [
+  {t:"Llevo tres versiones de Build & Shred y por primera vez veo progresión real en los pesos. El registro dentro de la app lo cambia todo.", w:"Ana · Build & Shred 4.0"},
+  {t:"Entreno a las 5:30 am antes del trabajo. BuildXpress me salvó: 45 minutos y salgo con la sensación de haber entrenado completo.", w:"Cami · BuildXpress"},
+  {t:"Nunca había pisado un gym. Empecé con las rutinas guiadas y hoy hago sentadilla con barra sin miedo.", w:"Vale · Primeras 8 semanas"}
+];
+
+/* ============================ HELPERS ============================ */
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const media = (label, dark=false) => `<div class="media${dark?" dark":""}"><span class="tag">${esc(label)}</span></div>`;
+
+function phone(kind){
+  const screens = {
+    hoy:`<div class="sbar"></div><div class="scard"><div class="srow" style="width:60%"></div><div class="srow" style="width:80%"></div><div class="srow" style="width:45%"></div></div><div class="scard fill" style="flex:1.4"></div>`,
+    entreno:`<div class="sbar" style="width:52%"></div><div class="scard fill" style="flex:2"></div><div class="scard"><div class="srow" style="width:70%"></div><div class="srow" style="width:40%"></div></div>`,
+    nutri:`<div class="sbar" style="width:44%"></div><div class="scard"><div class="srow" style="width:88%"></div><div class="srow" style="width:60%"></div><div class="srow" style="width:74%"></div></div><div class="scard fill"></div><div class="scard"><div class="srow" style="width:52%"></div></div>`,
+    chat:`<div class="chat">
+      <div class="bub them"><i>María Gabriela · Coach</i>¡Buenos días, BuildFam! Hoy toca pierna. ¿Quién ya entrenó?</div>
+      <div class="bub me"><i>Andrea</i>¡Lista! Subí 5 kg en hip thrust</div>
+      <div class="bub them"><i>Valeria</i>Duda: ¿puedo cambiar el día 3 por el 4?</div>
+      <div class="bub them"><i>María Gabriela · Coach</i>¡Claro! Usa ORDENAR en tu programa y acomoda tu semana como te funcione.</div>
+    </div>`,
+    chat2:`<div class="chat">
+      <div class="bub me"><i>Tú</i>Terminé la semana 4 de Build &amp; Shred</div>
+      <div class="bub them"><i>Cami</i>¡Vamos! Yo voy por la 6 y ya subí peso en sentadilla</div>
+      <div class="bub them"><i>María Gabriela · Coach</i>Qué orgullo, BuildFam. Recuerden registrar sus pesos</div>
+    </div>`,
+    chat3:`<div class="chat">
+      <div class="bub them"><i>Valeria</i>¿Alguna hace la versión en casa?</div>
+      <div class="bub me"><i>Andrea</i>Yo sí, te cuento cómo la adapto</div>
+      <div class="bub them"><i>María Gabriela · Coach</i>En cada ejercicio tienen alternativas, úsenlas sin miedo</div>
+    </div>`,
+    perfil:`<div class="sbar" style="width:36%"></div><div class="scard fill" style="flex:1.2"></div><div class="scard"><div class="srow" style="width:66%"></div><div class="srow" style="width:82%"></div><div class="srow" style="width:48%"></div></div>`
+  };
+  return `<div class="phone"><div class="screen">${screens[kind]||screens.hoy}</div></div>`;
+}
+
+function planBlock(){
+  return `
+  <div>
+    <h2 class="h-section" style="text-align:left;letter-spacing:.1em">Elige tu membresía</h2>
+    <p style="color:var(--grey);margin:18px 0 6px;max-width:52ch">Empieza con <b>7 días gratis</b> y desbloquea BuildUp completa: programas, progreso, nutrición y comunidad.</p>
+    <p style="color:var(--grey);margin:0 0 8px;max-width:52ch">Acceso a todo desde el primer día: no hay niveles, ni contenido extra que pagar aparte. Lo que pruebas gratis es lo que tienes siempre.</p>
+    <div class="plan sel" data-plan="anual" role="button" tabindex="0">
+      <span class="ribbon">Ahorra 40%</span>
+      <div><div class="mini">★ Oferta exclusiva</div><div class="nm">Membresía anual</div><div class="pr">$179.99 por año</div><div class="rn">Equivale a $15.00 al mes · se renueva cada 12 meses</div><span class="trial">7 días gratis</span></div>
+      <span class="dot"></span>
+    </div>
+    <div class="plan" data-plan="mensual" role="button" tabindex="0">
+      <div><div class="mini">Cancela cuando quieras</div><div class="nm">Membresía mensual</div><div class="pr">$24.99 por mes</div><div class="rn">Se renueva cada mes</div><span class="trial">7 días gratis</span></div>
+      <span class="dot"></span>
+    </div>
+    <div style="margin-top:26px"><a href="#/crear-cuenta" class="btn wide">Empieza 7 días gratis</a></div>
+  </div>`;
+}
+
+function comparator(){
+  return `
+  <div class="compare" data-compare tabindex="0" role="slider" aria-label="Comparador antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+    <div class="side after"><span class="lbl a">Después · semana 8</span></div>
+    <div class="side before"><span class="lbl b">Antes · semana 0</span></div>
+    <div class="handle"><span class="knob">↔</span></div>
+  </div>
+  <p class="compare-hint">Arrastra la barra para ver el antes y el después</p>`;
+}
+
+/* las 5 recetas que se muestran como vistazo (de las 42 reales) */
+const PEEK = ["Arepa crunch de avena","Tuna poke bowl","Cilantro lime chicken","Protein greek oats","Chocolate mugcake"];
+
+function recipeCard(r, link){
+  const tag = `<span class="rcat">${esc(r.c)}</span>`;
+  const inner = `<div class="thumb">${media("Foto — "+r.n)}${tag}</div>
+      <div class="body"><h4>${esc(r.n)}</h4>
+        <div class="macros"><span><b>${r.k}</b> kcal</span><span><b>${r.p}</b>P</span><span><b>${r.cb}</b>C</span><span><b>${r.g}</b>G</span></div>
+      </div>`;
+  return link ? `<a class="rcard" href="${link}" data-cat="${esc(r.c)}">${inner}</a>`
+              : `<div class="rcard" data-cat="${esc(r.c)}">${inner}</div>`;
+}
+
+const FAQS = [
+  ["¿Todos los programas están incluidos en mi membresía?",
+   "Sí. Con tu membresía tienes acceso a todos los programas y a todas sus versiones, y puedes cambiar de uno a otro cuando quieras."],
+  ["¿Cuánto dura cada programa?",
+   "Cada versión es un ciclo completo de 8 semanas. Al terminarla pasas a la siguiente, con nuevos ejercicios y variantes para seguir progresando y evitar el estancamiento."],
+  ["¿Cuántos días a la semana tengo que entrenar?",
+   "Tú eliges. Cada programa tiene splits de 3, 4, 5 o 6 días, y seleccionas el tuyo al empezar según el tiempo que tengas."],
+  ["¿Puedo hacer los programas en casa?",
+   "Sí. Todos los programas tienen versión gym y versión en casa, y eliges dónde entrenas en el cuestionario inicial. Si elegiste gym pero un día quieres entrenar en casa, puedes cambiarlo desde tu entrenamiento del día."],
+  ["¿Puedo reorganizar mi semana?",
+   "Sí. Con ORDENAR acomodas los entrenamientos de la semana según los días que mejor te funcionen, sin perder el orden del programa."],
+  ["¿Qué incluye cada entrenamiento?",
+   "Calentamiento y abdominales, el bloque de fuerza con series, repeticiones y descansos, y opciones de cardio al final. Cada ejercicio trae video, alternativas y Modo guiado para seguirlo paso a paso."],
+  ["¿Qué pasa cuando termino un programa?",
+   "Marcas el programa como completado, guardas tu progreso y eliges qué sigue: la siguiente versión del mismo programa u otro distinto."],
+  ["Soy principiante, ¿por dónde empiezo?",
+   "Dentro de la app hay una guía rápida que te recomienda el programa según tus objetivos, tu nivel y los días que puedas entrenar."],
+  ["¿La nutrición está incluida?",
+   "Sí. SmartFuel viene incluido: cálculo de tus calorías y macros, plan de alimentación, recetario completo y el registro diario de comidas."],
+  ["¿Puedo cancelar cuando quiera?",
+   "Sí. Empiezas con 7 días gratis y cancelas cuando quieras desde tu cuenta."]
+];
+
+function faqBlock(){
+  return `<div class="faq">${FAQS.map(([q,a])=>`
+    <details><summary>${esc(q)}</summary><p class="ans">${esc(a)}</p></details>`).join("")}</div>`;
+}
+
+function beforeAfterRow(n){
+  return `<div class="bagrid">${Array.from({length:n||6}).map((_,i)=>`
+    <div class="ba zoom" title="Antes y después ${i+1}">
+      <div class="h b"><em>Antes</em></div>
+      <div class="h a"><em>Después</em></div>
+    </div>`).join("")}</div>`;
+}
+
+function allInOne(){
+  return `
+  <div class="allin">
+    <div class="collage">${media("Collage — capturas de la app")}</div>
+    <div class="stackr">
+      <div class="panel k">
+        <p class="eyebrow">Entrena mejor, come mejor, sé constante</p>
+        <h3>Todo lo que necesitas, en una sola app</h3>
+        <p class="sig">Creado por mujeres, para mujeres</p>
+      </div>
+      <div class="panel l">
+        <p>Entrenamientos, plan de alimentación, recetas y registro de progreso, todo en el mismo lugar.</p>
+        <a href="#/crear-cuenta" class="btn">Empezar</a>
+      </div>
+    </div>
+  </div>
+  <div class="tiles4">
+    <a class="tile" href="#/programas"><span class="ic">◧</span><b>Entreno</b><span>6 programas</span></a>
+    <a class="tile" href="#/nutricion"><span class="ic">◍</span><b>SmartFuel</b><span>Macros y recetas</span></a>
+    <a class="tile" href="#/comunidad"><span class="ic">◇</span><b>BuildFam</b><span>Chat de la comunidad</span></a>
+    <a class="tile" href="#/membresia"><span class="ic">◈</span><b>Progreso</b><span>Pesos, reps y selfies</span></a>
+  </div>`;
+}
+
+function reviewsRow(){
+  const cards = [];
+  TESTIMONIALS.forEach((t,i)=>{
+    cards.push(`<div class="tphoto zoom">${media("Foto chica "+(i+1))}</div>`);
+    cards.push(`<div class="tcard"><div class="stars">★★★★★</div><p>“${esc(t.t)}”</p><div class="who">${esc(t.w)}</div></div>`);
+  });
+  return `<div class="treviews">${cards.join("")}</div>`;
+}
+
+function videoRow(list, dark){
+  return `<div class="vids hscroll">${list.map((w,i)=>`
+    <button class="vid" data-video>
+      ${media("Video "+(i+1), true)}
+      <span class="play"></span>
+      <span class="cap"><b>${esc(w)}</b><i>Aprox. 60 min · modo guiado</i></span>
+      <span class="bar"><i></i></span>
+    </button>`).join("")}</div>`;
+}
+
+function footer(){
+  const B="https://mariagabsfitness.com/pages/";
+  const LEGAL_ES=[["Términos de servicio","terminos"],["Política de privacidad","privacidad"],
+    ["Privacidad de datos de salud","privacidad-salud"],["Consentimiento de datos de salud","consentimiento-datos-salud"],
+    ["Aviso de salud y nutrición","aviso-salud"],["Normas de BuildFam","normas-comunidad"],
+    ["Eliminar cuenta y datos","borrar-cuenta"]];
+  const LEGAL_EN=[["Terms of Service","terms-en"],["Privacy Policy","privacy-en"],
+    ["Health Data Privacy","health-data-privacy-en"],["Health Data Consent","health-data-consent-en"],
+    ["Health &amp; Nutrition Notice","health-notice-en"],["BuildFam Guidelines","community-guidelines-en"],
+    ["Delete Account &amp; Data","delete-account-en"]];
+  const li = arr => arr.map(([t,u])=>`<li><a href="${B}${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+  return `
+  <footer class="ftr"><div class="wrap">
+    <div class="ftr-grid">
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>Lun – Vie | 9:00 – 17:00</li>
+          <li><a href="mailto:team@mariagabsfitness.com">team@mariagabsfitness.com</a></li>
+          <li style="color:var(--muted)">Consultas generales</li>
+          <li style="margin-top:12px"><a href="mailto:buildup@mariagabsfitness.com">buildup@mariagabsfitness.com</a></li>
+          <li style="color:var(--muted)">Reportar un problema con la app</li>
+          <li style="margin-top:16px;color:var(--muted)">Entrenamiento creado por María Gabriela</li>
+          <li style="color:var(--muted)">Maria Gabs Fitness LLC</li>
+        </ul>
+      </div>
+      <div>
+        <h4>La app</h4>
+        <ul>
+          <li><a href="#/programas">Programas</a></li>
+          <li><a href="#/nutricion">Nutrición</a></li>
+          <li><a href="#/comunidad">BuildFam</a></li>
+          <li><a href="#/membresia">Membresía</a></li>
+          <li><a href="#/programas">Preguntas frecuentes</a></li>
+        </ul>
+      </div>
+      <div><h4>Legal</h4><ul>${li(LEGAL_ES)}</ul></div>
+      <div><h4>Legal · EN</h4><ul>${li(LEGAL_EN)}</ul></div>
+    </div>
+
+    <div class="gdpr">
+      <a class="gdprbadge" href="https://app.prighter.com/portal/13541273953" target="_blank" rel="noopener">
+        <span class="shield">&#9094;</span>
+        <span class="txt"><b>EU GDPR</b><i>Representative</i><em>Certified · 2026-10-27</em></span>
+        <span class="chev">&rsaquo;</span>
+      </a>
+      <p class="gdprby">powered by <a href="https://prighter.com" target="_blank" rel="noopener">Prighter</a></p>
+    </div>
+
+    <div class="ftr-bot">
+      <div class="social"><a href="#/" aria-label="Instagram">IG</a><a href="#/" aria-label="TikTok">TT</a></div>
+      <div>© 2026 — Maria Gabs Fitness LLC</div>
+    </div>
+  </div></footer>`;
+}
+
+function programCard(p){
+  const body = `<div class="thumb">${media("Foto "+p.name)}</div>
+    <div class="body">
+      <div class="chips">${p.live?'<span class="chip solid">Disponible</span>':'<span class="chip soon">Próximamente</span>'}<span class="chip">${esc(p.level)}</span></div>
+      <h3>${esc(p.name)}</h3>
+      <p>${esc(p.short)}</p>
+      ${p.live ? '<span class="arrow">Ver programa <span>→</span></span>'
+               : '<span class="soonnote">Muy pronto en BuildUp</span>'}
+    </div>`;
+  return p.live
+    ? `<a class="pcard" href="#/programa/${p.slug}">${body}</a>`
+    : `<div class="pcard soon" aria-disabled="true">${body}</div>`;
+}
+
+/* ============================ PAGES ============================ */
+function pageHome(){
+  return `
+  <section class="hero">
+    ${media("Foto hero — entrenamiento en gym", true)}
+    <div class="hero-in">
+      <p class="eyebrow">BuildUp</p>
+      <h1>Todo lo que necesitas</h1>
+      <p class="sub">Entrenamiento, nutrición, progreso y comunidad en una sola app.</p>
+      <a href="#/crear-cuenta" class="btn on-dark">Empieza 7 días gratis</a>
+      <p class="trialnote">Cancela cuando quieras</p>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="n">6</div><div class="l">Programas</div><div class="d">Gym y casa, de principiante a competencia</div></div>
+    <div class="stat"><div class="n">8</div><div class="l">Semanas por ciclo</div><div class="d">Tiempo real para adaptarte y progresar</div></div>
+    <div class="stat"><div class="n">3–6</div><div class="l">Días a la semana</div><div class="d">Elige el split que se adapta a tu vida</div></div>
+  </div>
+
+  <section class="section tight">
+    <div class="wrap">${allInOne()}</div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-kicker">Todo en una app</p>
+      <h2 class="h-section">Qué encuentras dentro</h2>
+      <p class="lede center" style="margin-top:18px">Entrena, come y mide tu progreso sin salir de BuildUp.</p>
+      <div class="phones three hscroll" style="margin-top:52px">
+        <div class="pcol">${phone("entreno")}<h3>Entreno</h3><p>Series, reps, descansos y video de cada ejercicio, con Modo guiado paso a paso.</p></div>
+        <div class="pcol">${phone("nutri")}<h3>SmartFuel</h3><p>Calcula tus macros, arma tu plan y registra lo que comes cada día.</p></div>
+        <div class="pcol">${phone("perfil")}<h3>Progreso</h3><p>Guarda pesos y repeticiones, tus selfies y tus semanas completadas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap member">
+      <div class="media shot"><span class="tag">Foto — retrato entrenadora</span></div>
+      ${planBlock()}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-kicker">Encuentra el tuyo</p>
+      <h2 class="h-section">Programas que cambian tu cuerpo</h2>
+      <p class="lede center" style="margin-top:18px">Con tantos programas para elegir sabemos que puede ser difícil decidir por dónde empezar. Cada uno está diseñado para un objetivo distinto.</p>
+      <div class="pgrid hscroll" style="margin-top:48px">${PROGRAMS.map(programCard).join("")}</div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Recetario</p>
+      <h2 class="h-section">Un vistazo a las recetas</h2>
+      <p class="lede center" style="margin-top:18px">Recetas simples y nutritivas, con macros calculados, que se adaptan a tu plan sin restricciones ni complicaciones.</p>
+      <div class="recipes hscroll" style="margin-top:44px">
+        ${PEEK.map(nm=>recipeCard(RECIPES.find(r=>r.n===nm),"#/nutricion")).join("")}
+      </div>
+      <div class="center" style="margin-top:40px"><a href="#/nutricion" class="btn ghost">Ver la nutrición</a></div>
+    </div>
+  </section>
+
+  <section class="section ink">
+    <div class="wrap">
+      <p class="section-kicker">Transformaciones</p>
+      <h2 class="h-section">Resultados reales</h2>
+      <p class="lede center" style="margin-top:18px">Cuando el entrenamiento, la nutrición y la rutina trabajan juntos, el progreso deja de ser suerte.</p>
+      <div style="margin-top:44px">${comparator()}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-kicker">Comunidad</p>
+      <h2 class="h-section">Lo que dice la BuildFam</h2>
+      <p class="lede center" style="margin-top:18px">Historias reales de las chicas que ya entrenan con BuildUp.</p>
+      <div style="margin-top:44px">${reviewsRow()}</div>
+      <div class="center" style="margin-top:44px"><a href="#/crear-cuenta" class="btn wide">Únete ahora</a></div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageMembership(){
+  return `
+  <section class="hero">
+    ${media("Foto hero — sentadilla con barra", true)}
+    <div class="hero-in">
+      <p class="eyebrow">Tu membresía</p>
+      <h1>¿Qué pasa cuando te unes?</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap member">
+      <div class="media shot"><span class="tag">Foto — retrato entrenadora</span></div>
+      ${planBlock()}
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Cómo se ve tu día</p>
+      <h2 class="h-section">Un día con BuildUp</h2>
+      <div class="phones hscroll" style="margin-top:52px">
+        <div class="pcol">${phone("hoy")}<h3>Empieza el día</h3><p>Abres la app y ves tu entreno, tus macros y tu lista del día en un solo lugar.</p></div>
+        <div class="pcol">${phone("entreno")}<h3>Entrena</h3><p>Sigue la rutina con series, reps, temporizador de descanso y video de técnica.</p></div>
+        <div class="pcol">${phone("nutri")}<h3>Aliméntate</h3><p>Registra tus comidas y mira cómo se actualizan tus macros en tiempo real.</p></div>
+        <div class="pcol">${phone("perfil")}<h3>Cierra el día</h3><p>Agua, pasos, descanso y hábitos. Marca tu día completo y guarda tu progreso.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-kicker">Entrenamientos</p>
+      <h2 class="h-section">Entrenamientos del día</h2>
+      <p class="lede center" style="margin-top:18px">Cada ejercicio viene con su video, señales de técnica y alternativas si no tienes el equipo.</p>
+      <div style="margin-top:44px">${videoRow(["Glúteo (upper glutes)","Hombros, bíceps y pecho","Cuádriceps y glúteos","Espalda, tríceps y pecho"])}</div>
+    </div>
+  </section>
+
+  <section class="section ink">
+    <div class="wrap">
+      <p class="section-kicker">Transformaciones</p>
+      <h2 class="h-section">Resultados reales</h2>
+      <p class="lede center" style="margin-top:18px">Cuando el entrenamiento, la nutrición y la rutina trabajan juntos, el progreso deja de ser suerte. Esto es lo que parece la constancia.</p>
+      <div style="margin-top:44px">${beforeAfterRow(6)}</div>
+      <div class="center" style="margin-top:44px"><a href="#/crear-cuenta" class="btn on-dark wide">Únete ahora</a></div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Incluido en la membresía</p>
+      <h2 class="h-section">Todo lo que desbloqueas</h2>
+      <div class="two-col" style="margin-top:44px">
+        <div class="listcard"><h4>Entrenamiento</h4><ul>
+          <li>Los 6 programas y todas sus versiones</li>
+          <li>Splits de 3 a 6 días</li>
+          <li>Versión gym y versión en casa</li>
+          <li>Registro de pesos y reps</li>
+          <li>Calentamiento y abdominales</li>
+          <li>Cardio HIIT y LISS, casa y gym</li>
+          <li>Movilidad, estiramientos y descanso activo</li>
+          <li>Modo guiado y reordenar tu semana</li>
+        </ul></div>
+        <div class="listcard"><h4>Nutrición y comunidad</h4><ul>
+          <li>Calorías y macros personalizados</li>
+          <li>Plan de alimentación editable</li>
+          <li>Recetario con macros</li>
+          <li>Tracker diario de comidas y agua</li>
+          <li>Chat de la BuildFam</li>
+          <li>Selfies y línea de progreso</li>
+        </ul></div>
+      </div>
+      <div class="center" style="margin-top:48px"><a href="#/crear-cuenta" class="btn wide">Únete ahora</a></div>
+    </div>
+  </section>
+
+  ${footer()}`;
+}
+
+function pagePrograms(){
+  return `
+  <div class="pagehead">
+    <div class="wrap">
+      <p class="eyebrow">Programas</p>
+      <h1>Encuentra tu programa ideal</h1>
+      <p>Con tantos programas para elegir sabemos que puede ser difícil decidir por dónde empezar. Seis programas, un mismo método: ciclos de 8 semanas, progresión medida y versión gym o casa.</p>
+    </div>
+    <div class="rule"></div>
+  </div>
+  <section class="section">
+    <div class="wrap"><div class="pgrid two">${PROGRAMS.map(programCard).join("")}</div></div>
+  </section>
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Preguntas frecuentes</p>
+      <h2 class="h-section">Antes de empezar</h2>
+      <div style="margin-top:42px">${faqBlock()}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap member">
+      <div class="media shot"><span class="tag">Foto — retrato entrenadora</span></div>
+      ${planBlock()}
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageProgram(slug){
+  const p = P[slug]; if(!p) return pagePrograms();
+  return `
+  <section class="hero" style="min-height:440px">
+    ${media("Foto hero — "+p.name, true)}
+    <div class="hero-in">
+      <p class="eyebrow">${p.live?"Disponible ahora":"Próximamente"}</p>
+      <h1>${esc(p.name)}</h1>
+      <p class="sub">${esc(p.focusLine)}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap inside">
+      <div class="trio">${phone("hoy")}${phone("entreno")}${phone("perfil")}</div>
+      <div>
+        <p class="kicker">${esc(p.name)}</p>
+        <h2>Dentro del programa</h2>
+        <div class="badges">${p.badges.map((b,i)=>`<span class="badge${i===0?" k":""}">${esc(b)}</span>`).join("")}</div>
+        ${p.intro.map(t=>`<p>${esc(t)}</p>`).join("")}
+        <div style="margin-top:26px"><a href="#/crear-cuenta" class="btn">Únete ahora</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Entrenamientos</p>
+      <h2 class="h-section">Entrenamientos del día</h2>
+      <p class="lede center" style="margin-top:18px">Así se ve una semana dentro de ${esc(p.name)}. Cada ejercicio tiene su video de técnica, sus series y reps y sus alternativas.</p>
+      <div style="margin-top:44px">${videoRow(p.workouts)}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="two-col">
+        <div class="listcard"><h4>Enfoque del programa</h4><ul>${p.focus.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>
+          ${p.versions.length>1?`<h4 style="margin-top:34px">Versiones</h4>
+          <p style="font-size:13.5px;color:var(--grey);margin:0 0 14px">Cada versión es un ciclo completo de 8 semanas. Al terminar una, pasas a la siguiente con nuevos ejercicios y variantes para evitar el estancamiento.</p>
+          <div class="versions">${p.versions.map((v,i)=>`<span class="ver${i===p.versions.length-1?" now":""}">${esc(p.name.split(" ")[0])} ${esc(v)}</span>`).join("")}</div>`:""}
+        </div>
+        <div class="listcard"><h4>¿Qué incluye?</h4><ul>${p.includes.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Se adapta a tu estilo de vida</p>
+      <h2 class="h-section">Elige cuántos días entrenas</h2>
+      <div class="splits" style="margin-top:44px">
+        ${p.splits.map(s=>`<div class="split"><div class="d">${esc(s.d)}</div><div class="u">${esc(s.u)}</div><p>${esc(s.p)}</p></div>`).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-kicker">Cómo ejecutar el entrenamiento</p>
+      <h2 class="h-section">Tu sesión, paso a paso</h2>
+      <div class="steps" style="margin-top:46px">
+        <div class="step"><div class="num">1</div><h4>Calentamiento y abs</h4><p>Rutina de abdominales de ~10 minutos en circuito, siguiendo el orden y los tiempos indicados.</p></div>
+        <div class="step"><div class="num">2</div><h4>Fuerza</h4><p>Ejercicios solos y supersets. Registra el peso y las reps de cada serie para aplicar sobrecarga progresiva.</p></div>
+        <div class="step"><div class="num">3</div><h4>Cardio</h4><p>Elige la opción que se adapte a tu nivel y disponibilidad. El HIIT no más de 4 días por semana.</p></div>
+        <div class="step"><div class="num">4</div><h4>Registro</h4><p>Marca el entreno como completado y guarda tus datos para medir el progreso semana a semana.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ink">
+    <div class="wrap">
+      <p class="section-kicker">Transformaciones</p>
+      <h2 class="h-section">Resultados reales</h2>
+      <p class="lede center" style="margin-top:18px">Cuando el entrenamiento, la nutrición y la rutina trabajan juntos, el progreso deja de ser suerte. Esto es lo que parece la constancia.</p>
+      <div style="margin-top:44px">${beforeAfterRow(6)}</div>
+      <div class="center" style="margin-top:44px"><a href="#/crear-cuenta" class="btn on-dark wide">Únete ahora</a></div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageNutrition(){
+  return `
+  <section class="nhero">
+    <div class="txt">
+      <p class="eyebrow">SmartFuel</p>
+      <h1>Nutre tus metas</h1>
+      <p style="color:var(--charcoal);font-size:17px;margin:0">Tu nutrición y recetas, en un mismo lugar.</p>
+      <p style="color:var(--grey);max-width:46ch;margin:0">Explora nuestras recetas, calcula tus macros y empieza a nutrirte de acuerdo a tus objetivos con el tracker diario, todo dentro de la app.</p>
+      <div><a href="#/crear-cuenta" class="btn">Únete ahora</a></div>
+    </div>
+    <div class="pic">${media("Foto — ingredientes / cocina")}</div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-kicker">Cómo funciona</p>
+      <h2 class="h-section">Registra tu día en minutos</h2>
+      <div class="phones hscroll" style="margin-top:52px">
+        <div class="pcol">${phone("perfil")}<h3>1 · Tu objetivo</h3><p>Perder grasa, definición muscular o superávit calórico moderado.</p></div>
+        <div class="pcol">${phone("nutri")}<h3>2 · Tus macros</h3><p>Calculamos tus calorías y macros personalizados según tus datos.</p></div>
+        <div class="pcol">${phone("hoy")}<h3>3 · Registra</h3><p>Alimentos sueltos, una receta o tu comida personalizada. Como te quede más fácil.</p></div>
+        <div class="pcol">${phone("entreno")}<h3>4 · Sigue tu día</h3><p>Mira cuánto te queda de cada macro y cierra el día completo.</p></div>
+      </div>
+      <div class="center" style="margin-top:44px"><a href="#/crear-cuenta" class="btn">Únete ahora</a></div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Tu nutrición, a tu manera</p>
+      <h2 class="h-section">Tres formas de registrar tus comidas</h2>
+      <p class="lede center" style="margin-top:18px">Registra como te resulte más fácil ese día. Las tres suman a los mismos macros.</p>
+      <div class="ways three hscroll" style="margin-top:46px">
+        <a class="way zoom" href="#/membresia">
+          <div class="thumb">${media("Foto — buscador de alimentos")}</div>
+          <h3>Alimentos individuales</h3>
+          <p>Busca cualquier alimento en la biblioteca de SmartFuel, elige la porción y los macros se calculan solos.</p>
+          <span class="arrow">Explorar <span>→</span></span>
+        </a>
+        <a class="way zoom" href="#/membresia">
+          <div class="thumb">${media("Foto — bowl de receta")}</div>
+          <h3>Desde una receta</h3>
+          <p>Elige una receta de la biblioteca y agrégala a tu día con sus calorías y macros ya calculados.</p>
+          <span class="arrow">Explorar <span>→</span></span>
+        </a>
+        <div class="way soon" aria-disabled="true">
+          <div class="thumb">${media("Foto — plato casero")}<span class="lock"><span>&#128274;</span></span></div>
+          <h3>Comida personalizada</h3>
+          <p>¿Comiste algo que no está en la app? Agrégalo manualmente con su foto y sus macros y guárdalo para después.</p>
+          <span class="soonpill">Próximamente</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="max-width:760px">
+      <p class="section-kicker">Sin restricciones</p>
+      <h2 class="h-section">Comida real, calculada</h2>
+      <div class="checks" style="margin-top:34px">
+        <div class="check"><b>✓</b><span>Cada receta trae sus calorías y macros ya calculados.</span></div>
+        <div class="check"><b>✓</b><span>Sin eliminar grupos de alimentos ni prohibir nada.</span></div>
+        <div class="check"><b>✓</b><span>Diseñada para acompañar tu entrenamiento, no para pelearse con él.</span></div>
+        <div class="check"><b>✓</b><span>Objetivos calculados según tus datos: perder grasa, definir o superávit moderado.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <p class="section-kicker">Recetario</p>
+      <h2 class="h-section">Un vistazo a las recetas</h2>
+      <p class="lede center" style="margin-top:18px">Recetas simples y nutritivas, con calorías y macros ya calculados, que se adaptan a tu plan sin restricciones ni complicaciones.</p>
+      <div class="recipes hscroll" style="margin-top:44px">
+        ${PEEK.map(nm=>recipeCard(RECIPES.find(r=>r.n===nm))).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap member">
+      <div class="media shot"><span class="tag">Foto — retrato entrenadora</span></div>
+      ${planBlock()}
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageCommunity(){
+  return `
+  <section class="hero" style="min-height:320px;padding:80px 24px">
+    ${media("Foto hero — comunidad", true)}
+    <div class="hero-in">
+      <p class="eyebrow">BuildFam</p>
+      <h1>No entrenas sola</h1>
+      <p class="sub">Comparte tu progreso y conecta con BuildFam.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap inside">
+      <div class="trio">${phone("chat2")}${phone("chat")}${phone("chat3")}</div>
+      <div>
+        <p class="kicker">BuildFam</p>
+        <h2>Dentro de la comunidad</h2>
+        <div class="badges"><span class="badge k">CHAT</span><span class="badge">DUDAS</span><span class="badge">PROGRESO</span></div>
+        <p>Mantente activa en el chat de la BuildFam: un espacio para motivarte, recibir apoyo, resolver dudas y compartir tu progreso durante tu transformación.</p>
+        <p>Aquí preguntas cómo adaptar un ejercicio, cuentas que terminaste la semana 4, o encuentras a alguien que va por el mismo programa que tú.</p>
+        <p>No es un canal de anuncios: es un grupo donde se pregunta y se responde, con María Gabriela adentro.</p>
+        <div style="margin-top:26px"><a href="#/crear-cuenta" class="btn">Únete a BuildFam</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      ${reviewsRow()}
+      <div class="center" style="margin-top:44px"><a href="#/crear-cuenta" class="btn wide">Únete ahora</a></div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageSignup(){
+  return `
+  <section class="section" style="padding:66px 0 92px">
+    <div class="wrap" style="max-width:880px">
+      <p class="section-kicker">Empieza hoy</p>
+      <h2 class="h-section">Crea tu cuenta</h2>
+      <p class="lede center" style="margin-top:16px">7 días gratis con acceso a toda la app. Cancela cuando quieras.</p>
+
+      <div class="stepper">
+        <span class="stp on"><b>1</b> Cuenta</span>
+        <span class="stp on"><b>2</b> Plan</span>
+        <span class="stp"><b>3</b> Pago</span>
+      </div>
+
+      <div class="signup">
+        <div class="scardx">
+          <h4>Tu cuenta</h4>
+          <label>Nombre</label><input type="text" placeholder="Tu nombre">
+          <label>Correo</label><input type="email" placeholder="tu@correo.com">
+          <label>Contraseña</label><input type="password" placeholder="Mínimo 8 caracteres">
+          <p class="hint">Este mismo correo y contraseña son los que usarás para entrar en la app. Tu prueba queda ligada a esta cuenta.</p>
+        </div>
+        <div class="scardx">
+          <h4>Tu plan</h4>
+          <div class="plan sel" data-plan="anual" role="button" tabindex="0" data-price="$179.99 al año" style="margin-top:0">
+            <span class="ribbon">Ahorra 40%</span>
+            <div><div class="mini">★ Oferta exclusiva</div><div class="nm">Anual</div><div class="pr">$179.99 por año</div><div class="rn">Equivale a $15.00 al mes</div></div>
+            <span class="dot"></span>
+          </div>
+          <div class="plan" data-plan="mensual" role="button" tabindex="0" data-price="$24.99 al mes">
+            <div><div class="mini">Cancela cuando quieras</div><div class="nm">Mensual</div><div class="pr">$24.99 por mes</div><div class="rn">Se renueva cada mes</div></div>
+            <span class="dot"></span>
+          </div>
+          <div class="summary">
+            <div class="big"><span>Hoy pagas</span><b>$0.00</b></div>
+            <div><span>A partir del día 8</span><b data-after>$179.99 al año</b></div>
+          </div>
+          <div style="margin-top:22px"><a href="#/listo" class="btn wide" style="width:100%">Empezar 7 días gratis</a></div>
+          <p class="legalnote">Al continuar aceptas los Términos de servicio y la Política de privacidad. Te avisamos por correo antes de que terminen los 7 días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageDone(){
+  return `
+  <section class="section" style="padding:86px 0 100px">
+    <div class="wrap" style="max-width:660px;text-align:center">
+      <div class="donemark">✓</div>
+      <h2 class="h-section" style="margin-top:26px">Tu prueba empieza hoy</h2>
+      <p class="lede" style="margin-top:18px">Ya tienes acceso completo a BuildUp durante 7 días. Descarga la app y entra con el mismo correo con el que acabas de crear tu cuenta.</p>
+      <div class="stores">
+        <a class="store" href="#/"><b>App Store</b><span>Descargar para iPhone</span></a>
+        <a class="store" href="#/"><b>Google Play</b><span>Descargar para Android</span></a>
+      </div>
+      <div class="nextsteps">
+        <h4>Qué sigue</h4>
+        <ol>
+          <li>Descarga la app e inicia sesión con tu correo.</li>
+          <li>Responde el cuestionario: tu objetivo, dónde entrenas y cuántos días.</li>
+          <li>Elige tu programa, o deja que la guía te recomiende uno.</li>
+          <li>Empieza tu primer entrenamiento y registra tus pesos.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+function pageLogin(){
+  return `
+  <section class="section" style="padding:110px 0 130px">
+    <div class="wrap" style="max-width:440px">
+      <div style="border:1px solid var(--line);border-radius:var(--r-md);padding:38px 34px">
+        <h2 style="font-size:26px;letter-spacing:-.01em">Iniciar sesión</h2>
+        <p style="color:var(--grey);font-size:14px;margin:10px 0 26px">Entra con el correo con el que creaste tu cuenta BuildUp.</p>
+        <label style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Correo</label>
+        <input type="email" placeholder="tu@correo.com" style="width:100%;margin:8px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
+        <label style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Contraseña</label>
+        <input type="password" placeholder="••••••••" style="width:100%;margin:8px 0 24px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
+        <button class="btn" style="width:100%">Entrar</button>
+        <p style="text-align:center;font-size:13px;color:var(--grey);margin:20px 0 0">¿No tienes cuenta? <a href="#/crear-cuenta" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
+      </div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+
+/* ============================ ROUTER ============================ */
+const app = document.getElementById("app");
+const nav = document.getElementById("nav");
+
+function route(){
+  const h = (location.hash || "#/").replace(/^#\/?/,"");
+  const parts = h.split("/").filter(Boolean);
+  let html, key = parts[0] || "";
+  if(key === "membresia") html = pageMembership();
+  else if(key === "programas") html = pagePrograms();
+  else if(key === "programa") html = pageProgram(parts[1]);
+  else if(key === "nutricion") html = pageNutrition();
+  else if(key === "comunidad") html = pageCommunity();
+  else if(key === "login") html = pageLogin();
+  else if(key === "crear-cuenta") html = pageSignup();
+  else if(key === "listo") html = pageDone();
+  else { html = pageHome(); key = ""; }
+  app.innerHTML = html;
+  nav.classList.remove("open");
+  nav.querySelectorAll("a").forEach(a=>a.classList.toggle("on", a.dataset.r === (key==="programa"?"programas":key)));
+  window.scrollTo({top:0,behavior:"instant"});
+  wire();
+}
+
+/* ============================ INTERACTIONS ============================ */
+function wire(){
+  /* membership plan selector */
+  app.querySelectorAll("[data-plan]").forEach(el=>{
+    const pick = ()=>{
+      el.parentElement.querySelectorAll("[data-plan]").forEach(x=>x.classList.remove("sel"));
+      el.classList.add("sel");
+      const after = app.querySelector("[data-after]");
+      if(after && el.dataset.price) after.textContent = el.dataset.price;
+    };
+    el.addEventListener("click", pick);
+    el.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();} });
+  });
+
+  /* before / after comparator */
+  app.querySelectorAll("[data-compare]").forEach(box=>{
+    const before = box.querySelector(".before");
+    const handle = box.querySelector(".handle");
+    const set = pct=>{
+      pct = Math.max(0, Math.min(100, pct));
+      before.style.clipPath = `inset(0 ${100-pct}% 0 0)`;
+      handle.style.left = pct + "%";
+      box.setAttribute("aria-valuenow", Math.round(pct));
+    };
+    const fromEvent = e=>{
+      const r = box.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+      set(x / r.width * 100);
+    };
+    let dragging = false;
+    box.addEventListener("pointerdown", e=>{ dragging = true; box.setPointerCapture(e.pointerId); fromEvent(e); });
+    box.addEventListener("pointermove", e=>{ if(dragging) fromEvent(e); });
+    box.addEventListener("pointerup", ()=>{ dragging = false; });
+    box.addEventListener("pointercancel", ()=>{ dragging = false; });
+    box.addEventListener("keydown", e=>{
+      const cur = parseFloat(box.getAttribute("aria-valuenow"));
+      if(e.key === "ArrowLeft"){ e.preventDefault(); set(cur - 4); }
+      if(e.key === "ArrowRight"){ e.preventDefault(); set(cur + 4); }
+    });
+    set(50);
+  });
+
+  /* video tiles — placeholder playback */
+  app.querySelectorAll("[data-video]").forEach(v=>{
+    const bar = v.querySelector(".bar i");
+    let t = null, p = 0;
+    v.addEventListener("click", ()=>{
+      if(t){ clearInterval(t); t = null; v.classList.remove("playing"); bar.style.width = "0%"; p = 0; return; }
+      v.classList.add("playing");
+      t = setInterval(()=>{
+        p += 1.6;
+        bar.style.width = Math.min(p,100) + "%";
+        if(p >= 100){ clearInterval(t); t = null; v.classList.remove("playing"); bar.style.width = "0%"; p = 0; }
+      }, 60);
+    });
+  });
+}
+
+document.getElementById("burger").addEventListener("click", ()=> nav.classList.toggle("open"));
+window.addEventListener("hashchange", route);
+route();
+</script>
+
