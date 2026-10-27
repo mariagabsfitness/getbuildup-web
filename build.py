@@ -9,7 +9,32 @@ S, P = C.SITE, C.PRECIOS
 
 def esc(x): return html.escape(str(x), quote=True)
 
-def media(label, dark=False):
+IMG_DIR = os.path.join("assets", "img")
+EXTS = (".jpg", ".jpeg", ".png", ".webp")
+
+def slug(t):
+    t = t.lower()
+    for a, b in zip("áéíóúñü", "aeiounu"): t = t.replace(a, b)
+    return re.sub(r"[^a-z0-9]+", "-", t).strip("-")
+
+def _find(base):
+    """Devuelve el nombre de archivo si existe assets/img/<base>.<ext>."""
+    for e in EXTS:
+        if os.path.isfile(os.path.join(IMG_DIR, base + e)):
+            return base + e
+    return None
+
+def media(label, dark=False, slot=None, foco=None):
+    """Si hay una foto en assets/img/<slot>.jpg la usa; si no, deja el marcador.
+       Si ademas existe <slot>-movil.jpg, la usa en pantallas de telefono."""
+    if slot:
+        desk = _find(slot)
+        if desk:
+            mob = _find(slot + "-movil")
+            src = ('<source media="(max-width:767px)" srcset="/assets/img/%s">' % mob) if mob else ""
+            sty = (' style="object-position:%s"' % foco) if foco else ""
+            return ('<picture class="media"%s>%s<img src="/assets/img/%s" alt="%s" loading="lazy"%s></picture>'
+                    % (" " if False else "", src, desk, esc(label), sty))
     return '<div class="media%s"><span class="tag">%s</span></div>' % (" dark" if dark else "", esc(label))
 
 SCREENS = {
@@ -138,9 +163,11 @@ def plan_block():
 
 def member_band(wash=True):
     return """<section class="section%s"><div class="wrap member">
-  <div class="media shot"><span class="tag">Foto — retrato entrenadora</span></div>
+  <div class="shot">%s</div>
   %s
-</div></section>""" % (" wash" if wash else "", plan_block())
+</div></section>""" % (" wash" if wash else "",
+                       media("María Gabriela, entrenadora de BuildUp", False, "retrato"),
+                       plan_block())
 
 def comparator():
     return """<div class="compare" data-compare tabindex="0" role="slider" aria-label="Comparador antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
@@ -158,7 +185,7 @@ def video_row(nombres):
     return '<div class="vids hscroll">%s</div>' % "".join(
         """<button class="vid" data-video>%s<span class="play"></span>
         <span class="cap"><b>%s</b><i>Aprox. 60 min · modo guiado</i></span>
-        <span class="bar"><i></i></span></button>""" % (media("Video " + str(i+1), True), esc(w))
+        <span class="bar"><i></i></span></button>""" % (media(w, True, "video-" + slug(w)), esc(w))
         for i, w in enumerate(nombres))
 
 def all_in_one():
@@ -181,12 +208,12 @@ def all_in_one():
   <a class="tile" href="/nutricion/"><span class="ic">◍</span><b>SmartFuel</b><span>Macros y recetas</span></a>
   <a class="tile" href="/comunidad/"><span class="ic">◇</span><b>BuildFam</b><span>Chat de la comunidad</span></a>
   <a class="tile" href="/membresia/"><span class="ic">◈</span><b>Progreso</b><span>Pesos, reps y selfies</span></a>
-</div>""" % media("Collage — capturas de la app")
+</div>""" % media("Capturas de la app BuildUp", False, "collage")
 
 def reviews_row():
     out = []
     for i, (t, w) in enumerate(C.TESTIMONIOS):
-        out.append('<div class="tphoto zoom">%s</div>' % media("Foto chica " + str(i+1)))
+        out.append('<div class="tphoto zoom">%s</div>' % media(w, False, "testimonio-" + str(i+1)))
         out.append('<div class="tcard"><div class="stars">★★★★★</div><p>“%s”</p><div class="who">%s</div></div>' % (esc(t), esc(w)))
     return '<div class="treviews">%s</div>' % "".join(out)
 
@@ -195,7 +222,7 @@ def recipe_card(r, link=None):
     inner = """<div class="thumb">%s<span class="rcat">%s</span></div>
       <div class="body"><h4>%s</h4>
         <div class="macros"><span><b>%d</b> kcal</span><span><b>%d</b>P</span><span><b>%d</b>C</span><span><b>%d</b>G</span></div>
-      </div>""" % (media("Foto — " + n), esc(cat), esc(n), k, pr, cb, g)
+      </div>""" % (media(n, False, "receta-" + slug(n)), esc(cat), esc(n), k, pr, cb, g)
     return ('<a class="rcard" href="%s">%s</a>' % (link, inner)) if link else ('<div class="rcard">%s</div>' % inner)
 
 def vistazo(link=None):
@@ -211,7 +238,7 @@ def program_card(p):
     <div class="body">
       <div class="chips">%s<span class="chip">%s</span></div>
       <h3>%s</h3><p>%s</p>%s
-    </div>""" % (media("Foto " + p["nombre"]), chips, esc(p["nivel"]), esc(p["nombre"]), esc(p["corta"]), tail)
+    </div>""" % (media(p["nombre"], False, "programa-" + p["slug"]), chips, esc(p["nivel"]), esc(p["nombre"]), esc(p["corta"]), tail)
     if p["disponible"]:
         return '<a class="pcard" href="/programa/%s/">%s</a>' % (p["slug"], body)
     return '<div class="pcard soon" aria-disabled="true">%s</div>' % body
@@ -281,7 +308,7 @@ def page_home():
   <p class="lede center" style="margin-top:18px">Historias reales de las chicas que ya entrenan con BuildUp.</p>
   <div style="margin-top:44px">%s</div>
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
-</div></section>""" % (media("Foto hero — entrenamiento en gym", True), P["prueba_dias"], all_in_one(),
+</div></section>""" % (media("Entrenamiento en el gym", True, "hero-home", "center 35%"), P["prueba_dias"], all_in_one(),
        phone("entreno"), phone("nutri"), phone("perfil"), member_band(True),
        "".join(program_card(p) for p in C.PROGRAMAS), vistazo("/nutricion/"),
        comparator(), reviews_row(), P["prueba_dias"])
@@ -331,7 +358,7 @@ def page_membresia():
     </ul></div>
   </div>
   <div class="center" style="margin-top:48px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
-</div></section>""" % (media("Foto hero — sentadilla con barra", True), member_band(False),
+</div></section>""" % (media("Sentadilla con barra", True, "hero-membresia", "center 35%"), member_band(False),
         phone("hoy"), phone("entreno"), phone("nutri"), phone("perfil"),
         video_row(["Glúteo (upper glutes)","Hombros, bíceps y pecho","Cuádriceps y glúteos","Espalda, tríceps y pecho"]),
         comparator(), P["prueba_dias"], P["prueba_dias"])
@@ -403,7 +430,7 @@ def page_programa(p):
   <div style="margin-top:44px">%s</div>
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn on-dark wide">Empieza %d días gratis</a></div>
 </div></section>""" % (
-    media("Foto hero — " + p["nombre"], True),
+    media(p["nombre"], True, "hero-programa-" + p["slug"], "center 35%"),
     "Disponible ahora" if p["disponible"] else "Próximamente", esc(p["nombre"]), esc(p["enfoque_linea"]),
     phone("hoy"), phone("entreno"), phone("perfil"), esc(p["nombre"]), badges,
     "".join("<p>%s</p>" % esc(t) for t in p["intro"]), P["prueba_dias"], esc(p["nombre"]),
@@ -470,9 +497,9 @@ def page_nutricion():
   <p class="lede center" style="margin-top:18px">Recetas simples y nutritivas, con calorías y macros ya calculados, que se adaptan a tu plan sin restricciones ni complicaciones.</p>
   <div class="recipes hscroll" style="margin-top:44px">%s</div>
 </div></section>
-%s""" % (P["prueba_dias"], media("Foto — ingredientes / cocina"),
+%s""" % (P["prueba_dias"], media("Ingredientes frescos", False, "nutricion-hero"),
          phone("perfil"), phone("nutri"), phone("hoy"), phone("entreno"), P["prueba_dias"],
-         media("Foto — buscador de alimentos"), media("Foto — bowl de receta"), media("Foto — plato casero"),
+         media("Buscador de alimentos", False, "nutricion-alimentos"), media("Receta lista", False, "nutricion-receta"), media("Plato casero", False, "nutricion-personalizada"),
          vistazo(), member_band(False))
 
 def page_comunidad():
@@ -493,7 +520,7 @@ def page_comunidad():
 </div></section>
 <section class="section wash"><div class="wrap">%s
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
-</div></section>""" % (media("Foto hero — comunidad", True), phone("chat2"), phone("chat"), phone("chat3"),
+</div></section>""" % (media("La comunidad BuildFam", True, "hero-comunidad", "center 35%"), phone("chat2"), phone("chat"), phone("chat3"),
                        esc(S["coach"]), reviews_row(), P["prueba_dias"])
 
 def page_crear_cuenta():
