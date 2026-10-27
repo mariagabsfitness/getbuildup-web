@@ -1,0 +1,50 @@
+Pon aquí las fotos del sitio, con estos nombres exactos.
+En cuanto un archivo existe, el sitio deja de mostrar el cuadro gris y usa la foto.
+Formato: .jpg (también valen .png y .webp). Después hay que correr: python3 build.py
+
+HERO (necesitan DOS versiones: la normal y la que termina en -movil)
+  hero-home.jpg              + hero-home-movil.jpg
+  hero-membresia.jpg         + hero-membresia-movil.jpg
+  hero-comunidad.jpg         + hero-comunidad-movil.jpg
+  hero-programa-build-shred.jpg   + hero-programa-build-shred-movil.jpg
+  hero-programa-build-sculpt.jpg  + ...-movil.jpg
+  hero-programa-buildxpress.jpg   + ...-movil.jpg
+  hero-programa-buildonthego.jpg  + ...-movil.jpg
+  hero-programa-buildginner.jpg   + ...-movil.jpg
+  hero-programa-hyroxready.jpg    + ...-movil.jpg
+
+RETRATO Y APP
+  retrato.jpg
+  collage.jpg
+
+TARJETAS DE PROGRAMA
+  programa-build-shred.jpg
+  programa-build-sculpt.jpg
+  programa-buildxpress.jpg
+  programa-buildonthego.jpg
+  programa-buildginner.jpg
+  programa-hyroxready.jpg
+
+RECETAS (las 5 del vistazo)
+  receta-arepa-crunch-de-avena.jpg
+  receta-tuna-poke-bowl.jpg
+  receta-cilantro-lime-chicken.jpg
+  receta-protein-greek-oats.jpg
+  receta-chocolate-mugcake.jpg
+
+NUTRICIÓN
+  nutricion-hero.jpg
+  nutricion-alimentos.jpg
+  nutricion-receta.jpg
+  nutricion-personalizada.jpg
+
+TESTIMONIOS
+  testimonio-1.jpg
+  testimonio-2.jpg
+  testimonio-3.jpg
+
+VIDEOS (miniatura de cada uno)
+  video-gluteo-upper-glutes.jpg
+  video-hombros-biceps-y-pecho.jpg
+  video-cuadriceps-y-gluteos.jpg
+  video-espalda-triceps-y-pecho.jpg

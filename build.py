@@ -361,7 +361,7 @@ def page_membresia():
 </div></section>""" % (media("Sentadilla con barra", True, "hero-membresia", "center 35%"), member_band(False),
         phone("hoy"), phone("entreno"), phone("nutri"), phone("perfil"),
         video_row(["Glúteo (upper glutes)","Hombros, bíceps y pecho","Cuádriceps y glúteos","Espalda, tríceps y pecho"]),
-        comparator(), P["prueba_dias"], P["prueba_dias"])
+        before_after(6), P["prueba_dias"], P["prueba_dias"])
 
 def page_programas():
     return """<div class="pagehead"><div class="wrap">
@@ -438,7 +438,7 @@ def page_programa(p):
     "".join("<li>%s</li>" % esc(x) for x in p["enfoque"]), vers,
     "".join("<li>%s</li>" % esc(x) for x in p["incluye"]),
     "".join('<div class="split"><div class="d">%s</div><div class="u">%s</div><p>%s</p></div>' % (esc(d), esc(u), esc(t)) for d, u, t in p["splits"]),
-    comparator(), P["prueba_dias"])
+    before_after(6), P["prueba_dias"])
 
 def page_nutricion():
     return """<section class="nhero">
