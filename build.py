@@ -292,7 +292,7 @@ def faq_block():
 
 # ---------------------------------------------------------------- páginas
 def page_home():
-    return """<section class="hero">%s
+    return """<section class="hero home">%s
   <div class="hero-in">
     <p class="eyebrow">BuildUp</p>
     <h1>Todo lo que necesitas</h1>
