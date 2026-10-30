@@ -296,7 +296,7 @@ def page_home():
   <div class="hero-in">
     <p class="eyebrow">BuildUp</p>
     <h1>Todo lo que necesitas</h1>
-    <p class="sub">Entrenamiento, nutrición, progreso y comunidad en una sola app.</p>
+    <p class="sub"><span class="d">Entrenamiento, nutrición, progreso y comunidad en una sola app.</span><span class="m">Entrena, come y progresa en una sola app.</span></p>
     <a href="/crear-cuenta/" class="btn on-dark">Empieza %d días gratis</a>
   </div>
 </section>
