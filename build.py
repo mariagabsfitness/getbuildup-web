@@ -235,12 +235,12 @@ def all_in_one():
   <div class="collage">%s</div>
   <div class="stackr">
     <div class="panel k">
-      <p class="eyebrow">Entrenamiento, nutrición, progreso y comunidad</p>
-      <h3>Todo lo que necesitas, en una sola app</h3>
+      <p class="eyebrow">Tu día, resuelto</p>
+      <h3>Abre la app y ya sabes qué toca hoy</h3>
       <p class="sig">Creado por mujeres, para mujeres</p>
     </div>
     <div class="panel l">
-      <p>Entrenamientos, plan de alimentación, recetas y registro de progreso, todo en el mismo lugar.</p>
+      <p>Tu entrenamiento del día, tus macros y tus recetas te esperan abiertos. Sin improvisar y sin buscar rutinas en internet.</p>
       <a href="/crear-cuenta/" class="btn">Empezar</a>
     </div>
   </div>
@@ -298,7 +298,6 @@ def page_home():
     <h1>Todo lo que necesitas</h1>
     <p class="sub">Entrenamiento, nutrición, progreso y comunidad en una sola app.</p>
     <a href="/crear-cuenta/" class="btn on-dark">Empieza %d días gratis</a>
-    <p class="trialnote">Cancela cuando quieras</p>
   </div>
 </section>
 
