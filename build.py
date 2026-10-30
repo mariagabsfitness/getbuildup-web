@@ -262,7 +262,7 @@ def page_home():
 <div class="stats">
   <div class="stat"><div class="n">6</div><div class="l">Programas</div><div class="d">Gym y casa, de principiante a competencia</div></div>
   <div class="stat"><div class="n">8</div><div class="l">Semanas por ciclo</div><div class="d">Tiempo real para adaptarte y progresar</div></div>
-  <div class="stat"><div class="n">3–6</div><div class="l">Días a la semana</div><div class="d">Elige el split que se adapta a tu vida</div></div>
+  <div class="stat"><div class="n">3 a 6</div><div class="l">Días a la semana</div><div class="d">Elige el split que se adapta a tu vida</div></div>
 </div>
 
 <section class="section tight"><div class="wrap">%s</div></section>

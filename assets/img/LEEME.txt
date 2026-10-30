@@ -48,3 +48,13 @@ VIDEOS (miniatura de cada uno)
   video-hombros-biceps-y-pecho.jpg
   video-cuadriceps-y-gluteos.jpg
   video-espalda-triceps-y-pecho.jpg
+
+ANTES Y DESPUES (3:4, exportar a 900 x 1200)
+  antes-1.jpg    despues-1.jpg
+  antes-2.jpg    despues-2.jpg
+  antes-3.jpg    despues-3.jpg
+  antes-4.jpg    despues-4.jpg
+  antes-5.jpg    despues-5.jpg
+  antes-6.jpg    despues-6.jpg
+  -> El antes y el despues deben tener el MISMO encuadre:
+     misma pose, misma distancia, misma pared, misma luz.
