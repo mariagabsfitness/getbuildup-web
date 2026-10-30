@@ -215,6 +215,21 @@ def video_row(nombres):
                        '<span class="bar"><i></i></span></button>' % (media(w, True, sl), cap))
     return '<div class="vids hscroll">%s</div>' % "".join(out)
 
+ICONOS = {
+ # mancuerna: barra central con dos discos a cada lado
+ "mancuerna": '<path d="M6.6 8.4v7.2M4 10.2v3.6M17.4 8.4v7.2M20 10.2v3.6M6.6 12h10.8"/>',
+ # aguacate: contorno de la fruta con el hueso dentro
+ "aguacate": '<path d="M12 3.2c3.5 0 6.3 3.3 6.3 7.4 0 4.5-2.8 9.4-6.3 9.4s-6.3-4.9-6.3-9.4c0-4.1 2.8-7.4 6.3-7.4Z"/><circle cx="12" cy="13.6" r="2.5"/>',
+ # comunidad: una persona en primer plano y otra detras
+ "comunidad": '<circle cx="9.4" cy="8.8" r="2.9"/><path d="M3.8 19.2c0-3.1 2.5-5 5.6-5s5.6 1.9 5.6 5"/><path d="M16.6 6.6a3 3 0 0 1 0 5.6"/><path d="M17.8 14.4c1.6.7 2.4 2.2 2.4 4.1"/>',
+ # grafica: tres barras en ascenso sobre una base
+ "grafica": '<path d="M4 19.4h16"/><path d="M7.4 19.4v-4.6M12 19.4v-8.4M16.6 19.4v-12"/>',
+}
+
+def icono(nombre):
+    return ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % ICONOS[nombre])
+
 def all_in_one():
     return """<div class="allin">
   <div class="collage">%s</div>
@@ -231,11 +246,12 @@ def all_in_one():
   </div>
 </div>
 <div class="tiles4">
-  <a class="tile" href="/programas/"><span class="ic">◧</span><b>Entreno</b><span>6 programas</span></a>
-  <a class="tile" href="/nutricion/"><span class="ic">◍</span><b>SmartFuel</b><span>Macros y recetas</span></a>
-  <a class="tile" href="/comunidad/"><span class="ic">◇</span><b>BuildFam</b><span>Chat de la comunidad</span></a>
-  <a class="tile" href="/membresia/"><span class="ic">◈</span><b>Progreso</b><span>Pesos, reps y selfies</span></a>
-</div>""" % media("Capturas de la app BuildUp", False, "collage")
+  <a class="tile" href="/programas/"><span class="ic">%s</span><b>Entreno</b><span>6 programas</span></a>
+  <a class="tile" href="/nutricion/"><span class="ic">%s</span><b>SmartFuel</b><span>Macros y recetas</span></a>
+  <a class="tile" href="/comunidad/"><span class="ic">%s</span><b>BuildFam</b><span>Chat de la comunidad</span></a>
+  <a class="tile" href="/membresia/"><span class="ic">%s</span><b>Progreso</b><span>Pesos, reps y selfies</span></a>
+</div>""" % (media("Capturas de la app BuildUp", True, "collage"),
+                  icono("mancuerna"), icono("aguacate"), icono("comunidad"), icono("grafica"))
 
 def reviews_row():
     out = []
@@ -292,7 +308,7 @@ def page_home():
   <div class="stat"><div class="n">3 a 6</div><div class="l">Días a la semana</div><div class="d">Elige el split que se adapta a tu vida</div></div>
 </div>
 
-<section class="section tight"><div class="wrap">%s</div></section>
+<section class="section tight ink"><div class="wrap">%s</div></section>
 
 <section class="section"><div class="wrap">
   <p class="section-kicker">Todo en una app</p>

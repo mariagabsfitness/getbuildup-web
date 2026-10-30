@@ -242,6 +242,16 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .tile .ic{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;font-size:14px}
 .tile b{font-family:var(--display);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}
 .tile span{font-size:12.5px;color:var(--muted)}
+.tile .ic svg{width:19px;height:19px;display:block}
+/* ---------- bloque todo-en-uno sobre negro ---------- */
+.section.ink .allin{background:#101011;border:1px solid rgba(255,255,255,.08)}
+.section.ink .panel.k{background:#000;border:1px solid rgba(255,255,255,.14)}
+.section.ink .panel.l{background:#fff;border-color:#fff}
+.section.ink .tile{background:#101011;border:1px solid rgba(255,255,255,.1)}
+.section.ink .tile:hover{background:#18181a}
+.section.ink .tile b{color:#fff}
+.section.ink .tile span{color:rgba(255,255,255,.5)}
+.section.ink .tile .ic{border-color:rgba(255,255,255,.22);color:#fff}
 
 /* ---------- testimonials (foto + review) ---------- */
 .treviews{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
