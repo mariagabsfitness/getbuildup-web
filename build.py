@@ -11,6 +11,7 @@ def esc(x): return html.escape(str(x), quote=True)
 
 IMG_DIR = os.path.join("assets", "img")
 EXTS = (".jpg", ".jpeg", ".png", ".webp")
+VID_EXTS = (".mp4", ".webm", ".mov")
 
 def slug(t):
     t = t.lower()
@@ -24,10 +25,30 @@ def _find(base):
             return base + e
     return None
 
+def _findv(base):
+    """Devuelve el video si existe assets/img/<base>.mp4 (o .webm / .mov)."""
+    for e in VID_EXTS:
+        if os.path.isfile(os.path.join(IMG_DIR, base + e)):
+            return base + e
+    return None
+
+def has_video(slot):
+    return _findv(slot) is not None
+
 def media(label, dark=False, slot=None, foco=None):
     """Si hay una foto en assets/img/<slot>.jpg la usa; si no, deja el marcador.
        Si ademas existe <slot>-movil.jpg, la usa en pantallas de telefono."""
     if slot:
+        vid = _findv(slot)
+        if vid:
+            poster = _find(slot)
+            pa = (' poster="/assets/img/%s"' % poster) if poster else ""
+            sty = (' style="object-position:%s"' % foco) if foco else ""
+            mobv = _findv(slot + "-movil")
+            mob = ('<source src="/assets/img/%s" media="(max-width:767px)">' % mobv) if mobv else ""
+            return ('<video class="media" autoplay muted loop playsinline preload="metadata"'
+                    '%s aria-label="%s"%s>%s<source src="/assets/img/%s"></video>'
+                    % (pa, esc(label), sty, mob, vid))
         desk = _find(slot)
         if desk:
             mob = _find(slot + "-movil")
@@ -182,11 +203,17 @@ def before_after(n=6):
         '<div class="ba zoom"><div class="h b"><em>Antes</em></div><div class="h a"><em>Después</em></div></div>' for _ in range(n))
 
 def video_row(nombres):
-    return '<div class="vids hscroll">%s</div>' % "".join(
-        """<button class="vid" data-video>%s<span class="play"></span>
-        <span class="cap"><b>%s</b><i>Aprox. 60 min · modo guiado</i></span>
-        <span class="bar"><i></i></span></button>""" % (media(w, True, "video-" + slug(w)), esc(w))
-        for i, w in enumerate(nombres))
+    out = []
+    for w in nombres:
+        sl = "video-" + slug(w)
+        cap = '<span class="cap"><b>%s</b><i>Aprox. 60 min · modo guiado</i></span>' % esc(w)
+        if has_video(sl):
+            # Video real: se reproduce solo, en bucle y sin sonido. Sin boton de play.
+            out.append('<div class="vid live">%s%s</div>' % (media(w, True, sl), cap))
+        else:
+            out.append('<button class="vid" data-video>%s<span class="play"></span>%s'
+                       '<span class="bar"><i></i></span></button>' % (media(w, True, sl), cap))
+    return '<div class="vids hscroll">%s</div>' % "".join(out)
 
 def all_in_one():
     return """<div class="allin">
