@@ -351,7 +351,9 @@ def page_home():
   <div style="margin-top:44px">%s</div>
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
 </div></section>""" % (media("Entrenamiento en el gym", True, "hero-home", "center 35%"), P["prueba_dias"], all_in_one(),
-       phone("entreno"), phone("nutri"), phone("perfil"), member_band(True),
+       media("Entreno en BuildUp", False, "dentro-entreno"),
+       media("SmartFuel en BuildUp", False, "dentro-smartfuel"),
+       media("Progreso en BuildUp", False, "dentro-progreso"), member_band(True),
        "".join(program_card(p) for p in C.PROGRAMAS), vistazo("/nutricion/"),
        comparator(), reviews_row(), P["prueba_dias"])
 
