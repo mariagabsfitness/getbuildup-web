@@ -251,7 +251,11 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .tile span{font-size:12.5px;color:var(--muted)}
 .tile .ic svg{width:23px;height:23px;display:block}
 /* ---------- bloque todo-en-uno sobre negro ---------- */
-.section.ink .allin{background:#101011;border:1px solid rgba(255,255,255,.08)}
+/* sobre negro: sin tarjeta exterior, capturas flotando */
+.section.ink .allin{background:transparent;border:0;padding:0;gap:14px;align-items:center}
+.section.ink .allin .collage{background:transparent;border-radius:0;overflow:visible;min-height:0}
+.section.ink .allin .collage .media{position:static;background:none}
+.section.ink .allin .collage .media>img{height:auto;object-fit:contain}
 .section.ink .panel.k{background:#000;border:1px solid rgba(255,255,255,.14)}
 .section.ink .panel.l{background:#fff;border-color:#fff}
 .section.ink .tile{background:#101011;border:1px solid rgba(255,255,255,.1)}
