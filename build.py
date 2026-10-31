@@ -10,7 +10,7 @@ S, P = C.SITE, C.PRECIOS
 def esc(x): return html.escape(str(x), quote=True)
 
 IMG_DIR = os.path.join("assets", "img")
-EXTS = (".jpg", ".jpeg", ".png", ".webp")
+EXTS = (".webp", ".png", ".jpg", ".jpeg")
 VID_EXTS = (".mp4", ".webm", ".mov")
 
 def slug(t):
