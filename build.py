@@ -472,7 +472,7 @@ def page_programa(p):
   <div style="margin-top:44px">%s</div>
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn on-dark wide">Empieza %d días gratis</a></div>
 </div></section>""" % (
-    media(p["nombre"], True, "hero-programa-" + p["slug"], "center 35%"),
+    media(p["nombre"], True, "hero-programa-" + p["slug"], "center 18%"),
     "Disponible ahora" if p["disponible"] else "Próximamente", esc(p["nombre"]), esc(p["enfoque_linea"]),
     phone("hoy"), phone("entreno"), phone("perfil"), esc(p["nombre"]), badges,
     "".join("<p>%s</p>" % esc(t) for t in p["intro"]), P["prueba_dias"], esc(p["nombre"]),
