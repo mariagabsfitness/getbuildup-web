@@ -292,7 +292,7 @@ def faq_block():
 
 # ---------------------------------------------------------------- páginas
 def page_home():
-    return """<section class="hero home">%s
+    return """<section class="hero home full">%s
   <div class="hero-in">
     <p class="eyebrow">BuildUp</p>
     <h1>Todo lo que necesitas</h1>
@@ -428,7 +428,7 @@ def page_programa(p):
         <p style="font-size:13.5px;color:var(--grey);margin:0 0 14px">Cada versión es un ciclo completo de 8 semanas. Al terminar una, pasas a la siguiente, con nuevos ejercicios y variantes para evitar el estancamiento.</p>
         <div class="versions">%s</div>""" % pills
     badges = "".join('<span class="badge%s">%s</span>' % (" k" if i == 0 else "", esc(b)) for i, b in enumerate(p["badges"]))
-    return """<section class="hero" style="min-height:440px">%s
+    return """<section class="hero full">%s
   <div class="hero-in"><p class="eyebrow">%s</p><h1>%s</h1><p class="sub">%s</p></div>
 </section>
 <section class="section"><div class="wrap inside">
