@@ -111,7 +111,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 
 /* ---------- membership ---------- */
 .member{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
-.member .shot{aspect-ratio:4/5;border-radius:var(--r-lg)}
+.member .shot{aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;position:relative}
 .plan{border:1px solid var(--line);border-radius:var(--r-md);padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;position:relative;margin-top:14px;background:#fff;transition:border-color .18s,box-shadow .18s}
 .plan:hover{border-color:var(--charcoal)}
 .plan.sel{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
