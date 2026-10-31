@@ -404,6 +404,8 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 
 
 /* ---------- video de fondo ---------- */
+picture.media{display:block}
+.media>img{display:block;width:100%;height:100%;object-fit:cover}
 video.media{display:block;width:100%;height:100%;object-fit:cover;background:#111}
 .vid.live{cursor:default}
 .vid.live .cap{pointer-events:none}
