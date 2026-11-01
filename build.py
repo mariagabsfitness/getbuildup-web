@@ -286,9 +286,23 @@ def program_card(p):
         return '<a class="pcard" href="/programa/%s/">%s</a>' % (p["slug"], body)
     return '<div class="pcard soon" aria-disabled="true">%s</div>' % body
 
-def faq_block():
+def faq_block(items=None):
+    if items is None:
+        items = C.FAQS
     return '<div class="faq">%s</div>' % "".join(
-        '<details><summary>%s</summary><p class="ans">%s</p></details>' % (esc(q), esc(a)) for q, a in C.FAQS)
+        '<details><summary>%s</summary><p class="ans">%s</p></details>' % (esc(q), esc(a)) for q, a in items)
+
+
+def faq_programa(p):
+    items = C.FAQS_PROGRAMA.get(p["slug"])
+    if not items:
+        return ""
+    return """
+<section class="section wash"><div class="wrap">
+  <p class="section-kicker">Preguntas frecuentes</p>
+  <h2 class="h-section">Sobre %s</h2>
+  <div style="margin-top:42px">%s</div>
+</div></section>""" % (esc(p["nombre"]), faq_block(items))
 
 # ---------------------------------------------------------------- páginas
 def page_home():
@@ -480,7 +494,7 @@ def page_programa(p):
   <p class="lede center" style="margin-top:18px">Cuando el entrenamiento, la nutrición y la rutina trabajan juntos, el progreso deja de ser suerte. Esto es lo que parece la constancia.</p>
   <div style="margin-top:44px">%s</div>
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn on-dark wide">Empieza %d días gratis</a></div>
-</div></section>""" % (
+</div></section>%s""" % (
     media(p["nombre"], True, "hero-programa-" + p["slug"], "center 18%"),
     "Disponible ahora" if p["disponible"] else "Próximamente", esc(p["nombre"]), esc(p["enfoque_linea"]),
     programa_shots(p), esc(p["nombre"]), badges,
@@ -489,7 +503,7 @@ def page_programa(p):
     "".join("<li>%s</li>" % esc(x) for x in p["enfoque"]), vers,
     "".join("<li>%s</li>" % esc(x) for x in p["incluye"]),
     "".join('<div class="split"><div class="d">%s</div><div class="u">%s</div><p>%s</p></div>' % (esc(d), esc(u), esc(t)) for d, u, t in p["splits"]),
-    before_after(6), P["prueba_dias"])
+    before_after(6), P["prueba_dias"], faq_programa(p))
 
 def page_nutricion():
     return """<section class="nhero">

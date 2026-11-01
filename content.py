@@ -214,6 +214,45 @@ TESTIMONIOS = [
     ("Nunca había pisado un gym. Empecé con las rutinas guiadas y hoy hago sentadilla con barra sin miedo.", "Vale · Primeras 8 semanas"),
 ]
 
+FAQS_PROGRAMA = {
+    "build-shred": [
+        ("¿Para quién es Build & Shred?",
+         "Para quienes disfrutan los entrenamientos más retadores. Combina el trabajo de pesas con movimientos funcionales y de estilo HIIT dentro de las rutinas, así que además de ganar masa muscular y reducir grasa, mejoras tu resistencia cardiovascular y tu condición física general. Es el programa de las que quieren convertirse en máquinas."),
+        ("¿En qué se diferencia de Build & Sculpt?",
+         "Build & Shred incorpora movimientos funcionales y de alta intensidad dentro de los entrenamientos de pesas, con mayor enfoque en tren inferior. Build & Sculpt es entrenamiento de pesas más directo, centrado en fuerza e hipertrofia, sin ese componente funcional."),
+        ("¿Qué nivel necesito?",
+         "Está pensado para nivel intermedio y avanzado. Si vienes de cero, puedes empezar por la versión en casa y usar las alternativas de cada ejercicio para adaptar la intensidad."),
+        ("¿Necesito gimnasio?",
+         "No. Cada entrenamiento tiene versión gym y versión en casa, con alternativas para diferentes ejercicios."),
+        ("¿Por qué tiene seis versiones?",
+         "Cada versión es un ciclo completo de 8 semanas. Build & Shred 6.0 es la más reciente. Al terminar una versión pasas a la siguiente, con nuevos ejercicios y variantes que te ayudan a seguir progresando y evitar el estancamiento."),
+    ],
+    "build-sculpt": [
+        ("¿Para quién es Build & Sculpt?",
+         "Para quienes quieren enfocarse principalmente en desarrollar músculo, ganar fuerza y trabajar su composición corporal con una estructura de entrenamiento basada en pesas. Se recomienda especialmente si tienes un metabolismo rápido y te cuesta ganar masa muscular: al no incluir tantos movimientos funcionales ni HIIT dentro de las rutinas, el gasto de cada sesión es menor y la energía se concentra en construir músculo."),
+        ("¿En qué se diferencia de Build & Shred?",
+         "Build & Sculpt tiene un enfoque más directo en fuerza e hipertrofia y no incorpora movimientos funcionales ni de estilo HIIT dentro de las rutinas de pesas. Build & Shred sí los incluye, y por eso trabaja más la resistencia y la condición física."),
+        ("¿Incluye cardio?",
+         "El cardio no va dentro de las rutinas de pesas. Encontrarás recomendaciones de cardio aparte, para que elijas cuándo y cuánto hacer según tu objetivo."),
+        ("¿Necesito gimnasio?",
+         "No. Cada entrenamiento tiene versión gym y versión en casa, con alternativas para diferentes ejercicios."),
+        ("¿Qué nivel necesito?",
+         "Intermedio y avanzado. Cada sesión está diseñada para que progreses en tus ejercicios, mejores tu técnica y aumentes gradualmente tu fuerza y rendimiento."),
+    ],
+    "buildxpress": [
+        ("¿Para quién es BuildXpress?",
+         "Para quienes quieren seguir entrenando con una estructura completa y progresiva, pero necesitan sesiones más cortas. Ideal si tienes poco tiempo y no quieres sacrificar un entrenamiento bien estructurado."),
+        ("¿Cuánto dura cada sesión?",
+         "Aproximadamente 45 minutos. Se logra con una selección estratégica de ejercicios, supersets y tiempos de descanso más controlados."),
+        ("Si entreno menos tiempo, ¿progreso menos?",
+         "No. BuildXpress mantiene los principios de un programa completo de fuerza e hipertrofia y el registro de pesos y repeticiones, así que sigues aplicando sobrecarga progresiva sesión a sesión."),
+        ("¿Necesito gimnasio?",
+         "No. Cada entrenamiento tiene versión gym y versión en casa, con alternativas para diferentes ejercicios."),
+        ("¿Qué nivel necesito?",
+         "Intermedio y avanzado."),
+    ],
+}
+
 FAQS = [
     ("¿Todos los programas están incluidos en mi membresía?",
      "Sí. Con tu membresía tienes acceso a todos los programas y a todas sus versiones, y puedes cambiar de uno a otro cuando quieras."),
