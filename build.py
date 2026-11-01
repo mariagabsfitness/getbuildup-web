@@ -560,7 +560,10 @@ def page_nutricion():
   <div class="recipes hscroll" style="margin-top:44px">%s</div>
 </div></section>
 %s""" % (P["prueba_dias"], media("Ingredientes frescos", False, "nutricion-hero"),
-         phone("perfil"), phone("nutri"), phone("hoy"), phone("entreno"), P["prueba_dias"],
+         media("Tu objetivo en SmartFuel", False, "nutri-paso-1"),
+         media("Tus macros en SmartFuel", False, "nutri-paso-2"),
+         media("Registrar una comida en SmartFuel", False, "nutri-paso-3"),
+         media("Seguimiento del día en SmartFuel", False, "nutri-paso-4"), P["prueba_dias"],
          media("Buscador de alimentos", False, "nutricion-alimentos"), media("Receta lista", False, "nutricion-receta"), media("Plato casero", False, "nutricion-personalizada"),
          vistazo(), member_band(False))
 
