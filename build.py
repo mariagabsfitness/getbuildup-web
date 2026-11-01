@@ -387,7 +387,7 @@ def page_membresia():
     <div class="pcol">%s<h3>Empieza el día</h3><p>Abres la app y ves tu entreno, tus macros y tu lista del día en un solo lugar.</p></div>
     <div class="pcol">%s<h3>Entrena</h3><p>Sigue la rutina con series, reps, temporizador de descanso y video de técnica.</p></div>
     <div class="pcol">%s<h3>Aliméntate</h3><p>Registra tus comidas y mira cómo se actualizan tus macros en tiempo real.</p></div>
-    <div class="pcol">%s<h3>Mide tu progreso</h3><p>Cada peso y cada repetición quedan guardados, así ves semana a semana cuánto has subido.</p></div>
+    <div class="pcol">%s<h3>Cierra el día</h3><p>Marca tu entrenamiento como completado, guarda tu selfie y comparte tu logro con la BuildFam.</p></div>
   </div>
 </div></section>
 <section class="section"><div class="wrap">
