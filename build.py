@@ -503,19 +503,18 @@ def page_programa(p):
     before_after(6), P["prueba_dias"], faq_programa(p))
 
 def page_nutricion():
-    return """<section class="nhero">
-  <div class="txt">
+    return """<section class="hero full">%s
+  <div class="hero-in">
     <p class="eyebrow">SmartFuel</p>
     <h1>Nutre tus metas</h1>
-    <p style="color:var(--charcoal);font-size:17px;margin:0">Tu nutrición y recetas, en un mismo lugar.</p>
-    <p style="color:var(--grey);max-width:46ch;margin:0">Explora nuestras recetas, calcula tus macros y empieza a nutrirte de acuerdo a tus objetivos con el tracker diario, todo dentro de la app.</p>
-    <div><a href="/crear-cuenta/" class="btn">Empieza %d días gratis</a></div>
+    <p class="sub">Tu nutrición y recetas, en un mismo lugar.</p>
+    <a href="/crear-cuenta/" class="btn on-dark">Empieza %d días gratis</a>
   </div>
-  <div class="pic">%s</div>
 </section>
 <section class="section"><div class="wrap">
   <p class="section-kicker">Cómo funciona</p>
   <h2 class="h-section">Registra tu día en minutos</h2>
+  <p class="lede center" style="margin-top:18px">Explora nuestras recetas, calcula tus macros y empieza a nutrirte de acuerdo a tus objetivos con el tracker diario, todo dentro de la app.</p>
   <div class="phones hscroll" style="margin-top:52px">
     <div class="pcol">%s<h3>1 · Tu objetivo</h3><p>Perder grasa, definición muscular o superávit calórico moderado.</p></div>
     <div class="pcol">%s<h3>2 · Tus macros</h3><p>Calculamos tus calorías y macros personalizados según tus datos.</p></div>
@@ -559,7 +558,7 @@ def page_nutricion():
   <p class="lede center" style="margin-top:18px">Recetas simples y nutritivas, con calorías y macros ya calculados, que se adaptan a tu plan sin restricciones ni complicaciones.</p>
   <div class="recipes hscroll" style="margin-top:44px">%s</div>
 </div></section>
-%s""" % (P["prueba_dias"], media("Ingredientes frescos", False, "nutricion-hero"),
+%s""" % (media("Ingredientes frescos", True, "nutricion-hero", "center 40%"), P["prueba_dias"],
          media("Tu objetivo en SmartFuel", False, "nutri-paso-1"),
          media("Tus macros en SmartFuel", False, "nutri-paso-2"),
          media("Registrar una comida en SmartFuel", False, "nutri-paso-3"),
