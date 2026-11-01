@@ -192,8 +192,8 @@ def member_band(wash=True):
 
 def comparator():
     return """<div class="compare" data-compare tabindex="0" role="slider" aria-label="Comparador antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-  <div class="side after"><span class="lbl a">Después · semana 8</span></div>
-  <div class="side before"><span class="lbl b">Antes · semana 0</span></div>
+  <div class="side after"><span class="lbl a">Después</span></div>
+  <div class="side before"><span class="lbl b">Antes</span></div>
   <div class="handle"><span class="knob">↔</span></div>
 </div>
 <p class="compare-hint">Arrastra la barra para ver el antes y el después</p>"""
