@@ -414,8 +414,11 @@ def page_membresia():
   </div>
   <div class="center" style="margin-top:48px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
 </div></section>""" % (media("Sentadilla con barra", True, "hero-membresia", "center 35%"), member_band(False),
-        phone("hoy"), phone("entreno"), phone("nutri"), phone("perfil"),
-        video_row(["Glúteo (upper glutes)","Hombros, bíceps y pecho","Cuádriceps y glúteos","Espalda, tríceps y pecho"]),
+        media("Empieza el día en BuildUp", False, "mem-paso-1"),
+        media("Entrena con BuildUp", False, "mem-paso-2"),
+        media("Aliméntate con SmartFuel", False, "mem-paso-3"),
+        media("Cierra el día en BuildUp", False, "mem-paso-4"),
+        video_row(C.ENTRENOS_DEMO),
         before_after(6), P["prueba_dias"], P["prueba_dias"])
 
 def page_programas():
