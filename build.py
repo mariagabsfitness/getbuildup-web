@@ -358,7 +358,7 @@ def page_home():
        comparator(), reviews_row(), P["prueba_dias"])
 
 def page_membresia():
-    return """<section class="hero">%s
+    return """<section class="hero full">%s
   <div class="hero-in"><p class="eyebrow">Tu membresía</p><h1>¿Qué pasa cuando te unes?</h1></div>
 </section>
 %s
