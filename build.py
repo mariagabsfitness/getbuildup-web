@@ -433,7 +433,7 @@ def page_programa(p):
     return """<section class="hero full">%s
   <div class="hero-in"><p class="eyebrow">%s</p><h1>%s</h1><p class="sub">%s</p></div>
 </section>
-<section class="section"><div class="wrap inside">
+<section class="section ink"><div class="wrap inside">
   <div class="trio">%s%s%s</div>
   <div>
     <p class="kicker">%s</p><h2>Dentro del programa</h2>
@@ -547,7 +547,7 @@ def page_nutricion():
          vistazo(), member_band(False))
 
 def page_comunidad():
-    return """<section class="hero" style="min-height:320px;padding:80px 24px">%s
+    return """<section class="hero full">%s
   <div class="hero-in"><p class="eyebrow">BuildFam</p><h1>No entrenas sola</h1>
   <p class="sub">Comparte tu progreso y conecta con BuildFam.</p></div>
 </section>
@@ -564,7 +564,7 @@ def page_comunidad():
 </div></section>
 <section class="section wash"><div class="wrap">%s
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
-</div></section>""" % (media("La comunidad BuildFam", True, "hero-comunidad", "center 35%"), phone("chat2"), phone("chat"), phone("chat3"),
+</div></section>""" % (media("La comunidad BuildFam", True, "hero-comunidad", "center 28%"), phone("chat2"), phone("chat"), phone("chat3"),
                        esc(S["coach"]), reviews_row(), P["prueba_dias"])
 
 def page_crear_cuenta():
