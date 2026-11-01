@@ -341,6 +341,13 @@ def page_home():
 </div></section>
 
 <section class="section wash"><div class="wrap">
+  <p class="section-kicker">Entrenamientos</p>
+  <h2 class="h-section">Así se entrena con BuildUp</h2>
+  <p class="lede center" style="margin-top:18px">Cada ejercicio con su video de técnica, sus series y repeticiones, y sus alternativas si no tienes el equipo.</p>
+  <div style="margin-top:44px">%s</div>
+</div></section>
+
+<section class="section wash"><div class="wrap">
   <p class="section-kicker">Recetario</p>
   <h2 class="h-section">Un vistazo a las recetas</h2>
   <p class="lede center" style="margin-top:18px">Recetas simples y nutritivas, con calorías y macros ya calculados, que se adaptan a tu plan sin restricciones ni complicaciones.</p>
@@ -365,7 +372,7 @@ def page_home():
        media("Entreno en BuildUp", False, "dentro-entreno"),
        media("SmartFuel en BuildUp", False, "dentro-smartfuel"),
        media("Progreso en BuildUp", False, "dentro-progreso"), member_band(True),
-       "".join(program_card(p) for p in C.PROGRAMAS), vistazo("/nutricion/"),
+       "".join(program_card(p) for p in C.PROGRAMAS), video_row(C.ENTRENOS_DEMO), vistazo("/nutricion/"),
        comparator(), reviews_row(), P["prueba_dias"])
 
 def page_membresia():

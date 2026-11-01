@@ -213,9 +213,9 @@ TESTIMONIOS = [
 # Cambia los nombres aquí y renombra los archivos de video/miniatura igual.
 ENTRENOS_DEMO = [
     "Glúteo (upper glutes)",
-    "Hombros, bíceps y pecho",
+    "Espalda y hombros",
     "Cuádriceps y glúteos",
-    "Espalda, tríceps y pecho",
+    "Espalda y tríceps",
 ]
 
 FAQS_PROGRAMA = {

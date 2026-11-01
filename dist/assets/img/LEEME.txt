@@ -49,10 +49,10 @@ VIDEOS DE EJEMPLO (los mismos en todas las paginas de programa)
     - un video corto en bucle:  video-<nombre>.mp4
     - o solo una foto fija:     video-<nombre>.jpg
   Nombres actuales:
-  video-gluteo-upper-glutes      (Gluteo (upper glutes))
-  video-hombros-biceps-y-pecho   (Hombros, biceps y pecho)
-  video-cuadriceps-y-gluteos     (Cuadriceps y gluteos)
-  video-espalda-triceps-y-pecho  (Espalda, triceps y pecho)
+  video-gluteo-upper-glutes   (Gluteo (upper glutes))
+  video-espalda-y-hombros     (Espalda y hombros)
+  video-cuadriceps-y-gluteos  (Cuadriceps y gluteos)
+  video-espalda-y-triceps     (Espalda y triceps)
   -> Si cambian los nombres, se cambian en content.py (ENTRENOS_DEMO)
      y los archivos se renombran igual.
 
