@@ -64,7 +64,6 @@ PROGRAMAS = [
                    ["4", "días", "2 tren inferior · 2 tren superior"],
                    ["5", "días", "3 tren inferior · 2 tren superior"],
                    ["6", "días", "3 inferior · 2 superior · 1 cardio y abs"]],
-        "entrenos": ["Glúteo (upper glutes)", "Hombros, bíceps y pecho", "Cuádriceps y glúteos", "Espalda, tríceps y pecho"],
     },
     {
         "slug": "build-sculpt", "nombre": "Build & Sculpt", "disponible": True,
@@ -87,7 +86,6 @@ PROGRAMAS = [
                    ["4", "días", "2 tren inferior · 2 tren superior"],
                    ["5", "días", "2 tren inferior · 3 tren superior"],
                    ["6", "días", "2 tren inferior · 3 tren superior · 1 abdomen y cardio"]],
-        "entrenos": ["Glúteos y femoral", "Espalda y bíceps", "Cuádriceps y glúteos", "Hombros, pecho y tríceps"],
     },
     {
         "slug": "buildxpress", "nombre": "BuildXpress", "disponible": True,
@@ -111,7 +109,6 @@ PROGRAMAS = [
                    ["4", "días", "2 tren inferior · 2 tren superior"],
                    ["5", "días", "3 tren inferior · 2 tren superior"],
                    ["6", "días", "3 tren inferior · 2 tren superior · 1 abdomen y cardio"]],
-        "entrenos": ["Glúteos y femoral", "Espalda y bíceps", "Cuádriceps y glúteos", "Hombros, pecho y tríceps"],
     },
     {
         "slug": "buildonthego", "nombre": "BuildOnTheGo", "disponible": False,
@@ -132,7 +129,6 @@ PROGRAMAS = [
                    ["4", "días", "Alterna inferior y superior"],
                    ["20", "min mín", "La sesión más corta del programa"],
                    ["0", "equipo", "Ni una banda ni una mancuerna"]],
-        "entrenos": ["Full body sin equipo", "Glúteos en el cuarto", "Core de viaje", "Cardio sin impacto"],
     },
     {
         "slug": "buildginner", "nombre": "BuildGinner", "disponible": False,
@@ -154,7 +150,6 @@ PROGRAMAS = [
                    ["4", "días", "2 inferior · 2 superior"],
                    ["8", "semanas", "Un ciclo completo de adaptación"],
                    ["→", "siguiente", "Salida natural hacia Build & Shred"]],
-        "entrenos": ["Sentadilla paso a paso", "Empuje básico", "Tracción básica", "Core para empezar"],
     },
     {
         "slug": "hyroxready", "nombre": "HyroxReady", "disponible": False,
@@ -176,7 +171,6 @@ PROGRAMAS = [
                    ["5", "días", "2 fuerza · 2 híbrido · 1 carrera"],
                    ["8", "estaciones", "Trabajo específico de la competencia"],
                    ["1", "descarga", "Semana ligera antes del evento"]],
-        "entrenos": ["Fuerza pesada", "Intervalos de carrera", "Simulación de estaciones", "Core y transiciones"],
     },
 ]
 
@@ -212,6 +206,16 @@ TESTIMONIOS = [
     ("Llevo tres versiones de Build & Shred y por primera vez veo progresión real en los pesos. El registro dentro de la app lo cambia todo.", "Ana · Build & Shred 4.0"),
     ("Entreno a las 5:30 am antes del trabajo. BuildXpress me salvó: 45 minutos y salgo con la sensación de haber entrenado completo.", "Cami · BuildXpress"),
     ("Nunca había pisado un gym. Empecé con las rutinas guiadas y hoy hago sentadilla con barra sin miedo.", "Vale · Primeras 8 semanas"),
+]
+
+# Los 4 entrenamientos de ejemplo que se ven en TODAS las páginas de programa.
+# Son una muestra del Modo guiado, no la semana de un programa concreto.
+# Cambia los nombres aquí y renombra los archivos de video/miniatura igual.
+ENTRENOS_DEMO = [
+    "Glúteo (upper glutes)",
+    "Hombros, bíceps y pecho",
+    "Cuádriceps y glúteos",
+    "Espalda, tríceps y pecho",
 ]
 
 FAQS_PROGRAMA = {

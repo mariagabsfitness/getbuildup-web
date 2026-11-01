@@ -43,11 +43,17 @@ TESTIMONIOS
   testimonio-2.jpg
   testimonio-3.jpg
 
-VIDEOS (miniatura de cada uno)
-  video-gluteo-upper-glutes.jpg
-  video-hombros-biceps-y-pecho.jpg
-  video-cuadriceps-y-gluteos.jpg
-  video-espalda-triceps-y-pecho.jpg
+VIDEOS DE EJEMPLO (los mismos en todas las paginas de programa)
+  Son una muestra del Modo guiado. Cada uno puede ser:
+    - un video corto en bucle:  video-<nombre>.mp4
+    - o solo una foto fija:     video-<nombre>.jpg
+  Nombres actuales:
+  video-gluteo-upper-glutes      (Gluteo (upper glutes))
+  video-hombros-biceps-y-pecho   (Hombros, biceps y pecho)
+  video-cuadriceps-y-gluteos     (Cuadriceps y gluteos)
+  video-espalda-triceps-y-pecho  (Espalda, triceps y pecho)
+  -> Si cambian los nombres, se cambian en content.py (ENTRENOS_DEMO)
+     y los archivos se renombran igual.
 
 ANTES Y DESPUES (3:4, exportar a 900 x 1200)
   antes-1.jpg    despues-1.jpg

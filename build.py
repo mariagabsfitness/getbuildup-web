@@ -466,7 +466,7 @@ def page_programa(p):
 <section class="section wash"><div class="wrap">
   <p class="section-kicker">Entrenamientos</p>
   <h2 class="h-section">Entrenamientos del día</h2>
-  <p class="lede center" style="margin-top:18px">Así se ve una semana dentro de %s. Cada ejercicio tiene su video de técnica, sus series y reps y sus alternativas.</p>
+  <p class="lede center" style="margin-top:18px">Así se entrena con el Modo guiado: cada ejercicio con su video de técnica, sus series y repeticiones, y sus alternativas.</p>
   <div style="margin-top:44px">%s</div>
 </div></section>
 <section class="section"><div class="wrap"><div class="two-col">
@@ -498,8 +498,8 @@ def page_programa(p):
     media(p["nombre"], True, "hero-programa-" + p["slug"], "center 18%"),
     "Disponible ahora" if p["disponible"] else "Próximamente", esc(p["nombre"]), esc(p["enfoque_linea"]),
     programa_shots(p), esc(p["nombre"]), badges,
-    "".join("<p>%s</p>" % esc(t) for t in p["intro"]), P["prueba_dias"], esc(p["nombre"]),
-    video_row(p["entrenos"]),
+    "".join("<p>%s</p>" % esc(t) for t in p["intro"]), P["prueba_dias"],
+    video_row(C.ENTRENOS_DEMO),
     "".join("<li>%s</li>" % esc(x) for x in p["enfoque"]), vers,
     "".join("<li>%s</li>" % esc(x) for x in p["incluye"]),
     "".join('<div class="split"><div class="d">%s</div><div class="u">%s</div><p>%s</p></div>' % (esc(d), esc(u), esc(t)) for d, u, t in p["splits"]),
