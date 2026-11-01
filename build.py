@@ -421,6 +421,13 @@ def page_programas():
 </div></section>
 %s""" % ("".join(program_card(p) for p in C.PROGRAMAS), faq_block(), member_band(False))
 
+def programa_shots(p):
+    sl = "capturas-" + p["slug"]
+    if _find(sl):
+        return '<div class="shots">%s</div>' % media("Capturas de " + p["nombre"], True, sl)
+    return '<div class="trio">%s%s%s</div>' % (phone("hoy"), phone("entreno"), phone("perfil"))
+
+
 def page_programa(p):
     vers = ""
     if len(p["versiones"]) > 1:
@@ -434,7 +441,7 @@ def page_programa(p):
   <div class="hero-in"><p class="eyebrow">%s</p><h1>%s</h1><p class="sub">%s</p></div>
 </section>
 <section class="section ink"><div class="wrap inside">
-  <div class="trio">%s%s%s</div>
+  %s
   <div>
     <p class="kicker">%s</p><h2>Dentro del programa</h2>
     <div class="badges">%s</div>
@@ -476,7 +483,7 @@ def page_programa(p):
 </div></section>""" % (
     media(p["nombre"], True, "hero-programa-" + p["slug"], "center 18%"),
     "Disponible ahora" if p["disponible"] else "Próximamente", esc(p["nombre"]), esc(p["enfoque_linea"]),
-    phone("hoy"), phone("entreno"), phone("perfil"), esc(p["nombre"]), badges,
+    programa_shots(p), esc(p["nombre"]), badges,
     "".join("<p>%s</p>" % esc(t) for t in p["intro"]), P["prueba_dias"], esc(p["nombre"]),
     video_row(p["entrenos"]),
     "".join("<li>%s</li>" % esc(x) for x in p["enfoque"]), vers,
