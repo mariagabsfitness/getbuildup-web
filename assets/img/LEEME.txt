@@ -44,6 +44,7 @@ TESTIMONIOS
   testimonio-3.jpg
 
 VIDEOS DE EJEMPLO (los mismos en todas las paginas de programa)
+  Formato vertical 9:16 (por ejemplo 1080 x 1920), en bucle y sin sonido.
   Son una muestra del Modo guiado. Cada uno puede ser:
     - un video corto en bucle:  video-<nombre>.mp4
     - o solo una foto fija:     video-<nombre>.jpg

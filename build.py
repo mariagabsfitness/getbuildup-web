@@ -206,14 +206,9 @@ def video_row(nombres):
     out = []
     for w in nombres:
         sl = "video-" + slug(w)
-        cap = '<span class="cap"><b>%s</b><i>Aprox. 60 min · modo guiado</i></span>' % esc(w)
-        if has_video(sl):
-            # Video real: se reproduce solo, en bucle y sin sonido. Sin boton de play.
-            out.append('<div class="vid live">%s%s</div>' % (media(w, True, sl), cap))
-        else:
-            out.append('<button class="vid" data-video>%s<span class="play"></span>%s'
-                       '<span class="bar"><i></i></span></button>' % (media(w, True, sl), cap))
+        out.append('<div class="vid">%s</div>' % media(w, True, sl))
     return '<div class="vids hscroll">%s</div>' % "".join(out)
+
 
 ICONOS = {
  # mancuerna: barra central con dos discos a cada lado
@@ -226,9 +221,11 @@ ICONOS = {
  "grafica": '<path d="M4 19.4h16"/><path d="M7.4 19.4v-4.6M12 19.4v-8.4M16.6 19.4v-12"/>',
 }
 
+
 def icono(nombre):
     return ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">%s</svg>' % ICONOS[nombre])
+
 
 def all_in_one():
     return """<div class="allin">
