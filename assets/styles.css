@@ -285,12 +285,16 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .section.ink .tile .ic{border-color:rgba(255,255,255,.22);color:#fff}
 
 /* ---------- testimonials (foto + review) ---------- */
-.treviews{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(460px,520px);gap:20px;max-width:1120px;margin:0 auto;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:10px;scroll-snap-type:x proximity}
-.trev{display:grid;grid-template-columns:.9fr 1.1fr;gap:14px;align-items:stretch}
+.treviews{display:grid;grid-auto-flow:column;grid-auto-columns:280px;gap:16px;max-width:1120px;margin:0 auto;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:10px;scroll-snap-type:x proximity}
+.trev{display:contents}
+.treviews .tphoto,.treviews .tcard{scroll-snap-align:start}
 .treviews>*{scroll-snap-align:start}
-.tphoto{border-radius:var(--r-md);overflow:hidden;position:relative;min-height:300px}
+.tphoto{border-radius:var(--r-md);overflow:hidden;position:relative;aspect-ratio:3/4}
 .tphoto .media{position:absolute;inset:0}
-.tcard{border:1px solid var(--line);border-radius:var(--r-md);padding:22px 20px;background:#fff;display:flex;flex-direction:column;gap:11px}
+.tcard{border:1px solid var(--line);border-radius:var(--r-md);padding:22px 20px;background:#fff;display:flex;flex-direction:column;gap:11px;aspect-ratio:3/4}
+.tcard p{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.tcard p::-webkit-scrollbar{width:4px}
+.tcard p::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
 .stars{letter-spacing:.24em;font-size:12px}
 .tcard p{margin:0;color:var(--charcoal);font-size:13.5px;line-height:1.55;overflow:hidden}
 .tcard .who{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:auto}
@@ -506,14 +510,7 @@ video.media{display:block;width:100%;height:100%;object-fit:cover;background:#11
   }
   .bagrid>*{scroll-snap-align:start}
   .treviews{grid-auto-columns:74vw;max-width:none;gap:14px}
-  .trev{display:contents}
-  .treviews .tphoto,.treviews .tcard{scroll-snap-align:start}
-  .tphoto{min-height:0;aspect-ratio:3/4}
-  .tcard{aspect-ratio:3/4;padding:20px 18px}
-  .tcard p{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
-           scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-  .tcard p::-webkit-scrollbar{width:4px}
-  .tcard p::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+  .tcard{padding:20px 18px}
   .allin .collage{min-height:230px}
   .phones{grid-template-columns:1fr}
   .section{padding:60px 0}
