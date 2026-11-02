@@ -470,22 +470,22 @@ def page_programa(p):
     <div style="margin-top:26px"><a href="/crear-cuenta/" class="btn">Empieza %d días gratis</a></div>
   </div>
 </div></section>
+<section class="section"><div class="wrap"><div class="two-col">
+  <div class="listcard"><h4>Enfoque del programa</h4><ul>%s</ul>%s</div>
+  <div class="listcard"><h4>¿Qué incluye?</h4><ul>%s</ul></div>
+</div></div></section>
 <section class="section wash"><div class="wrap">
   <p class="section-kicker">Entrenamientos</p>
   <h2 class="h-section">Entrenamientos del día</h2>
   <p class="lede center" style="margin-top:18px">Así se entrena con el Modo guiado: cada ejercicio con su video de técnica, sus series y repeticiones, y sus alternativas.</p>
   <div style="margin-top:44px">%s</div>
 </div></section>
-<section class="section"><div class="wrap"><div class="two-col">
-  <div class="listcard"><h4>Enfoque del programa</h4><ul>%s</ul>%s</div>
-  <div class="listcard"><h4>¿Qué incluye?</h4><ul>%s</ul></div>
-</div></div></section>
-<section class="section wash"><div class="wrap">
+<section class="section"><div class="wrap">
   <p class="section-kicker">Se adapta a tu estilo de vida</p>
   <h2 class="h-section">Elige cuántos días entrenas</h2>
   <div class="splits" style="margin-top:44px">%s</div>
 </div></section>
-<section class="section"><div class="wrap">
+<section class="section wash"><div class="wrap">
   <p class="section-kicker">Cómo ejecutar el entrenamiento</p>
   <h2 class="h-section">Tu sesión, paso a paso</h2>
   <div class="steps" style="margin-top:46px">
@@ -506,14 +506,14 @@ def page_programa(p):
     "Disponible ahora" if p["disponible"] else "Próximamente", esc(p["nombre"]), esc(p["enfoque_linea"]),
     programa_shots(p), esc(p["nombre"]), badges,
     "".join("<p>%s</p>" % esc(t) for t in p["intro"]), P["prueba_dias"],
-    video_row(C.ENTRENOS_DEMO),
     "".join("<li>%s</li>" % esc(x) for x in p["enfoque"]), vers,
     "".join("<li>%s</li>" % esc(x) for x in p["incluye"]),
+    video_row(C.ENTRENOS_DEMO),
     "".join('<div class="split"><div class="d">%s</div><div class="u">%s</div><p>%s</p></div>' % (esc(d), esc(u), esc(t)) for d, u, t in p["splits"]),
     before_after(6), P["prueba_dias"], faq_programa(p))
 
 def page_nutricion():
-    return """<section class="hero full claro izq">%s
+    return """<section class="hero full izq">%s
   <div class="hero-in">
     <p class="eyebrow">SmartFuel</p>
     <h1>Nutre tus metas</h1>
