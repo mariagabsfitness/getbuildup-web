@@ -295,7 +295,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .tcard .who{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:auto}
 
 /* ---------- before / after row ---------- */
-.bagrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.bagrid{display:grid;grid-template-columns:repeat(var(--cols,3),1fr);gap:18px;max-width:1040px;margin:0 auto}
 .ba{border-radius:var(--r-md);overflow:hidden;position:relative;aspect-ratio:3/2;display:grid;grid-template-columns:1fr 1fr}
 .ba .h{position:relative;overflow:hidden}
 .ba .h .media{position:absolute;inset:0;z-index:0}

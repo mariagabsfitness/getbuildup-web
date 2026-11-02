@@ -218,7 +218,8 @@ def before_after(n=6):
     else:
         items = "".join('<div class="ba zoom"><div class="h b"><em>Antes</em></div>'
                         '<div class="h a"><em>Después</em></div></div>' for _ in range(n))
-    return '<div class="bagrid">%s</div>' % items
+    cols = 1 if len(pares) == 1 else (2 if len(pares) in (2, 4) else 3)
+    return '<div class="bagrid" style="--cols:%d">%s</div>' % (cols, items)
 
 
 def video_row(nombres):
