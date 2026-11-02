@@ -365,7 +365,7 @@ def page_home():
 <section class="section"><div class="wrap">
   <p class="section-kicker">Comunidad</p>
   <h2 class="h-section">Lo que dice la BuildFam</h2>
-  <p class="lede center" style="margin-top:18px">Historias reales de las chicas que ya entrenan con BuildUp.</p>
+  <p class="lede center" style="margin-top:18px">Historias reales de las chicas que entrenan con el método BuildUp, desde antes de que fuera una app.</p>
   <div style="margin-top:44px">%s</div>
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
 </div></section>""" % (media("Entrenamiento en el gym", True, "hero-home", "center 35%"), P["prueba_dias"], all_in_one(),
@@ -588,7 +588,7 @@ def page_comunidad():
     <div class="badges"><span class="badge k">CHAT</span><span class="badge">DUDAS</span><span class="badge">PROGRESO</span></div>
     <p>Mantente activa en el chat de la BuildFam: un espacio para motivarte, recibir apoyo, resolver dudas y compartir tu progreso durante tu transformación.</p>
     <p>Aquí preguntas cómo adaptar un ejercicio, cuentas que terminaste la semana 4, o encuentras a alguien que va por el mismo programa que tú.</p>
-    <p>No es un canal de anuncios: es un grupo donde se pregunta y se responde, con %s adentro.</p>
+    <p>Y no estás sola: %s está dentro del chat, leyendo y respondiendo, para ayudarte cuando lo necesites.</p>
     <div style="margin-top:26px"><a href="/crear-cuenta/" class="btn">Únete a BuildFam</a></div>
   </div>
 </div></section>

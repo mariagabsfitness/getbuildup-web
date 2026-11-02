@@ -45,7 +45,7 @@ PRECIOS = {
 PROGRAMAS = [
     {
         "slug": "build-shred", "nombre": "Build & Shred", "disponible": True,
-        "enfoque_linea": "Tren inferior · Fuerza y resistencia",
+        "enfoque_linea": "Ganancia muscular · Fuerza · Definición · Resistencia",
         "nivel": "Intermedio · Avanzado",
         "corta": "Gana masa muscular, definición y resistencia. Fuerza intensa y cardio, con mayor enfoque en tren inferior.",
         "badges": ["GYM", "CASA", "3 / 4 / 5 / 6 días", "FUERZA", "HIPERTROFIA", "RESISTENCIA"],
@@ -67,7 +67,7 @@ PROGRAMAS = [
     },
     {
         "slug": "build-sculpt", "nombre": "Build & Sculpt", "disponible": True,
-        "enfoque_linea": "Cuerpo completo · Fuerza e hipertrofia", "nivel": "Intermedio · Avanzado",
+        "enfoque_linea": "Ganancia muscular · Fuerza · Definición", "nivel": "Intermedio · Avanzado",
         "corta": "Construye músculo y define con entrenamiento de pesas, sin movimientos funcionales ni HIIT dentro de las rutinas.",
         "badges": ["GYM", "CASA", "3 / 4 / 5 / 6 días", "FUERZA", "HIPERTROFIA"],
         "intro": [
@@ -89,7 +89,7 @@ PROGRAMAS = [
     },
     {
         "slug": "buildxpress", "nombre": "BuildXpress", "disponible": True,
-        "enfoque_linea": "45 minutos · Cuerpo completo", "nivel": "Intermedio · Avanzado",
+        "enfoque_linea": "Ganancia muscular · Fuerza · Definición · Rutinas express", "nivel": "Intermedio · Avanzado",
         "corta": "Entrenamientos eficientes de unos 45 minutos para ganar músculo y fuerza, con una estructura completa.",
         "badges": ["GYM", "CASA", "3 / 4 / 5 / 6 días", "45 MIN", "FUERZA", "HIPERTROFIA"],
         "intro": [
