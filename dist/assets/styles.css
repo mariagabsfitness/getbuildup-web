@@ -285,7 +285,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .section.ink .tile .ic{border-color:rgba(255,255,255,.22);color:#fff}
 
 /* ---------- testimonials (foto + review) ---------- */
-.treviews{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.treviews{display:grid;grid-template-columns:repeat(var(--n,6),minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
 .treviews>*{scroll-snap-align:start}
 .tphoto{border-radius:var(--r-md);overflow:hidden;position:relative;aspect-ratio:3/4}
 .tphoto .media{position:absolute;inset:0}
@@ -504,7 +504,7 @@ video.media{display:block;width:100%;height:100%;object-fit:cover;background:#11
     scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.3) transparent;
   }
   .bagrid>*{scroll-snap-align:start}
-  .treviews{grid-template-columns:repeat(6,minmax(74vw,1fr))}
+  .treviews{grid-template-columns:repeat(var(--n,6),minmax(74vw,1fr));max-width:none}
   .allin .collage{min-height:230px}
   .phones{grid-template-columns:1fr}
   .section{padding:60px 0}
@@ -527,5 +527,5 @@ video.media{display:block;width:100%;height:100%;object-fit:cover;background:#11
   .ways.hscroll,.ways.three.hscroll{grid-template-columns:none;max-width:none;grid-auto-columns:76vw}
   .pcol .media{max-width:none}
   .vids.hscroll{grid-auto-columns:68vw}
-  .treviews{grid-template-columns:repeat(6,minmax(72vw,1fr))}
+  .treviews{grid-template-columns:repeat(var(--n,6),minmax(72vw,1fr));max-width:none}
 }

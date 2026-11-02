@@ -275,7 +275,9 @@ def reviews_row():
     for i, (t, w) in enumerate(C.TESTIMONIOS):
         out.append('<div class="tphoto zoom">%s</div>' % media(w, False, "testimonio-" + str(i+1)))
         out.append('<div class="tcard"><div class="stars">★★★★★</div><p>“%s”</p><div class="who">%s</div></div>' % (esc(t), esc(w)))
-    return '<div class="treviews">%s</div>' % "".join(out)
+    n = len(C.TESTIMONIOS) * 2
+    ancho = '' if n >= 6 else ';max-width:%dpx;margin:0 auto' % (n*250 + (n-1)*16)
+    return '<div class="treviews" style="--n:%d%s">%s</div>' % (n, ancho, "".join(out))
 
 def recipe_card(r, link=None):
     n, cat, k, pr, cb, g, f = r

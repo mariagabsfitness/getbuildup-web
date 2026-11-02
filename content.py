@@ -202,10 +202,10 @@ RECETAS = [
 # Las 5 que se muestran como vistazo en Home y en Nutricion
 VISTAZO = ["Arepa crunch de avena","Tuna poke bowl","Cilantro lime chicken","Protein greek oats","Chocolate mugcake"]
 
+# Testimonios REALES. La foto de cada uno es testimonio-1.jpg, testimonio-2.jpg...
+# en el mismo orden de esta lista. Si quitas uno, quita tambien su foto.
 TESTIMONIOS = [
-    ("Llevo tres versiones de Build & Shred y por primera vez veo progresión real en los pesos. El registro dentro de la app lo cambia todo.", "Ana · Build & Shred 4.0"),
-    ("Entreno a las 5:30 am antes del trabajo. BuildXpress me salvó: 45 minutos y salgo con la sensación de haber entrenado completo.", "Cami · BuildXpress"),
-    ("Nunca había pisado un gym. Empecé con las rutinas guiadas y hoy hago sentadilla con barra sin miedo.", "Vale · Primeras 8 semanas"),
+    ("Amo la dieta, no me da ansiedad, tengo buen ánimo siempre y duermo super bien. Y aparte del cambio físico, el cambio en la piel y en el pelo también es una locura.", "Olga"),
 ]
 
 # Los 4 entrenamientos de ejemplo que se ven en TODAS las páginas de programa.
