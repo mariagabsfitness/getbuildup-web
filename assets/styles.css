@@ -203,8 +203,8 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .compare .after{background:repeating-linear-gradient(135deg,rgba(0,0,0,.03) 0 2px,transparent 2px 9px),linear-gradient(150deg,#f0f0f0,#c9c9c9 60%,#a8a8a8)}
 .compare .before{background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 9px),linear-gradient(150deg,#4a4a4a,#242424 60%,#101010);clip-path:inset(0 50% 0 0)}
 .compare .lbl{position:absolute;top:14px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;padding:5px 11px;border-radius:999px}
-.compare .lbl.b{left:14px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3)}
-.compare .lbl.a{right:14px;background:rgba(0,0,0,.06);color:#333;border:1px solid rgba(0,0,0,.18)}
+.compare .lbl.b{left:14px;background:rgba(0,0,0,.42);color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(5px)}
+.compare .lbl.a{right:14px;background:rgba(0,0,0,.42);color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(5px)}
 .compare .handle{position:absolute;top:0;bottom:0;width:2px;background:#fff;left:50%;transform:translateX(-1px);box-shadow:0 0 0 1px rgba(0,0,0,.15)}
 .compare .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.28);font-size:12px;color:var(--ink);letter-spacing:.1em}
 .compare-hint{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:16px}
