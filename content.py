@@ -285,13 +285,13 @@ FAQS = [
      "Sí. Empiezas con 7 días gratis y cancelas cuando quieras desde tu cuenta."),
 ]
 
-_LEG = "https://mariagabsfitness.com/pages/"
+_LEG = "/legal/"
 LEGAL_ES = [("Términos de servicio","terminos"),("Política de privacidad","privacidad"),
             ("Privacidad de datos de salud","privacidad-salud"),("Consentimiento de datos de salud","consentimiento-datos-salud"),
             ("Aviso de salud y nutrición","aviso-salud"),("Normas de BuildFam","normas-comunidad"),
-            ("Eliminar cuenta y datos","borrar-cuenta")]
+            ("Eliminar cuenta y datos","borrar-cuenta"),("Política de reembolsos","reembolsos")]
 LEGAL_EN = [("Terms of Service","terms-en"),("Privacy Policy","privacy-en"),
             ("Health Data Privacy","health-data-privacy-en"),("Health Data Consent","health-data-consent-en"),
             ("Health &amp; Nutrition Notice","health-notice-en"),("BuildFam Guidelines","community-guidelines-en"),
             ("Delete Account &amp; Data","delete-account-en")]
-def legal_url(slug): return _LEG + slug
+def legal_url(slug): return _LEG + slug + "/"

@@ -688,6 +688,57 @@ def page_login():
 </div></section>"""
 
 # ---------------------------------------------------------------- generar
+
+# ---------------------------------------------------------------- legal
+import re as _re
+
+def _inline(s):
+    s = esc(s)
+    s = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+    def _a(m):
+        txt, url = m.group(1), m.group(2)
+        url = _re.sub(r'^https?://mariagabsfitness\.com/pages/([a-z0-9\-]+)/?$', r'/legal/\1/', url)
+        ext = '' if url.startswith('/') else ' target="_blank" rel="noopener"'
+        return '<a href="%s"%s>%s</a>' % (url, ext, txt)
+    return _re.sub(r'\[([^\]]+)\]\(([^)]+)\)', _a, s)
+
+
+def md_a_html(texto):
+    out, lista = [], False
+    for linea in texto.split("\n"):
+        l = linea.rstrip()
+        if l.startswith("- "):
+            if not lista: out.append("<ul>"); lista = True
+            out.append("<li>%s</li>" % _inline(l[2:]))
+            continue
+        if lista: out.append("</ul>"); lista = False
+        if not l.strip(): continue
+        if l.startswith("### "):  out.append("<h3>%s</h3>" % _inline(l[4:]))
+        elif l.startswith("## "): out.append("<h2>%s</h2>" % _inline(l[3:]))
+        else:                     out.append("<p>%s</p>" % _inline(l))
+    if lista: out.append("</ul>")
+    return "\n".join(out)
+
+
+def leer_legal(slug):
+    ruta = os.path.join("legal", slug + ".md")
+    if not os.path.isfile(ruta):
+        return None, None
+    txt = io.open(ruta, encoding="utf-8").read().strip()
+    lineas = txt.split("\n")
+    titulo = lineas[0][2:].strip() if lineas[0].startswith("# ") else slug
+    return titulo, md_a_html("\n".join(lineas[1:]))
+
+
+def page_legal(slug):
+    titulo, cuerpo = leer_legal(slug)
+    return """<div class="pagehead"><div class="wrap">
+  <p class="eyebrow">Legal</p>
+  <h1>%s</h1>
+</div><div class="rule"></div></div>
+<section class="section"><div class="wrap"><div class="legal">%s</div></div></section>""" % (esc(titulo), cuerpo)
+
+
 PAGES = [
   ("/", "BuildUp — Entrenamiento, nutrición y progreso en una sola app",
    "Programas de entrenamiento para gym y casa, plan de alimentación con macros, recetario y comunidad. Empieza con 7 días gratis.", page_home, ""),
@@ -720,6 +771,13 @@ def main():
     urls = []
     for path, title, desc, fn, active in PAGES:
         write(path, doc(path, title, desc, fn(), active)); urls.append(path)
+    for _t, sl in C.LEGAL_ES + C.LEGAL_EN + [("Política de reembolsos", "reembolsos")]:
+        tit, _c = leer_legal(sl)
+        if tit is None:
+            print("  (falta legal/%s.md)" % sl); continue
+        path = "/legal/%s/" % sl
+        write(path, doc(path, "%s — BuildUp" % tit, tit, page_legal(sl), ""))
+        urls.append(path)
     for p in C.PROGRAMAS:
         path = "/programa/%s/" % p["slug"]
         title = "%s — Programa de entrenamiento — BuildUp" % p["nombre"]
