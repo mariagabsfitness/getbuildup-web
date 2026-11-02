@@ -285,7 +285,8 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .section.ink .tile .ic{border-color:rgba(255,255,255,.22);color:#fff}
 
 /* ---------- testimonials (foto + review) ---------- */
-.treviews{display:grid;grid-template-columns:repeat(var(--n,6),minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.treviews{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:20px;max-width:1120px;margin:0 auto;justify-content:center}
+.trev{display:grid;grid-template-columns:.9fr 1.1fr;gap:14px;align-items:stretch}
 .treviews>*{scroll-snap-align:start}
 .tphoto{border-radius:var(--r-md);overflow:hidden;position:relative;min-height:300px}
 .tphoto .media{position:absolute;inset:0}
@@ -504,7 +505,9 @@ video.media{display:block;width:100%;height:100%;object-fit:cover;background:#11
     scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.3) transparent;
   }
   .bagrid>*{scroll-snap-align:start}
-  .treviews{grid-template-columns:repeat(var(--n,6),minmax(74vw,1fr));max-width:none}
+  .treviews{grid-template-columns:1fr;max-width:none}
+  .trev{grid-template-columns:1fr;gap:12px}
+  .tphoto{min-height:0;aspect-ratio:3/4}
   .allin .collage{min-height:230px}
   .phones{grid-template-columns:1fr}
   .section{padding:60px 0}
@@ -527,5 +530,5 @@ video.media{display:block;width:100%;height:100%;object-fit:cover;background:#11
   .ways.hscroll,.ways.three.hscroll{grid-template-columns:none;max-width:none;grid-auto-columns:76vw}
   .pcol .media{max-width:none}
   .vids.hscroll{grid-auto-columns:68vw}
-  .treviews{grid-template-columns:repeat(var(--n,6),minmax(72vw,1fr));max-width:none}
+  .treviews{grid-template-columns:1fr;max-width:none}
 }

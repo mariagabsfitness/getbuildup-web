@@ -272,12 +272,13 @@ def all_in_one():
 
 def reviews_row():
     out = []
-    for i, (t, w) in enumerate(C.TESTIMONIOS):
-        out.append('<div class="tphoto zoom">%s</div>' % media(w, False, "testimonio-" + str(i+1)))
-        out.append('<div class="tcard"><div class="stars">★★★★★</div><p>“%s”</p><div class="who">%s</div></div>' % (esc(t), esc(w)))
-    n = len(C.TESTIMONIOS) * 2
-    ancho = '' if n >= 6 else ';max-width:%dpx;margin:0 auto' % (n*250 + (n-1)*16)
-    return '<div class="treviews" style="--n:%d%s">%s</div>' % (n, ancho, "".join(out))
+    for i, (txt, w) in enumerate(C.TESTIMONIOS):
+        out.append('<div class="trev"><div class="tphoto zoom">%s</div>'
+                   '<div class="tcard"><div class="stars">★★★★★</div><p>“%s”</p>'
+                   '<div class="who">%s</div></div></div>'
+                   % (media(w, False, "testimonio-" + str(i+1)), esc(txt), esc(w)))
+    return '<div class="treviews">%s</div>' % "".join(out)
+
 
 def recipe_card(r, link=None):
     n, cat, k, pr, cb, g, f = r
