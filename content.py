@@ -47,7 +47,7 @@ PROGRAMAS = [
         "slug": "build-shred", "nombre": "Build & Shred", "disponible": True,
         "enfoque_linea": "Ganancia muscular · Fuerza · Definición · Resistencia",
         "nivel": "Intermedio · Avanzado",
-        "corta": "Gana masa muscular, definición y resistencia. Fuerza intensa y cardio, con mayor enfoque en tren inferior.",
+        "corta": "Gana masa muscular, definición y resistencia, con fuerza intensa y cardio.",
         "badges": ["GYM", "CASA", "3 / 4 / 5 / 6 días", "FUERZA", "HIPERTROFIA", "RESISTENCIA"],
         "intro": [
             "Un programa de entrenamiento estructurado para trabajar todo el cuerpo, desarrollar masa muscular, reducir grasa y mejorar tu fuerza y resistencia.",
@@ -207,9 +207,9 @@ VISTAZO = ["Arepa crunch de avena","Tuna poke bowl","Cilantro lime chicken","Pro
 TESTIMONIOS = [
     ("Los entrenamientos me encantan porque son retadores: salgo sintiendo que de verdad trabajé. Amo la dieta, no me da ansiedad, tengo buen ánimo siempre y duermo súper bien. Y aparte del cambio físico, el de la piel y el pelo también es una locura. Este estilo de vida lo aprendí con BuildUp y me lo voy a quedar, porque me encanta cómo me siento.",
      "Olga · Build & Shred"),
-    ("Empecé a entrenar con BuildUp después de mis primeros dos hijos, antes de que fuera una app, y fue de las mejores decisiones que tomé. Luego llegó mi tercer bebé y tocó empezar de nuevo, con tres niños y una rutina completamente distinta 😂. No siempre es fácil encontrar el tiempo, pero hoy, un año y medio después, me siento más fuerte y feliz con mis resultados. Lo que más me gusta es haber aprendido a hacer del entrenamiento parte de mi vida, incluso en medio del caos de ser mamá de tres. ¡Y vamos por más! ❤️",
+    ("Empecé a entrenar con BuildUp después de mis primeros dos hijos, antes de que fuera una app, y fue de las mejores decisiones que tomé. Luego llegó mi tercer bebé y tocó empezar de nuevo, con una rutina completamente distinta 😂. Hoy, un año y medio después, me siento más fuerte y feliz con mis resultados. Aprendí a hacer del entrenamiento parte de mi vida, incluso en medio del caos de ser mamá de tres. ¡Y vamos por más! ❤️",
      "María B · Build & Sculpt"),
-    ("Hace 10 años, antes de conocer el fitness, el entrenamiento y la alimentación, mi pensamiento de veinteañera era operarme las bubis y quitarme dos costillas, jajaja, porque sentía que mi cuerpo no tenía forma. Bastó empezar a entrenar y cambiar mi alimentación para ver el cambio que siempre quise. No tenía idea de que la solución era entrenar con un programa estructurado y comer saludable de acuerdo a mi cuerpo y a mi objetivo.",
+    ("Hace 10 años, antes de conocer el fitness, el entrenamiento y la alimentación, mi pensamiento de veinteañera era operarme las bubis y quitarme dos costillas, jajaja, porque sentía que mi cuerpo no tenía forma. Bastó empezar a entrenar y cambiar mi alimentación para ver el cambio que siempre quise. No tenía idea de que la solución era entrenar con un programa estructurado y comer saludable según mi cuerpo y mi objetivo.",
      "María Gabriela · Build & Shred"),
 ]
 
