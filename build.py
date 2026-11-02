@@ -582,7 +582,7 @@ def page_comunidad():
   <p class="sub">Comparte tu progreso y conecta con BuildFam.</p></div>
 </section>
 <section class="section"><div class="wrap inside">
-  <div class="trio">%s%s%s</div>
+  %s
   <div>
     <p class="kicker">BuildFam</p><h2>Dentro de la comunidad</h2>
     <div class="badges"><span class="badge k">CHAT</span><span class="badge">DUDAS</span><span class="badge">PROGRESO</span></div>
@@ -594,7 +594,9 @@ def page_comunidad():
 </div></section>
 <section class="section wash"><div class="wrap">%s
   <div class="center" style="margin-top:44px"><a href="/crear-cuenta/" class="btn wide">Empieza %d días gratis</a></div>
-</div></section>""" % (media("La comunidad BuildFam", True, "hero-comunidad", "center 28%"), phone("chat2"), phone("chat"), phone("chat3"),
+</div></section>""" % (media("La comunidad BuildFam", True, "hero-comunidad", "center 28%"), ('<div class="shots">%s</div>' % media("Chat de la BuildFam", False, "capturas-comunidad")
+                        if _find("capturas-comunidad")
+                        else '<div class="trio">%s%s%s</div>' % (phone("chat2"), phone("chat"), phone("chat3"))),
                        esc(S["coach"]), reviews_row(), P["prueba_dias"])
 
 def page_crear_cuenta():
