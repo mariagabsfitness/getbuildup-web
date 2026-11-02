@@ -164,7 +164,7 @@ def plan_block():
     return """<div>
   <h2 class="h-section" style="text-align:left;letter-spacing:.1em">Elige tu membresía</h2>
   <p style="color:var(--grey);margin:18px 0 6px;max-width:52ch">Empieza con <b>%d días gratis</b> y desbloquea BuildUp completa: programas, progreso, nutrición y comunidad.</p>
-  <p style="color:var(--grey);margin:0 0 8px;max-width:52ch">Acceso a todo desde el primer día: no hay niveles, ni contenido extra que pagar aparte. Lo que pruebas gratis es lo que tienes siempre.</p>
+  <p style="color:var(--grey);margin:0 0 8px;max-width:52ch">Entrenamiento, nutrición, progreso y comunidad en un solo lugar por menos de $1 al día.</p>
   <div class="plan sel" data-plan="anual" data-price="%s al año" role="button" tabindex="0">
     <span class="ribbon">%s</span>
     <div><div class="mini">★ Oferta exclusiva</div><div class="nm">Membresía anual</div>
@@ -336,9 +336,9 @@ def page_home():
 </section>
 
 <div class="stats">
-  <div class="stat"><div class="n">6</div><div class="l">Programas</div><div class="d">Versión gym y casa</div></div>
-  <div class="stat"><div class="n">8</div><div class="l">Semanas por ciclo</div><div class="d">Tiempo real para adaptarte y progresar</div></div>
-  <div class="stat"><div class="n">3<span class="dash"></span>6</div><div class="l">Días a la semana</div><div class="d">Elige el split que se adapta a tu vida</div></div>
+  <div class="stat"><div class="n">6</div><div class="l">Programas</div><div class="d"><span>Versión gym</span> <span>y casa</span></div></div>
+  <div class="stat"><div class="n">8</div><div class="l">Semanas por ciclo</div><div class="d"><span>Tiempo real para</span> <span>adaptarte y progresar</span></div></div>
+  <div class="stat"><div class="n">3<span class="dash"></span>6</div><div class="l">Días a la semana</div><div class="d"><span>Elige el split</span> <span>que se adapta a tu vida</span></div></div>
 </div>
 
 <section class="section tight ink"><div class="wrap">%s</div></section>
