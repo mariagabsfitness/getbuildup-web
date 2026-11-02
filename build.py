@@ -513,7 +513,7 @@ def page_programa(p):
     before_after(6), P["prueba_dias"], faq_programa(p))
 
 def page_nutricion():
-    return """<section class="hero full claro">%s
+    return """<section class="hero full claro izq">%s
   <div class="hero-in">
     <p class="eyebrow">SmartFuel</p>
     <h1>Nutre tus metas</h1>
