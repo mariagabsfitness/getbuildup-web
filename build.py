@@ -191,12 +191,20 @@ def member_band(wash=True):
                        plan_block())
 
 def comparator():
+    def side(cls, slot, lbl, lblcls):
+        if _find(slot):
+            return ('<div class="side %s img">%s<span class="lbl %s">%s</span></div>'
+                    % (cls, media(lbl, False, slot), lblcls, lbl))
+        return '<div class="side %s"><span class="lbl %s">%s</span></div>' % (cls, lblcls, lbl)
     return """<div class="compare" data-compare tabindex="0" role="slider" aria-label="Comparador antes y después" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-  <div class="side after"><span class="lbl a">Después</span></div>
-  <div class="side before"><span class="lbl b">Antes</span></div>
+  %s
+  %s
   <div class="handle"><span class="knob">↔</span></div>
 </div>
-<p class="compare-hint">Arrastra la barra para ver el antes y el después</p>"""
+<p class="compare-hint">Arrastra la barra para ver el antes y el después</p>""" % (
+        side("after", "comparador-despues", "Después", "a"),
+        side("before", "comparador-antes", "Antes", "b"))
+
 
 def before_after(n=6):
     return '<div class="bagrid">%s</div>' % "".join(

@@ -194,8 +194,10 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .vid .bar i{display:block;height:100%;width:0;background:#fff;transition:width .2s linear}
 
 /* ---------- comparator ---------- */
-.compare{position:relative;max-width:880px;margin:0 auto;aspect-ratio:16/8;border-radius:var(--r-md);overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize;border:1px solid rgba(255,255,255,.16)}
-@media (max-width:767px){.compare{aspect-ratio:4/3}}
+.compare{position:relative;max-width:520px;margin:0 auto;aspect-ratio:3/4;border-radius:var(--r-md);overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize;border:1px solid rgba(255,255,255,.16)}
+.compare .side .media{position:absolute;inset:0;z-index:0}
+.compare .side.img{background:none}
+@media (max-width:767px){.compare{aspect-ratio:3/4;max-width:none}}
 .section:not(.ink) .compare{border-color:var(--line)}
 .compare .side{position:absolute;inset:0}
 .compare .after{background:repeating-linear-gradient(135deg,rgba(0,0,0,.03) 0 2px,transparent 2px 9px),linear-gradient(150deg,#f0f0f0,#c9c9c9 60%,#a8a8a8)}

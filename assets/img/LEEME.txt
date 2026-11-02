@@ -56,6 +56,10 @@ VIDEOS DE EJEMPLO (los mismos en todas las paginas de programa)
   -> Si cambian los nombres, se cambian en content.py (ENTRENOS_DEMO)
      y los archivos se renombran igual.
 
+COMPARADOR DEL HOME (la barra que se desliza)
+  comparador-antes.jpg     comparador-despues.jpg
+  -> Vertical 3:4, exportar a 1200 x 1600. Mismo encuadre las dos.
+
 ANTES Y DESPUES (3:4, exportar a 900 x 1200)
   antes-1.jpg    despues-1.jpg
   antes-2.jpg    despues-2.jpg
