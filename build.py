@@ -207,8 +207,19 @@ def comparator():
 
 
 def before_after(n=6):
-    return '<div class="bagrid">%s</div>' % "".join(
-        '<div class="ba zoom"><div class="h b"><em>Antes</em></div><div class="h a"><em>Después</em></div></div>' for _ in range(n))
+    pares = [i for i in range(1, 13)
+             if _find("antes-%d" % i) and _find("despues-%d" % i)]
+    if pares:
+        items = "".join(
+            '<div class="ba zoom"><div class="h b img">%s<em>Antes</em></div>'
+            '<div class="h a img">%s<em>Después</em></div></div>'
+            % (media("Antes", True, "antes-%d" % i), media("Después", False, "despues-%d" % i))
+            for i in pares)
+    else:
+        items = "".join('<div class="ba zoom"><div class="h b"><em>Antes</em></div>'
+                        '<div class="h a"><em>Después</em></div></div>' for _ in range(n))
+    return '<div class="bagrid">%s</div>' % items
+
 
 def video_row(nombres):
     out = []
