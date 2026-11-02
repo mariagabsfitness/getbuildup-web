@@ -205,7 +205,12 @@ VISTAZO = ["Arepa crunch de avena","Tuna poke bowl","Cilantro lime chicken","Pro
 # Testimonios REALES. La foto de cada uno es testimonio-1.jpg, testimonio-2.jpg...
 # en el mismo orden de esta lista. Si quitas uno, quita tambien su foto.
 TESTIMONIOS = [
-    ("Amo la dieta, no me da ansiedad, tengo buen ánimo siempre y duermo super bien. Y aparte del cambio físico, el cambio en la piel y en el pelo también es una locura.", "Olga"),
+    ("Los entrenamientos me encantan porque son retadores: salgo sintiendo que de verdad trabajé. Amo la dieta, no me da ansiedad, tengo buen ánimo siempre y duermo súper bien. Y aparte del cambio físico, el de la piel y el pelo también es una locura. Este estilo de vida lo aprendí con BuildUp y me lo voy a quedar, porque me encanta cómo me siento.",
+     "Olga · Build & Shred"),
+    ("Empecé a entrenar con BuildUp después de mis primeros dos hijos, antes de que fuera una app, y fue de las mejores decisiones que tomé. Luego llegó mi tercer bebé y tocó empezar de nuevo, con tres niños y una rutina completamente distinta 😂. No siempre es fácil encontrar el tiempo, pero hoy, un año y medio después, me siento más fuerte y feliz con mis resultados. Lo que más me gusta es haber aprendido a hacer del entrenamiento parte de mi vida, incluso en medio del caos de ser mamá de tres. ¡Y vamos por más! ❤️",
+     "María B · Build & Sculpt"),
+    ("Hace 10 años, antes de conocer el fitness, el entrenamiento y la alimentación, mi pensamiento de veinteañera era operarme las bubis y quitarme dos costillas, jajaja, porque sentía que mi cuerpo no tenía forma. Bastó empezar a entrenar y cambiar mi alimentación para ver el cambio que siempre quise. No tenía idea de que la solución era entrenar con un programa estructurado y comer saludable de acuerdo a mi cuerpo y a mi objetivo.",
+     "María Gabriela · Build & Shred"),
 ]
 
 # Los 4 entrenamientos de ejemplo que se ven en TODAS las páginas de programa.
