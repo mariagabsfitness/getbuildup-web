@@ -774,7 +774,7 @@ def main():
     urls = []
     for path, title, desc, fn, active in PAGES:
         write(path, doc(path, title, desc, fn(), active)); urls.append(path)
-    for _t, sl in C.LEGAL_ES + C.LEGAL_EN + [("Política de reembolsos", "reembolsos")]:
+    for _t, sl in C.LEGAL_ES + C.LEGAL_EN:
         tit, _c = leer_legal(sl)
         if tit is None:
             print("  (falta legal/%s.md)" % sl); continue

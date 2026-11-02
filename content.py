@@ -293,5 +293,5 @@ LEGAL_ES = [("Términos de servicio","terminos"),("Política de privacidad","pri
 LEGAL_EN = [("Terms of Service","terms-en"),("Privacy Policy","privacy-en"),
             ("Health Data Privacy","health-data-privacy-en"),("Health Data Consent","health-data-consent-en"),
             ("Health &amp; Nutrition Notice","health-notice-en"),("BuildFam Guidelines","community-guidelines-en"),
-            ("Delete Account &amp; Data","delete-account-en")]
+            ("Delete Account &amp; Data","delete-account-en"),("Refund Policy","refunds-en")]
 def legal_url(slug): return _LEG + slug + "/"
