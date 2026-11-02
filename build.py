@@ -727,6 +727,9 @@ def leer_legal(slug):
     txt = io.open(ruta, encoding="utf-8").read().strip()
     lineas = txt.split("\n")
     titulo = lineas[0][2:].strip() if lineas[0].startswith("# ") else slug
+    for cola in (" | BuildUp", " – BuildUp", " — BuildUp", " de BuildUp"):
+        if titulo.endswith(cola):
+            titulo = titulo[: -len(cola)].strip()
     return titulo, md_a_html("\n".join(lineas[1:]))
 
 
