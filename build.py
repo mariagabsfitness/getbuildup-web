@@ -787,7 +787,7 @@ def page_crear_cuenta():
       <label for="c">Contraseña</label><input id="c" type="password" placeholder="Mínimo 8 caracteres">
       <label for="f">Fecha de nacimiento</label><input id="f" type="date">
       <p class="hint">Este mismo correo y contraseña son los que usarás para entrar en la app. Tu prueba queda ligada a esta cuenta. Debes ser mayor de 18 años.</p>
-      <label class="chk" for="salud"><input id="salud" type="checkbox"><span>Autorizo a BuildUp a tratar mis datos de salud y fitness (peso, medidas, fotos de progreso y alimentación) para calcular mis macros y seguir mi progreso. Sin esto no se pueden usar el cuestionario de nutrición ni las fotos de progreso. <a href="%s" target="_blank" rel="noopener">Más información</a></span></label>
+      <label class="chk" for="salud"><input id="salud" type="checkbox"><span>Autorizo a BuildUp a tratar mis datos de salud y fitness (peso, medidas, fotos de progreso y alimentación) para calcular mis macros y seguir mi progreso. Puedes activarlo o desactivarlo luego desde la app, pero sin esto no se pueden usar el cuestionario de nutrición ni las fotos de progreso. <a href="%s" target="_blank" rel="noopener">Más información</a></span></label>
     </div>
     <div class="scardx"><h4>Tu plan</h4>
       <div class="plan sel" data-plan="anual" data-price="%s al año" role="button" tabindex="0" style="margin-top:0">
