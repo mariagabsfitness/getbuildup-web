@@ -640,7 +640,18 @@ def script_pago():
     return """
 <script type="module">
 const CFG = %s;
-const activo = CFG.activo || new URLSearchParams(location.search).get("pago") === "prueba";
+const qsPrueba = new URLSearchParams(location.search).get("pago") === "prueba";
+if (qsPrueba) { try { sessionStorage.setItem("bu_prueba", "1"); } catch (_) {} }
+let pruebaGuardada = false;
+try { pruebaGuardada = sessionStorage.getItem("bu_prueba") === "1"; } catch (_) {}
+const modoPrueba = qsPrueba || pruebaGuardada;
+const activo = CFG.activo || modoPrueba;
+if (modoPrueba && !CFG.activo) {
+  const bandera = document.createElement("div");
+  bandera.textContent = "MODO PRUEBA \u00b7 el cobro es de mentira";
+  bandera.style.cssText = "position:fixed;left:14px;bottom:14px;z-index:99999;background:#111;color:#fff;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.28)";
+  (document.body || document.documentElement).appendChild(bandera);
+}
 const boton = document.getElementById("btn-pagar");
 const aviso = document.getElementById("pago-error");
 const caja  = document.getElementById("checkout");
