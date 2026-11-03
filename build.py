@@ -627,6 +627,7 @@ RC_SDK = "https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1.73.2/dist/Purc
 FB_APP = "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"
 FB_AUTH = "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js"
 FB_FS = "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js"
+FB_FN = "https://www.gstatic.com/firebasejs/13.2.0/firebase-functions.js"
 
 
 def script_pago():
@@ -657,6 +658,7 @@ if (boton) {
       const correo = (document.getElementById("e").value || "").trim();
       const clave  = document.getElementById("c").value || "";
       const fnac   = document.getElementById("f").value || "";
+      const quiereSalud = document.getElementById("salud").checked;
       di("");
       if (!nombre)                      return di("Escribe tu nombre.");
       if (!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(correo)) return di("Revisa tu correo, parece que falta algo.");
@@ -673,8 +675,8 @@ if (boton) {
       const textoOriginal = boton.textContent;
       boton.disabled = true; boton.textContent = "Creando tu cuenta...";
       try {
-        const [{ initializeApp }, fbAuth, fbFs, { Purchases }] = await Promise.all([
-          import("%s"), import("%s"), import("%s"), import("%s"),
+        const [{ initializeApp }, fbAuth, fbFs, fbFn, { Purchases }] = await Promise.all([
+          import("%s"), import("%s"), import("%s"), import("%s"), import("%s"),
         ]);
         const app  = initializeApp(CFG.fb);
         const auth = fbAuth.getAuth(app);
@@ -720,6 +722,26 @@ if (boton) {
             aceptoTerminosVersion: "1.0",
           });
         }
+        if (quiereSalud) {
+          // Igual que la app: la funcion deja constancia en registroConsentimientos
+          // ademas de poner los campos en el perfil.
+          try {
+            const fn = fbFn.httpsCallable(fbFn.getFunctions(app), "actualizarConsentimiento");
+            await fn({ tipo: "salud", otorgar: true, origen: "web" });
+          } catch (errFn) {
+            console.warn("consentimiento por funcion no disponible, se escribe directo", errFn);
+            let version = "1.0";
+            try {
+              const aj = await fbFs.getDoc(fbFs.doc(db, "ajustes", "legal"));
+              if (aj.exists() && aj.data().versionConsentSalud) version = aj.data().versionConsentSalud;
+            } catch (_) {}
+            await fbFs.setDoc(ref, {
+              consintioSalud: true,
+              consintioSaludFecha: fbFs.serverTimestamp(),
+              consintioSaludVersion: version,
+            }, { merge: true });
+          }
+        }
         if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: uid });
         else await Purchases.getSharedInstance().changeUser(uid);
         const rc = Purchases.getSharedInstance();
@@ -748,7 +770,7 @@ if (boton) {
     });
   }
 }
-</script>""" % (cfg, FB_APP, FB_AUTH, FB_FS, RC_SDK)
+</script>""" % (cfg, FB_APP, FB_AUTH, FB_FS, FB_FN, RC_SDK)
 
 
 def page_crear_cuenta():
@@ -765,6 +787,7 @@ def page_crear_cuenta():
       <label for="c">Contraseña</label><input id="c" type="password" placeholder="Mínimo 8 caracteres">
       <label for="f">Fecha de nacimiento</label><input id="f" type="date">
       <p class="hint">Este mismo correo y contraseña son los que usarás para entrar en la app. Tu prueba queda ligada a esta cuenta. Debes ser mayor de 18 años.</p>
+      <label class="chk" for="salud"><input id="salud" type="checkbox"><span>Autorizo a BuildUp a tratar mis datos de salud y fitness (peso, medidas, fotos de progreso y alimentación) para calcular mis macros y seguir mi progreso. Sin esto no se pueden usar el cuestionario de nutrición ni las fotos de progreso. <a href="%s" target="_blank" rel="noopener">Más información</a></span></label>
     </div>
     <div class="scardx"><h4>Tu plan</h4>
       <div class="plan sel" data-plan="anual" data-price="%s al año" role="button" tabindex="0" style="margin-top:0">
@@ -784,7 +807,8 @@ def page_crear_cuenta():
     </div>
   </div>
   <div id="checkout" hidden></div>
-</div></section>""" % (P["prueba_dias"], a["importe"], a["cinta"], a["importe"], a["periodo"], a["mensualizado"],
+</div></section>""" % (P["prueba_dias"], C.legal_url("consentimiento-datos-salud"),
+    a["importe"], a["cinta"], a["importe"], a["periodo"], a["mensualizado"],
     m["importe"], m["importe"], m["periodo"], m["renovacion"], P["prueba_dias"]+1, a["importe"],
     P["prueba_dias"], C.legal_url("terminos"), C.legal_url("privacidad"), P["prueba_dias"]) + script_pago()
 
