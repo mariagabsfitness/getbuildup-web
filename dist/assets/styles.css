@@ -317,8 +317,8 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 /* ---------- paginas legales ---------- */
 /* ---------- alta de cuenta y pago ---------- */
 .formerr{color:#b42318;font-size:13px;line-height:1.55;margin:12px 0 0}
-.chk{display:flex;gap:11px;align-items:flex-start;margin-top:18px;font-size:12.5px;color:var(--grey);line-height:1.6;cursor:pointer}
-.chk input[type=checkbox]{width:17px;height:17px;flex:0 0 17px;margin:2px 0 0;accent-color:var(--ink);cursor:pointer}
+.scardx label.chk{display:flex;gap:11px;align-items:flex-start;margin:18px 0 0;font-size:12.5px;color:var(--grey);line-height:1.6;cursor:pointer;text-transform:none;letter-spacing:normal}
+.scardx label.chk input[type=checkbox]{width:17px;height:17px;flex:0 0 17px;margin:2px 0 0;padding:0;border-radius:3px;accent-color:var(--ink);cursor:pointer}
 .chk a{color:var(--charcoal);text-decoration:underline;text-underline-offset:2px}
 #btn-pagar[disabled]{opacity:.6;cursor:default}
 #btn-pagar[disabled]:hover{background:var(--ink);color:#fff;transform:none}
