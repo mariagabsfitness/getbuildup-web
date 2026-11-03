@@ -644,6 +644,15 @@ const activo = CFG.activo || new URLSearchParams(location.search).get("pago") ==
 const boton = document.getElementById("btn-pagar");
 const aviso = document.getElementById("pago-error");
 const caja  = document.getElementById("checkout");
+const salud = document.getElementById("salud");
+const nota  = document.getElementById("nota-salud");
+const sincro = () => {
+  const ok = !!(salud && salud.checked);
+  if (boton) boton.disabled = !ok;
+  if (nota) nota.hidden = ok;
+};
+if (salud) salud.addEventListener("change", sincro);
+sincro();
 if (boton) {
   if (!activo) {
     boton.addEventListener("click", () => { location.href = "/listo/"; });
@@ -690,14 +699,14 @@ if (boton) {
             try {
               cred = await fbAuth.signInWithEmailAndPassword(auth, correo, clave);
             } catch (_) {
-              boton.disabled = false; boton.textContent = textoOriginal;
+              boton.textContent = textoOriginal; sincro();
               return di("Ya existe una cuenta con ese correo. Entra desde Iniciar sesión.");
             }
           } else if (err && err.code === "auth/weak-password") {
-            boton.disabled = false; boton.textContent = textoOriginal;
+            boton.textContent = textoOriginal; sincro();
             return di("Esa contraseña es muy débil, prueba con una más larga.");
           } else if (err && err.code === "auth/invalid-email") {
-            boton.disabled = false; boton.textContent = textoOriginal;
+            boton.textContent = textoOriginal; sincro();
             return di("Ese correo no parece válido.");
           } else {
             throw err;
@@ -752,7 +761,8 @@ if (boton) {
         if (!pkg) throw new Error("sin paquete");
         boton.textContent = "Abriendo el pago...";
         caja.hidden = false;
-        caja.scrollIntoView({ behavior: "smooth", block: "center" });
+        const irAlPago = () => { try { caja.scrollIntoView({ behavior: "auto", block: "start" }); } catch (_) {} };
+        irAlPago(); setTimeout(irAlPago, 900); setTimeout(irAlPago, 2400);
         const res = await rc.purchase({
           rcPackage: pkg,
           customerEmail: correo,
@@ -762,7 +772,7 @@ if (boton) {
         if (res) { location.href = "/listo/"; return; }
       } catch (err) {
         caja.hidden = true; caja.innerHTML = "";
-        boton.disabled = false; boton.textContent = textoOriginal;
+        boton.textContent = textoOriginal; sincro();
         const cancelado = err && (err.errorCode === 1 || String(err.message || "").toLowerCase().includes("cancel"));
         if (cancelado) di("");
         else { console.error(err); di("No pudimos completar el pago. Inténtalo de nuevo o escríbenos."); }
@@ -802,6 +812,7 @@ def page_crear_cuenta():
         <div><span>A partir del día %d</span><b data-after>%s al año</b></div>
       </div>
       <div style="margin-top:22px"><button id="btn-pagar" class="btn wide" style="width:100%%">Empezar %d días gratis</button></div>
+      <p class="hint" id="nota-salud" style="margin-top:10px">Marca la casilla de autorización de datos de salud para continuar.</p>
       <p class="formerr" id="pago-error" hidden></p>
       <p class="legalnote">Al continuar aceptas los <a href="%s" target="_blank" rel="noopener">Términos de servicio</a> y la <a href="%s" target="_blank" rel="noopener">Política de privacidad</a>. Te avisamos por correo antes de que terminen los %d días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
     </div>
