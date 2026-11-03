@@ -636,6 +636,7 @@ def script_pago():
         "rcKey": C.PAGO["rc_api_key"],
         "ent": C.PAGO["entitlement"],
         "fb": C.PAGO["firebase"],
+        "terminos": C.legal_url("terminos"),
     }, ensure_ascii=False)
     return """
 <script type="module">
@@ -794,6 +795,22 @@ if (boton) {
         caja.hidden = false;
         const irAlPago = () => { try { caja.scrollIntoView({ behavior: "auto", block: "start" }); } catch (_) {} };
         irAlPago(); setTimeout(irAlPago, 900); setTimeout(irAlPago, 2400);
+        const ajustarCaja = () => {
+          const k = caja.firstElementChild;
+          if (!k) return;
+          const sc = Array.from(k.querySelectorAll("div")).find(
+            (d) => d.scrollHeight > d.clientHeight + 4 && d.clientHeight > 120
+          );
+          if (!sc) return;
+          const extra = sc.scrollHeight - sc.clientHeight;
+          const alto = caja.getBoundingClientRect().height + extra + 12;
+          caja.style.height = Math.min(1600, Math.round(alto)) + "px";
+        };
+        [700, 1400, 2200, 3200, 4500, 6000].forEach((ms) => setTimeout(ajustarCaja, ms));
+        window.addEventListener("resize", () => {
+          caja.style.height = "";
+          setTimeout(ajustarCaja, 300);
+        });
         setTimeout(() => {
           diag("7 a los 9s: hijos=" + caja.children.length + " alto=" + caja.offsetHeight + " iframes=" + caja.querySelectorAll("iframe").length);
           if (!caja.hidden && caja.children.length === 0) {
@@ -806,6 +823,19 @@ if (boton) {
           customerEmail: correo,
           htmlTarget: caja,
           selectedLocale: "es",
+          termsAndConditionsUrl: location.origin + CFG.terminos,
+          brandingAppearanceOverride: {
+            color_buttons_primary: "#000000",
+            color_buttons_primary_text: "#FFFFFF",
+            color_accent: "#000000",
+            color_error: "#B42318",
+            color_product_info_bg: "#F5F5F5",
+            color_form_bg: "#FFFFFF",
+            color_page_bg: "#FFFFFF",
+            font: "Inter",
+            shapes: "rounded",
+            show_product_description: true,
+          },
         });
         if (res) { location.href = "/listo/"; return; }
       } catch (err) {
