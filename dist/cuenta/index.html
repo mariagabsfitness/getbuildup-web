@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi cuenta — BuildUp</title>
+<meta name="description" content="Tu membresía de BuildUp: estado, renovación y gestión de la suscripción.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://getbuildup.app/cuenta/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BuildUp">
+<meta property="og:title" content="Mi cuenta — BuildUp">
+<meta property="og:description" content="Tu membresía de BuildUp: estado, renovación y gestión de la suscripción.">
+<meta property="og:url" content="https://getbuildup.app/cuenta/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<div class="notebar">Empieza con <b>7 días gratis</b> · acceso completo a BuildUp · cancela cuando quieras</div>
+<header class="hdr"><div class="hdr-in">
+  <a href="/" class="logo"><b>Build</b><span>Up</span></a>
+  <nav class="nav" id="nav"><a href="/membresia/">Membresía</a><a href="/programas/">Programas</a><a href="/nutricion/">Nutrición</a><a href="/comunidad/">BuildFam</a><a href="/login/" class="on">Iniciar sesión</a></nav>
+  <div class="hdr-cta">
+    <button class="burger" id="burger" aria-label="Menú"><span></span></button>
+    <a href="/crear-cuenta/" class="btn">Únete</a>
+  </div>
+</div></header>
+<main>
+<section class="section" style="padding:96px 0 120px"><div class="wrap" style="max-width:620px">
+  <h2 style="font-size:30px;letter-spacing:-.015em">Mi cuenta</h2>
+  <div id="cargando" style="color:var(--grey);font-size:14px;margin-top:18px">Cargando tu cuenta...</div>
+  <div id="panel" hidden style="margin-top:26px">
+    <div style="border:1px solid var(--line);border-radius:var(--r-md);padding:28px 26px">
+      <p style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Tus datos</p>
+      <p style="font-size:19px;margin:10px 0 2px" id="c-nombre"></p>
+      <p style="color:var(--grey);font-size:14px" id="c-correo"></p>
+    </div>
+    <div style="border:1px solid var(--line);border-radius:var(--r-md);padding:28px 26px;margin-top:16px">
+      <p style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Tu membresía</p>
+      <p style="font-size:19px;margin:10px 0 2px" id="c-estado"></p>
+      <p style="color:var(--grey);font-size:14px;line-height:1.6" id="c-detalle"></p>
+      <div id="c-acciones" style="margin-top:22px"></div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;margin-top:24px">
+      <a class="btn ghost" href="/listo/">Descargar la app</a>
+      <a href="#" id="salir" style="font-size:14px;color:var(--grey);border-bottom:1px solid var(--line)">Cerrar sesión</a>
+    </div>
+  </div>
+</div></section>
+<script type="module">
+const CFG = {"activo": false, "rcKey": "pdl_ipkHDTDyCXEIJgZjsTHzfbwIoJWg", "ent": "acceso", "fb": {"apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego", "authDomain": "buildup-40951.firebaseapp.com", "projectId": "buildup-40951", "appId": "1:869364925842:web:d78fc11ef48bf437ce2d4b"}, "terminos": "/legal/terminos/"};
+const cargando = document.getElementById("cargando");
+const panel = document.getElementById("panel");
+const fecha = (d) => d ? new Date(d).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" }) : "";
+const [{ initializeApp, getApps }, fbAuth, { Purchases }] = await Promise.all([
+  import("https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"), import("https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js"), import("https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1.73.2/dist/Purchases.es.js"),
+]);
+const app = getApps()[0] || initializeApp(CFG.fb);
+const auth = fbAuth.getAuth(app);
+fbAuth.onAuthStateChanged(auth, async (user) => {
+  if (!user) { location.replace("/login/"); return; }
+  document.getElementById("c-nombre").textContent = user.displayName || "Tu cuenta";
+  document.getElementById("c-correo").textContent = user.email || "";
+  const estado = document.getElementById("c-estado");
+  const detalle = document.getElementById("c-detalle");
+  const acciones = document.getElementById("c-acciones");
+  try {
+    if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: user.uid });
+    else await Purchases.getSharedInstance().changeUser(user.uid);
+    const info = await Purchases.getSharedInstance().getCustomerInfo();
+    const ent = info.entitlements.active[CFG.ent];
+    if (ent) {
+      const prueba = ent.periodType === "trial";
+      estado.textContent = prueba ? "Prueba gratuita activa" : "Membresía activa";
+      const lineas = [];
+      if (prueba) lineas.push("Tu prueba termina el " + fecha(ent.expirationDate) + ".");
+      if (ent.willRenew) lineas.push((prueba ? "Ese día" : "Se renueva el " + fecha(ent.expirationDate)) + " se cobrará la renovación automáticamente.");
+      else lineas.push("No se renovará. Mantienes el acceso hasta el " + fecha(ent.expirationDate) + ".");
+      detalle.innerHTML = lineas.join("<br>");
+      if (info.managementURL) {
+        const a = document.createElement("a");
+        a.className = "btn"; a.href = info.managementURL;
+        a.target = "_blank"; a.rel = "noopener";
+        a.textContent = "Gestionar o cancelar mi membresía";
+        acciones.appendChild(a);
+        const nota = document.createElement("p");
+        nota.style.cssText = "color:var(--muted);font-size:12.5px;margin-top:12px;line-height:1.6";
+        nota.textContent = "Se abre el portal seguro de Paddle, que gestiona los pagos de BuildUp. Ahí puedes cambiar tu tarjeta, descargar tus facturas o cancelar.";
+        acciones.appendChild(nota);
+      }
+    } else {
+      estado.textContent = "Sin membresía activa";
+      detalle.textContent = "Tu cuenta existe, pero ahora mismo no tienes acceso a la app.";
+      const a = document.createElement("a");
+      a.className = "btn"; a.href = "/crear-cuenta/";
+      a.textContent = "Empezar mi membresía";
+      acciones.appendChild(a);
+    }
+  } catch (err) {
+    console.error(err);
+    estado.textContent = "No pudimos cargar tu membresía";
+    detalle.textContent = "Vuelve a intentarlo en unos minutos. Si sigue igual, escríbenos y lo miramos.";
+  }
+  cargando.hidden = true;
+  panel.hidden = false;
+});
+document.getElementById("salir").addEventListener("click", async (e) => {
+  e.preventDefault();
+  await fbAuth.signOut(auth);
+  location.href = "/";
+});
+</script>
+</main>
+<footer class="ftr"><div class="wrap">
+  <div class="ftr-grid">
+    <div><h4>Contacto</h4><ul>
+      <li>Lun – Vie | 9:00 – 17:00</li>
+      <li><a href="mailto:team@mariagabsfitness.com">team@mariagabsfitness.com</a></li>
+      <li style="color:var(--muted)">Consultas generales</li>
+      <li style="margin-top:12px"><a href="mailto:buildup@mariagabsfitness.com">buildup@mariagabsfitness.com</a></li>
+      <li style="color:var(--muted)">Reportar un problema con la app</li>
+      <li style="margin-top:16px;color:var(--muted)">Entrenamiento creado por María Gabriela</li>
+      <li style="color:var(--muted)">Maria Gabs Fitness LLC</li>
+    </ul></div>
+    <div><h4>La app</h4><ul>
+      <li><a href="/programas/">Programas</a></li>
+      <li><a href="/nutricion/">Nutrición</a></li>
+      <li><a href="/comunidad/">BuildFam</a></li>
+      <li><a href="/membresia/">Membresía</a></li>
+      <li><a href="/programas/#faq">Preguntas frecuentes</a></li>
+    </ul></div>
+    <div><h4>Legal</h4><ul><li><a href="/legal/terminos/" target="_blank" rel="noopener">Términos de servicio</a></li><li><a href="/legal/privacidad/" target="_blank" rel="noopener">Política de privacidad</a></li><li><a href="/legal/privacidad-salud/" target="_blank" rel="noopener">Privacidad de datos de salud</a></li><li><a href="/legal/consentimiento-datos-salud/" target="_blank" rel="noopener">Consentimiento de datos de salud</a></li><li><a href="/legal/aviso-salud/" target="_blank" rel="noopener">Aviso de salud y nutrición</a></li><li><a href="/legal/normas-comunidad/" target="_blank" rel="noopener">Normas de BuildFam</a></li><li><a href="/legal/borrar-cuenta/" target="_blank" rel="noopener">Eliminar cuenta y datos</a></li><li><a href="/legal/reembolsos/" target="_blank" rel="noopener">Política de reembolsos</a></li></ul></div>
+    <div><h4>Legal · EN</h4><ul><li><a href="/legal/terms-en/" target="_blank" rel="noopener">Terms of Service</a></li><li><a href="/legal/privacy-en/" target="_blank" rel="noopener">Privacy Policy</a></li><li><a href="/legal/health-data-privacy-en/" target="_blank" rel="noopener">Health Data Privacy</a></li><li><a href="/legal/health-data-consent-en/" target="_blank" rel="noopener">Health Data Consent</a></li><li><a href="/legal/health-notice-en/" target="_blank" rel="noopener">Health &amp; Nutrition Notice</a></li><li><a href="/legal/community-guidelines-en/" target="_blank" rel="noopener">BuildFam Guidelines</a></li><li><a href="/legal/delete-account-en/" target="_blank" rel="noopener">Delete Account &amp; Data</a></li><li><a href="/legal/refunds-en/" target="_blank" rel="noopener">Refund Policy</a></li></ul></div>
+  </div>
+  <div class="gdpr">
+    <a class="gdprbadge" href="https://app.prighter.com/portal/13541273953" target="_blank" rel="noopener">
+      <span class="shield">&#9094;</span>
+      <span class="txt"><b>EU GDPR</b><i>Representative</i><em>Certified · 2026-10-27</em></span>
+      <span class="chev">&rsaquo;</span>
+    </a>
+    <p class="gdprby">powered by <a href="https://prighter.com" target="_blank" rel="noopener">Prighter</a></p>
+  </div>
+  <div class="ftr-bot">
+    <div class="social"><a href="https://www.instagram.com/getbuildup/" aria-label="Instagram">IG</a><a href="https://www.tiktok.com/@mariagabsfitness" aria-label="TikTok">TT</a></div>
+    <div>© 2026 — Maria Gabs Fitness LLC</div>
+  </div>
+</div></footer>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>

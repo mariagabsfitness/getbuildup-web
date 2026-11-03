@@ -38,10 +38,61 @@
     <input id="le" type="email" placeholder="tu@correo.com" style="width:100%;margin:8px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
     <label style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)" for="lc">Contraseña</label>
     <input id="lc" type="password" placeholder="••••••••" style="width:100%;margin:8px 0 24px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
-    <button class="btn" style="width:100%">Entrar</button>
-    <p style="text-align:center;font-size:13px;color:var(--grey);margin:20px 0 0">¿No tienes cuenta? <a href="/crear-cuenta/" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
+    <button class="btn" id="btn-entrar" style="width:100%">Entrar</button>
+    <p class="formerr" id="login-error" hidden></p>
+    <p id="login-ok" hidden style="color:var(--success);font-size:13px;margin:14px 0 0">Te enviamos un correo para crear una contraseña nueva.</p>
+    <p style="text-align:center;font-size:13px;color:var(--grey);margin:18px 0 0"><a href="#" id="olvide" style="border-bottom:1px solid var(--line)">Olvidé mi contraseña</a></p>
+    <p style="text-align:center;font-size:13px;color:var(--grey);margin:12px 0 0">¿No tienes cuenta? <a href="/crear-cuenta/" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
   </div>
 </div></section>
+<script type="module">
+const CFG = {"activo": false, "rcKey": "pdl_ipkHDTDyCXEIJgZjsTHzfbwIoJWg", "ent": "acceso", "fb": {"apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego", "authDomain": "buildup-40951.firebaseapp.com", "projectId": "buildup-40951", "appId": "1:869364925842:web:d78fc11ef48bf437ce2d4b"}, "terminos": "/legal/terminos/"};
+const boton = document.getElementById("btn-entrar");
+const aviso = document.getElementById("login-error");
+const di = (m) => { aviso.textContent = m; aviso.hidden = !m; };
+const entrar = async () => {
+  const correo = (document.getElementById("le").value || "").trim();
+  const clave = document.getElementById("lc").value || "";
+  di("");
+  if (!correo) return di("Escribe tu correo.");
+  if (!clave) return di("Escribe tu contraseña.");
+  const texto = boton.textContent;
+  boton.disabled = true; boton.textContent = "Entrando...";
+  try {
+    const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"), import("https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js")]);
+    const app = getApps()[0] || initializeApp(CFG.fb);
+    await fbAuth.signInWithEmailAndPassword(fbAuth.getAuth(app), correo, clave);
+    location.href = "/cuenta/";
+  } catch (err) {
+    boton.disabled = false; boton.textContent = texto;
+    const c = err && err.code;
+    if (c === "auth/invalid-credential" || c === "auth/wrong-password" || c === "auth/user-not-found")
+      di("Ese correo o esa contraseña no coinciden. Revísalos e inténtalo otra vez.");
+    else if (c === "auth/invalid-email") di("Ese correo no parece válido.");
+    else if (c === "auth/too-many-requests") di("Demasiados intentos. Espera unos minutos y vuelve a probar.");
+    else { console.error(err); di("No pudimos entrar ahora mismo. Inténtalo de nuevo en un momento."); }
+  }
+};
+if (boton) {
+  boton.addEventListener("click", entrar);
+  ["le", "lc"].forEach((id) => document.getElementById(id).addEventListener("keydown", (e) => {
+    if (e.key === "Enter") entrar();
+  }));
+}
+const olvide = document.getElementById("olvide");
+if (olvide) olvide.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const correo = (document.getElementById("le").value || "").trim();
+  if (!correo) return di("Escribe tu correo arriba y vuelve a pulsar aquí.");
+  try {
+    const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"), import("https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js")]);
+    const app = getApps()[0] || initializeApp(CFG.fb);
+    await fbAuth.sendPasswordResetEmail(fbAuth.getAuth(app), correo);
+    di("");
+    document.getElementById("login-ok").hidden = false;
+  } catch (_) { di("No pudimos enviar el correo. Revísalo e inténtalo otra vez."); }
+});
+</script>
 </main>
 <footer class="ftr"><div class="wrap">
   <div class="ftr-grid">

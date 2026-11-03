@@ -126,13 +126,14 @@ def footer():
 
 def doc(path, title, desc, body, active=""):
     canon = S["dominio"] + path
+    noindex = '\n<meta name="robots" content="noindex,nofollow">' if path in ("/cuenta/", "/listo/") else ""
     return """<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title>
-<meta name="description" content="%s">
+<meta name="description" content="%s">%s
 <link rel="canonical" href="%s">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BuildUp">
@@ -156,7 +157,7 @@ def doc(path, title, desc, body, active=""):
 <script src="/assets/app.js" defer></script>
 </body>
 </html>
-""" % (esc(title), esc(desc), canon, esc(title), esc(desc), canon, header(active), body, footer())
+""" % (esc(title), esc(desc), noindex, canon, esc(title), esc(desc), canon, header(active), body, footer())
 
 # ---------------------------------------------------------------- componentes
 def plan_block():
@@ -630,6 +631,16 @@ FB_FS = "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js"
 FB_FN = "https://www.gstatic.com/firebasejs/13.2.0/firebase-functions.js"
 
 
+def cfg_json():
+    return json.dumps({
+        "activo": C.PAGO["activo"],
+        "rcKey": C.PAGO["rc_api_key"],
+        "ent": C.PAGO["entitlement"],
+        "fb": C.PAGO["firebase"],
+        "terminos": C.legal_url("terminos"),
+    }, ensure_ascii=False)
+
+
 def script_pago():
     cfg = json.dumps({
         "activo": C.PAGO["activo"],
@@ -918,10 +929,156 @@ def page_login():
     <input id="le" type="email" placeholder="tu@correo.com" style="width:100%;margin:8px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
     <label style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)" for="lc">Contraseña</label>
     <input id="lc" type="password" placeholder="••••••••" style="width:100%;margin:8px 0 24px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
-    <button class="btn" style="width:100%">Entrar</button>
-    <p style="text-align:center;font-size:13px;color:var(--grey);margin:20px 0 0">¿No tienes cuenta? <a href="/crear-cuenta/" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
+    <button class="btn" id="btn-entrar" style="width:100%">Entrar</button>
+    <p class="formerr" id="login-error" hidden></p>
+    <p id="login-ok" hidden style="color:var(--success);font-size:13px;margin:14px 0 0">Te enviamos un correo para crear una contraseña nueva.</p>
+    <p style="text-align:center;font-size:13px;color:var(--grey);margin:18px 0 0"><a href="#" id="olvide" style="border-bottom:1px solid var(--line)">Olvidé mi contraseña</a></p>
+    <p style="text-align:center;font-size:13px;color:var(--grey);margin:12px 0 0">¿No tienes cuenta? <a href="/crear-cuenta/" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
   </div>
-</div></section>"""
+</div></section>""" + script_login()
+
+def script_login():
+    return """
+<script type="module">
+const CFG = %s;
+const boton = document.getElementById("btn-entrar");
+const aviso = document.getElementById("login-error");
+const di = (m) => { aviso.textContent = m; aviso.hidden = !m; };
+const entrar = async () => {
+  const correo = (document.getElementById("le").value || "").trim();
+  const clave = document.getElementById("lc").value || "";
+  di("");
+  if (!correo) return di("Escribe tu correo.");
+  if (!clave) return di("Escribe tu contrase\u00f1a.");
+  const texto = boton.textContent;
+  boton.disabled = true; boton.textContent = "Entrando...";
+  try {
+    const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("%s"), import("%s")]);
+    const app = getApps()[0] || initializeApp(CFG.fb);
+    await fbAuth.signInWithEmailAndPassword(fbAuth.getAuth(app), correo, clave);
+    location.href = "/cuenta/";
+  } catch (err) {
+    boton.disabled = false; boton.textContent = texto;
+    const c = err && err.code;
+    if (c === "auth/invalid-credential" || c === "auth/wrong-password" || c === "auth/user-not-found")
+      di("Ese correo o esa contrase\u00f1a no coinciden. Rev\u00edsalos e int\u00e9ntalo otra vez.");
+    else if (c === "auth/invalid-email") di("Ese correo no parece v\u00e1lido.");
+    else if (c === "auth/too-many-requests") di("Demasiados intentos. Espera unos minutos y vuelve a probar.");
+    else { console.error(err); di("No pudimos entrar ahora mismo. Int\u00e9ntalo de nuevo en un momento."); }
+  }
+};
+if (boton) {
+  boton.addEventListener("click", entrar);
+  ["le", "lc"].forEach((id) => document.getElementById(id).addEventListener("keydown", (e) => {
+    if (e.key === "Enter") entrar();
+  }));
+}
+const olvide = document.getElementById("olvide");
+if (olvide) olvide.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const correo = (document.getElementById("le").value || "").trim();
+  if (!correo) return di("Escribe tu correo arriba y vuelve a pulsar aqu\u00ed.");
+  try {
+    const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("%s"), import("%s")]);
+    const app = getApps()[0] || initializeApp(CFG.fb);
+    await fbAuth.sendPasswordResetEmail(fbAuth.getAuth(app), correo);
+    di("");
+    document.getElementById("login-ok").hidden = false;
+  } catch (_) { di("No pudimos enviar el correo. Rev\u00edsalo e int\u00e9ntalo otra vez."); }
+});
+</script>""" % (cfg_json(), FB_APP, FB_AUTH, FB_APP, FB_AUTH)
+
+
+def page_cuenta():
+    return """<section class="section" style="padding:96px 0 120px"><div class="wrap" style="max-width:620px">
+  <h2 style="font-size:30px;letter-spacing:-.015em">Mi cuenta</h2>
+  <div id="cargando" style="color:var(--grey);font-size:14px;margin-top:18px">Cargando tu cuenta...</div>
+  <div id="panel" hidden style="margin-top:26px">
+    <div style="border:1px solid var(--line);border-radius:var(--r-md);padding:28px 26px">
+      <p style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Tus datos</p>
+      <p style="font-size:19px;margin:10px 0 2px" id="c-nombre"></p>
+      <p style="color:var(--grey);font-size:14px" id="c-correo"></p>
+    </div>
+    <div style="border:1px solid var(--line);border-radius:var(--r-md);padding:28px 26px;margin-top:16px">
+      <p style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">Tu membres\u00eda</p>
+      <p style="font-size:19px;margin:10px 0 2px" id="c-estado"></p>
+      <p style="color:var(--grey);font-size:14px;line-height:1.6" id="c-detalle"></p>
+      <div id="c-acciones" style="margin-top:22px"></div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;margin-top:24px">
+      <a class="btn ghost" href="/listo/">Descargar la app</a>
+      <a href="#" id="salir" style="font-size:14px;color:var(--grey);border-bottom:1px solid var(--line)">Cerrar sesi\u00f3n</a>
+    </div>
+  </div>
+</div></section>""" + script_cuenta()
+
+
+def script_cuenta():
+    return """
+<script type="module">
+const CFG = %s;
+const cargando = document.getElementById("cargando");
+const panel = document.getElementById("panel");
+const fecha = (d) => d ? new Date(d).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" }) : "";
+const [{ initializeApp, getApps }, fbAuth, { Purchases }] = await Promise.all([
+  import("%s"), import("%s"), import("%s"),
+]);
+const app = getApps()[0] || initializeApp(CFG.fb);
+const auth = fbAuth.getAuth(app);
+fbAuth.onAuthStateChanged(auth, async (user) => {
+  if (!user) { location.replace("/login/"); return; }
+  document.getElementById("c-nombre").textContent = user.displayName || "Tu cuenta";
+  document.getElementById("c-correo").textContent = user.email || "";
+  const estado = document.getElementById("c-estado");
+  const detalle = document.getElementById("c-detalle");
+  const acciones = document.getElementById("c-acciones");
+  try {
+    if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: user.uid });
+    else await Purchases.getSharedInstance().changeUser(user.uid);
+    const info = await Purchases.getSharedInstance().getCustomerInfo();
+    const ent = info.entitlements.active[CFG.ent];
+    if (ent) {
+      const prueba = ent.periodType === "trial";
+      estado.textContent = prueba ? "Prueba gratuita activa" : "Membres\u00eda activa";
+      const lineas = [];
+      if (prueba) lineas.push("Tu prueba termina el " + fecha(ent.expirationDate) + ".");
+      if (ent.willRenew) lineas.push((prueba ? "Ese d\u00eda" : "Se renueva el " + fecha(ent.expirationDate)) + " se cobrar\u00e1 la renovaci\u00f3n autom\u00e1ticamente.");
+      else lineas.push("No se renovar\u00e1. Mantienes el acceso hasta el " + fecha(ent.expirationDate) + ".");
+      detalle.innerHTML = lineas.join("<br>");
+      if (info.managementURL) {
+        const a = document.createElement("a");
+        a.className = "btn"; a.href = info.managementURL;
+        a.target = "_blank"; a.rel = "noopener";
+        a.textContent = "Gestionar o cancelar mi membres\u00eda";
+        acciones.appendChild(a);
+        const nota = document.createElement("p");
+        nota.style.cssText = "color:var(--muted);font-size:12.5px;margin-top:12px;line-height:1.6";
+        nota.textContent = "Se abre el portal seguro de Paddle, que gestiona los pagos de BuildUp. Ah\u00ed puedes cambiar tu tarjeta, descargar tus facturas o cancelar.";
+        acciones.appendChild(nota);
+      }
+    } else {
+      estado.textContent = "Sin membres\u00eda activa";
+      detalle.textContent = "Tu cuenta existe, pero ahora mismo no tienes acceso a la app.";
+      const a = document.createElement("a");
+      a.className = "btn"; a.href = "/crear-cuenta/";
+      a.textContent = "Empezar mi membres\u00eda";
+      acciones.appendChild(a);
+    }
+  } catch (err) {
+    console.error(err);
+    estado.textContent = "No pudimos cargar tu membres\u00eda";
+    detalle.textContent = "Vuelve a intentarlo en unos minutos. Si sigue igual, escr\u00edbenos y lo miramos.";
+  }
+  cargando.hidden = true;
+  panel.hidden = false;
+});
+document.getElementById("salir").addEventListener("click", async (e) => {
+  e.preventDefault();
+  await fbAuth.signOut(auth);
+  location.href = "/";
+});
+</script>""" % (cfg_json(), FB_APP, FB_AUTH, RC_SDK)
+
 
 # ---------------------------------------------------------------- generar
 
@@ -995,6 +1152,8 @@ PAGES = [
    "Descarga la app y entra con tu cuenta para empezar tus 7 días gratis.", page_listo, ""),
   ("/login/", "Iniciar sesión — BuildUp",
    "Entra a tu cuenta de BuildUp.", page_login, "login"),
+  ("/cuenta/", "Mi cuenta — BuildUp",
+   "Tu membresía de BuildUp: estado, renovación y gestión de la suscripción.", page_cuenta, "login"),
 ]
 
 def write(path, text):
@@ -1031,6 +1190,8 @@ def main():
         "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % S["dominio"])
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
+        if u in ("/cuenta/", "/listo/"):
+            continue  # paginas privadas: no van al sitemap
         sm.append("  <url><loc>%s%s</loc></url>" % (S["dominio"], u))
     sm.append("</urlset>")
     io.open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(sm) + "\n")
