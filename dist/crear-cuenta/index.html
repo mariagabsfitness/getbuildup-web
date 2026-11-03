@@ -224,7 +224,7 @@ if (boton) {
         setTimeout(() => {
           diag("7 a los 9s: hijos=" + caja.children.length + " alto=" + caja.offsetHeight + " iframes=" + caja.querySelectorAll("iframe").length);
           if (!caja.hidden && caja.children.length === 0) {
-            di("No pudimos abrir el formulario de pago. Si estás en una ventana de incógnito o tu navegador bloquea las cookies de terceros, ábrelo en una ventana normal y vuelve a intentarlo.");
+            di("No pudimos abrir el formulario de pago. Recarga la página e inténtalo otra vez; si sigue igual, escríbenos y lo resolvemos.");
           }
         }, 9000);
         diag("6 llamando a purchase()");
