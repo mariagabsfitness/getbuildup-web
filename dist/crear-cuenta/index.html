@@ -54,11 +54,95 @@
         <div class="big"><span>Hoy pagas</span><b>$0.00</b></div>
         <div><span>A partir del día 8</span><b data-after>$179.99 al año</b></div>
       </div>
-      <div style="margin-top:22px"><a href="/listo/" class="btn wide" style="width:100%">Empezar 7 días gratis</a></div>
+      <div style="margin-top:22px"><button id="btn-pagar" class="btn wide" style="width:100%">Empezar 7 días gratis</button></div>
+      <p class="formerr" id="pago-error" hidden></p>
       <p class="legalnote">Al continuar aceptas los <a href="/legal/terminos/" target="_blank" rel="noopener">Términos de servicio</a> y la <a href="/legal/privacidad/" target="_blank" rel="noopener">Política de privacidad</a>. Te avisamos por correo antes de que terminen los 7 días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
     </div>
   </div>
+  <div id="checkout" hidden></div>
 </div></section>
+<script type="module">
+const CFG = {"activo": false, "rcKey": "pdl_ipkHDTDyCXEIJgZjsTHzfbwIoJWg", "ent": "acceso", "fb": {"apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego", "authDomain": "buildup-40951.firebaseapp.com", "projectId": "buildup-40951", "appId": "1:869364925842:web:d78fc11ef48bf437ce2d4b"}};
+const activo = CFG.activo || new URLSearchParams(location.search).get("pago") === "prueba";
+const boton = document.getElementById("btn-pagar");
+const aviso = document.getElementById("pago-error");
+const caja  = document.getElementById("checkout");
+if (boton) {
+  if (!activo) {
+    boton.addEventListener("click", () => { location.href = "/listo/"; });
+  } else {
+    const di = (m) => { aviso.textContent = m; aviso.hidden = !m; };
+    const planSel = () => {
+      const s = document.querySelector(".plan.sel");
+      return s && s.dataset.plan === "mensual" ? "mensual" : "anual";
+    };
+    boton.addEventListener("click", async () => {
+      const nombre = (document.getElementById("n").value || "").trim();
+      const correo = (document.getElementById("e").value || "").trim();
+      const clave  = document.getElementById("c").value || "";
+      di("");
+      if (!nombre)                      return di("Escribe tu nombre.");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) return di("Revisa tu correo, parece que falta algo.");
+      if (clave.length < 8)             return di("La contraseña necesita al menos 8 caracteres.");
+      const textoOriginal = boton.textContent;
+      boton.disabled = true; boton.textContent = "Creando tu cuenta...";
+      try {
+        const [{ initializeApp }, fbAuth, { Purchases, ErrorCode, PurchasesError }] = await Promise.all([
+          import("https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"), import("https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js"), import("https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1.73.2/dist/Purchases.es.js"),
+        ]);
+        const auth = fbAuth.getAuth(initializeApp(CFG.fb));
+        let cred;
+        try {
+          cred = await fbAuth.createUserWithEmailAndPassword(auth, correo, clave);
+          await fbAuth.updateProfile(cred.user, { displayName: nombre });
+        } catch (err) {
+          if (err && err.code === "auth/email-already-in-use") {
+            try {
+              cred = await fbAuth.signInWithEmailAndPassword(auth, correo, clave);
+            } catch (_) {
+              boton.disabled = false; boton.textContent = textoOriginal;
+              return di("Ya existe una cuenta con ese correo. Entra desde Iniciar sesión.");
+            }
+          } else if (err && err.code === "auth/weak-password") {
+            boton.disabled = false; boton.textContent = textoOriginal;
+            return di("Esa contraseña es muy débil, prueba con una más larga.");
+          } else if (err && err.code === "auth/invalid-email") {
+            boton.disabled = false; boton.textContent = textoOriginal;
+            return di("Ese correo no parece válido.");
+          } else {
+            throw err;
+          }
+        }
+        const uid = cred.user.uid;
+        if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: uid });
+        else await Purchases.getSharedInstance().changeUser(uid);
+        const rc = Purchases.getSharedInstance();
+        const offs = await rc.getOfferings();
+        const act = offs.current;
+        if (!act) throw new Error("sin offering");
+        const pkg = planSel() === "mensual" ? act.monthly : act.annual;
+        if (!pkg) throw new Error("sin paquete");
+        boton.textContent = "Abriendo el pago...";
+        caja.hidden = false;
+        caja.scrollIntoView({ behavior: "smooth", block: "center" });
+        const res = await rc.purchase({
+          rcPackage: pkg,
+          customerEmail: correo,
+          htmlTarget: caja,
+          selectedLocale: "es",
+        });
+        if (res) { location.href = "/listo/"; return; }
+      } catch (err) {
+        caja.hidden = true; caja.innerHTML = "";
+        boton.disabled = false; boton.textContent = textoOriginal;
+        const cancelado = err && (err.errorCode === 1 || String(err.message || "").toLowerCase().includes("cancel"));
+        if (cancelado) di("");
+        else { console.error(err); di("No pudimos completar el pago. Inténtalo de nuevo o escríbenos."); }
+      }
+    });
+  }
+}
+</script>
 </main>
 <footer class="ftr"><div class="wrap">
   <div class="ftr-grid">

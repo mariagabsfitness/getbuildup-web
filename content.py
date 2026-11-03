@@ -34,6 +34,24 @@ SITE = {
     "prighter_fecha": "2026-10-27",
 }
 
+# ---------------------------------------------------------------- pagos
+# activo=False -> el boton de "crear cuenta" sigue llevando a /listo/ sin cobrar.
+#                 Para probar el cobro de verdad sin exponerlo al publico,
+#                 abre /crear-cuenta/?pago=prueba
+# Cuando Paddle apruebe la cuenta de produccion, se cambia rc_api_key por la
+# clave de produccion y se pone activo=True. Nada mas cambia.
+PAGO = {
+    "activo": False,
+    "rc_api_key": "pdl_ipkHDTDyCXEIJgZjsTHzfbwIoJWg",   # sandbox
+    "entitlement": "acceso",
+    "firebase": {
+        "apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego",
+        "authDomain": "buildup-40951.firebaseapp.com",
+        "projectId": "buildup-40951",
+        "appId": "1:869364925842:web:d78fc11ef48bf437ce2d4b",
+    },
+}
+
 PRECIOS = {
     "anual": {"importe": "$179.99", "periodo": "por año", "mensualizado": "$15.00",
               "renovacion": "se renueva cada 12 meses", "cinta": "Ahorra 40%"},

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Genera el sitio estatico de BuildUp en dist/.
    Uso:  python3 build.py        (y luego abre dist/index.html o usa serve.sh)"""
-import io, os, re, shutil, html
+import io, json, os, re, shutil, html
 import content as C
 
 OUT = "dist"
@@ -622,6 +622,104 @@ def page_comunidad():
                         else '<div class="trio">%s%s%s</div>' % (phone("chat2"), phone("chat"), phone("chat3"))),
                        esc(S["coach"]), reviews_row(), P["prueba_dias"])
 
+
+RC_SDK = "https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1.73.2/dist/Purchases.es.js"
+FB_APP = "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"
+FB_AUTH = "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js"
+
+
+def script_pago():
+    cfg = json.dumps({
+        "activo": C.PAGO["activo"],
+        "rcKey": C.PAGO["rc_api_key"],
+        "ent": C.PAGO["entitlement"],
+        "fb": C.PAGO["firebase"],
+    }, ensure_ascii=False)
+    return """
+<script type="module">
+const CFG = %s;
+const activo = CFG.activo || new URLSearchParams(location.search).get("pago") === "prueba";
+const boton = document.getElementById("btn-pagar");
+const aviso = document.getElementById("pago-error");
+const caja  = document.getElementById("checkout");
+if (boton) {
+  if (!activo) {
+    boton.addEventListener("click", () => { location.href = "/listo/"; });
+  } else {
+    const di = (m) => { aviso.textContent = m; aviso.hidden = !m; };
+    const planSel = () => {
+      const s = document.querySelector(".plan.sel");
+      return s && s.dataset.plan === "mensual" ? "mensual" : "anual";
+    };
+    boton.addEventListener("click", async () => {
+      const nombre = (document.getElementById("n").value || "").trim();
+      const correo = (document.getElementById("e").value || "").trim();
+      const clave  = document.getElementById("c").value || "";
+      di("");
+      if (!nombre)                      return di("Escribe tu nombre.");
+      if (!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(correo)) return di("Revisa tu correo, parece que falta algo.");
+      if (clave.length < 8)             return di("La contraseña necesita al menos 8 caracteres.");
+      const textoOriginal = boton.textContent;
+      boton.disabled = true; boton.textContent = "Creando tu cuenta...";
+      try {
+        const [{ initializeApp }, fbAuth, { Purchases, ErrorCode, PurchasesError }] = await Promise.all([
+          import("%s"), import("%s"), import("%s"),
+        ]);
+        const auth = fbAuth.getAuth(initializeApp(CFG.fb));
+        let cred;
+        try {
+          cred = await fbAuth.createUserWithEmailAndPassword(auth, correo, clave);
+          await fbAuth.updateProfile(cred.user, { displayName: nombre });
+        } catch (err) {
+          if (err && err.code === "auth/email-already-in-use") {
+            try {
+              cred = await fbAuth.signInWithEmailAndPassword(auth, correo, clave);
+            } catch (_) {
+              boton.disabled = false; boton.textContent = textoOriginal;
+              return di("Ya existe una cuenta con ese correo. Entra desde Iniciar sesión.");
+            }
+          } else if (err && err.code === "auth/weak-password") {
+            boton.disabled = false; boton.textContent = textoOriginal;
+            return di("Esa contraseña es muy débil, prueba con una más larga.");
+          } else if (err && err.code === "auth/invalid-email") {
+            boton.disabled = false; boton.textContent = textoOriginal;
+            return di("Ese correo no parece válido.");
+          } else {
+            throw err;
+          }
+        }
+        const uid = cred.user.uid;
+        if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: uid });
+        else await Purchases.getSharedInstance().changeUser(uid);
+        const rc = Purchases.getSharedInstance();
+        const offs = await rc.getOfferings();
+        const act = offs.current;
+        if (!act) throw new Error("sin offering");
+        const pkg = planSel() === "mensual" ? act.monthly : act.annual;
+        if (!pkg) throw new Error("sin paquete");
+        boton.textContent = "Abriendo el pago...";
+        caja.hidden = false;
+        caja.scrollIntoView({ behavior: "smooth", block: "center" });
+        const res = await rc.purchase({
+          rcPackage: pkg,
+          customerEmail: correo,
+          htmlTarget: caja,
+          selectedLocale: "es",
+        });
+        if (res) { location.href = "/listo/"; return; }
+      } catch (err) {
+        caja.hidden = true; caja.innerHTML = "";
+        boton.disabled = false; boton.textContent = textoOriginal;
+        const cancelado = err && (err.errorCode === 1 || String(err.message || "").toLowerCase().includes("cancel"));
+        if (cancelado) di("");
+        else { console.error(err); di("No pudimos completar el pago. Inténtalo de nuevo o escríbenos."); }
+      }
+    });
+  }
+}
+</script>""" % (cfg, FB_APP, FB_AUTH, RC_SDK)
+
+
 def page_crear_cuenta():
     a, m = P["anual"], P["mensual"]
     return """<section class="section" style="padding:66px 0 92px"><div class="wrap" style="max-width:880px">
@@ -648,13 +746,15 @@ def page_crear_cuenta():
         <div class="big"><span>Hoy pagas</span><b>$0.00</b></div>
         <div><span>A partir del día %d</span><b data-after>%s al año</b></div>
       </div>
-      <div style="margin-top:22px"><a href="/listo/" class="btn wide" style="width:100%%">Empezar %d días gratis</a></div>
+      <div style="margin-top:22px"><button id="btn-pagar" class="btn wide" style="width:100%%">Empezar %d días gratis</button></div>
+      <p class="formerr" id="pago-error" hidden></p>
       <p class="legalnote">Al continuar aceptas los <a href="%s" target="_blank" rel="noopener">Términos de servicio</a> y la <a href="%s" target="_blank" rel="noopener">Política de privacidad</a>. Te avisamos por correo antes de que terminen los %d días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
     </div>
   </div>
+  <div id="checkout" hidden></div>
 </div></section>""" % (P["prueba_dias"], a["importe"], a["cinta"], a["importe"], a["periodo"], a["mensualizado"],
     m["importe"], m["importe"], m["periodo"], m["renovacion"], P["prueba_dias"]+1, a["importe"],
-    P["prueba_dias"], C.legal_url("terminos"), C.legal_url("privacidad"), P["prueba_dias"])
+    P["prueba_dias"], C.legal_url("terminos"), C.legal_url("privacidad"), P["prueba_dias"]) + script_pago()
 
 def page_listo():
     return """<section class="section" style="padding:86px 0 100px"><div class="wrap" style="max-width:660px;text-align:center">
