@@ -774,6 +774,11 @@ if (boton) {
         caja.hidden = false;
         const irAlPago = () => { try { caja.scrollIntoView({ behavior: "auto", block: "start" }); } catch (_) {} };
         irAlPago(); setTimeout(irAlPago, 900); setTimeout(irAlPago, 2400);
+        setTimeout(() => {
+          if (!caja.hidden && caja.children.length === 0) {
+            di("No pudimos abrir el formulario de pago. Si est\u00e1s en una ventana de inc\u00f3gnito o tu navegador bloquea las cookies de terceros, \u00e1brelo en una ventana normal y vuelve a intentarlo.");
+          }
+        }, 9000);
         const res = await rc.purchase({
           rcPackage: pkg,
           customerEmail: correo,
@@ -808,7 +813,7 @@ def page_crear_cuenta():
       <label for="c">Contraseña</label><input id="c" type="password" placeholder="Mínimo 8 caracteres">
       <label for="f">Fecha de nacimiento</label><input id="f" type="date">
       <p class="hint">Este mismo correo y contraseña son los que usarás para entrar en la app. Tu prueba queda ligada a esta cuenta. Debes ser mayor de 18 años.</p>
-      <label class="chk" for="salud"><input id="salud" type="checkbox"><span>Autorizo a BuildUp a tratar mis datos de salud y fitness (peso, medidas, fotos de progreso y alimentación) para calcular mis macros y seguir mi progreso. Puedes activarlo o desactivarlo luego desde la app, pero sin esto no se pueden usar el cuestionario de nutrición ni las fotos de progreso. <a href="%s" target="_blank" rel="noopener">Más información</a></span></label>
+      <label class="chk" for="salud"><input id="salud" type="checkbox"><span>Sí, quiero registrar mi peso, mis medidas y mis fotos de progreso en mi cuenta para ver mi evolución. <a href="%s" target="_blank" rel="noopener">Más información</a></span></label>
     </div>
     <div class="scardx"><h4>Tu plan</h4>
       <div class="plan sel" data-plan="anual" data-price="%s al año" role="button" tabindex="0" style="margin-top:0">
@@ -823,7 +828,7 @@ def page_crear_cuenta():
         <div><span>A partir del día %d</span><b data-after>%s al año</b></div>
       </div>
       <div style="margin-top:22px"><button id="btn-pagar" class="btn wide" style="width:100%%">Empezar %d días gratis</button></div>
-      <p class="hint" id="nota-salud" style="margin-top:10px">Marca la casilla de autorización de datos de salud para continuar.</p>
+      <p class="hint" id="nota-salud" style="margin-top:10px">Marca la casilla de arriba para continuar.</p>
       <p class="formerr" id="pago-error" hidden></p>
       <p class="legalnote">Al continuar aceptas los <a href="%s" target="_blank" rel="noopener">Términos de servicio</a> y la <a href="%s" target="_blank" rel="noopener">Política de privacidad</a>. Te avisamos por correo antes de que terminen los %d días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
     </div>
