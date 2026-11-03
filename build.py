@@ -626,6 +626,7 @@ def page_comunidad():
 RC_SDK = "https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1.73.2/dist/Purchases.es.js"
 FB_APP = "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"
 FB_AUTH = "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js"
+FB_FS = "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js"
 
 
 def script_pago():
@@ -655,17 +656,29 @@ if (boton) {
       const nombre = (document.getElementById("n").value || "").trim();
       const correo = (document.getElementById("e").value || "").trim();
       const clave  = document.getElementById("c").value || "";
+      const fnac   = document.getElementById("f").value || "";
       di("");
       if (!nombre)                      return di("Escribe tu nombre.");
       if (!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(correo)) return di("Revisa tu correo, parece que falta algo.");
       if (clave.length < 8)             return di("La contraseña necesita al menos 8 caracteres.");
+      if (!fnac)                        return di("Pon tu fecha de nacimiento.");
+      const nacimiento = new Date(fnac + "T12:00:00");
+      if (isNaN(nacimiento))            return di("Esa fecha de nacimiento no es válida.");
+      const hoy = new Date();
+      let edad = hoy.getFullYear() - nacimiento.getFullYear();
+      const md = hoy.getMonth() - nacimiento.getMonth();
+      if (md < 0 || (md === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
+      if (edad < 18)                    return di("Tienes que ser mayor de 18 años para usar BuildUp.");
+      if (edad > 110)                   return di("Revisa tu fecha de nacimiento.");
       const textoOriginal = boton.textContent;
       boton.disabled = true; boton.textContent = "Creando tu cuenta...";
       try {
-        const [{ initializeApp }, fbAuth, { Purchases, ErrorCode, PurchasesError }] = await Promise.all([
-          import("%s"), import("%s"), import("%s"),
+        const [{ initializeApp }, fbAuth, fbFs, { Purchases }] = await Promise.all([
+          import("%s"), import("%s"), import("%s"), import("%s"),
         ]);
-        const auth = fbAuth.getAuth(initializeApp(CFG.fb));
+        const app  = initializeApp(CFG.fb);
+        const auth = fbAuth.getAuth(app);
+        const db   = fbFs.getFirestore(app);
         let cred;
         try {
           cred = await fbAuth.createUserWithEmailAndPassword(auth, correo, clave);
@@ -689,6 +702,24 @@ if (boton) {
           }
         }
         const uid = cred.user.uid;
+        // Mismo documento que crea la app al registrarse (users/{uid}).
+        // Si ya existe no lo tocamos: lo habra creado la app o un intento anterior.
+        const ref = fbFs.doc(db, "users", uid);
+        const snap = await fbFs.getDoc(ref);
+        if (!snap.exists()) {
+          await fbFs.setDoc(ref, {
+            uid: uid,
+            email: correo,
+            display_name: nombre,
+            created_time: fbFs.serverTimestamp(),
+            photo_url: "",
+            phone_number: "",
+            fechaNacimiento: fbFs.Timestamp.fromDate(nacimiento),
+            aceptoTerminos: true,
+            aceptoTerminosFecha: fbFs.serverTimestamp(),
+            aceptoTerminosVersion: "1.0",
+          });
+        }
         if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: uid });
         else await Purchases.getSharedInstance().changeUser(uid);
         const rc = Purchases.getSharedInstance();
@@ -717,7 +748,7 @@ if (boton) {
     });
   }
 }
-</script>""" % (cfg, FB_APP, FB_AUTH, RC_SDK)
+</script>""" % (cfg, FB_APP, FB_AUTH, FB_FS, RC_SDK)
 
 
 def page_crear_cuenta():
@@ -732,7 +763,8 @@ def page_crear_cuenta():
       <label for="n">Nombre</label><input id="n" type="text" placeholder="Tu nombre">
       <label for="e">Correo</label><input id="e" type="email" placeholder="tu@correo.com">
       <label for="c">Contraseña</label><input id="c" type="password" placeholder="Mínimo 8 caracteres">
-      <p class="hint">Este mismo correo y contraseña son los que usarás para entrar en la app. Tu prueba queda ligada a esta cuenta.</p>
+      <label for="f">Fecha de nacimiento</label><input id="f" type="date">
+      <p class="hint">Este mismo correo y contraseña son los que usarás para entrar en la app. Tu prueba queda ligada a esta cuenta. Debes ser mayor de 18 años.</p>
     </div>
     <div class="scardx"><h4>Tu plan</h4>
       <div class="plan sel" data-plan="anual" data-price="%s al año" role="button" tabindex="0" style="margin-top:0">
