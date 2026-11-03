@@ -79,6 +79,21 @@ if (modoPrueba && !CFG.activo) {
   (document.body || document.documentElement).appendChild(bandera);
 }
 const boton = document.getElementById("btn-pagar");
+const panelDiag = (() => {
+  if (!modoPrueba || CFG.activo) return null;
+  const d = document.createElement("div");
+  d.style.cssText = "position:fixed;left:14px;bottom:58px;z-index:99999;background:rgba(17,17,17,.95);color:#8ef0c0;max-width:320px;max-height:46vh;overflow:auto;font:500 11px/1.5 ui-monospace,Menlo,monospace;padding:11px 13px;border-radius:12px;white-space:pre-wrap;box-shadow:0 6px 24px rgba(0,0,0,.3)";
+  d.textContent = "DIAGNOSTICO";
+  (document.body || document.documentElement).appendChild(d);
+  return d;
+})();
+const diag = (t) => { if (panelDiag) { panelDiag.textContent += "
+" + t; panelDiag.scrollTop = panelDiag.scrollHeight; } };
+if (modoPrueba) {
+  window.addEventListener("error", (e) => diag("JS ERROR: " + e.message));
+  window.addEventListener("unhandledrejection", (e) => diag("PROMESA: " + ((e.reason && (e.reason.message || e.reason.code)) || e.reason)));
+}
+
 const aviso = document.getElementById("pago-error");
 const caja  = document.getElementById("checkout");
 const salud = document.getElementById("salud");
@@ -150,6 +165,7 @@ if (boton) {
           }
         }
         const uid = cred.user.uid;
+        diag("1 cuenta OK uid=" + uid.slice(0, 10));
         // Mismo documento que crea la app al registrarse (users/{uid}).
         // Si ya existe no lo tocamos: lo habra creado la app o un intento anterior.
         const ref = fbFs.doc(db, "users", uid);
@@ -167,14 +183,17 @@ if (boton) {
             aceptoTerminosFecha: fbFs.serverTimestamp(),
             aceptoTerminosVersion: "1.0",
           });
-        }
+          diag("2 documento users creado");
+        } else { diag("2 users ya existia"); }
         if (quiereSalud) {
           // Igual que la app: la funcion deja constancia en registroConsentimientos
           // ademas de poner los campos en el perfil.
           try {
             const fn = fbFn.httpsCallable(fbFn.getFunctions(app), "actualizarConsentimiento");
             await fn({ tipo: "salud", otorgar: true, origen: "web" });
+            diag("3 consentimiento por funcion OK");
           } catch (errFn) {
+            diag("3 funcion fallo: " + (errFn && (errFn.code || errFn.message)) + " -> escribo directo");
             console.warn("consentimiento por funcion no disponible, se escribe directo", errFn);
             let version = "1.0";
             try {
@@ -191,7 +210,9 @@ if (boton) {
         if (!Purchases.isConfigured()) Purchases.configure({ apiKey: CFG.rcKey, appUserId: uid });
         else await Purchases.getSharedInstance().changeUser(uid);
         const rc = Purchases.getSharedInstance();
+        diag("4 revenuecat configurado");
         const offs = await rc.getOfferings();
+        diag("5 offerings OK");
         const act = offs.current;
         if (!act) throw new Error("sin offering");
         const pkg = planSel() === "mensual" ? act.monthly : act.annual;
@@ -201,10 +222,12 @@ if (boton) {
         const irAlPago = () => { try { caja.scrollIntoView({ behavior: "auto", block: "start" }); } catch (_) {} };
         irAlPago(); setTimeout(irAlPago, 900); setTimeout(irAlPago, 2400);
         setTimeout(() => {
+          diag("7 a los 9s: hijos=" + caja.children.length + " alto=" + caja.offsetHeight + " iframes=" + caja.querySelectorAll("iframe").length);
           if (!caja.hidden && caja.children.length === 0) {
             di("No pudimos abrir el formulario de pago. Si estás en una ventana de incógnito o tu navegador bloquea las cookies de terceros, ábrelo en una ventana normal y vuelve a intentarlo.");
           }
         }, 9000);
+        diag("6 llamando a purchase()");
         const res = await rc.purchase({
           rcPackage: pkg,
           customerEmail: correo,
@@ -215,6 +238,7 @@ if (boton) {
       } catch (err) {
         caja.hidden = true; caja.innerHTML = "";
         boton.textContent = textoOriginal; sincro();
+        diag("ERROR FINAL: " + (err && (err.message || err.errorCode || err.code)));
         const cancelado = err && (err.errorCode === 1 || String(err.message || "").toLowerCase().includes("cancel"));
         if (cancelado) di("");
         else { console.error(err); di("No pudimos completar el pago. Inténtalo de nuevo o escríbenos."); }
