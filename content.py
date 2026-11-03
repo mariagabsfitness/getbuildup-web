@@ -28,8 +28,8 @@ SITE = {
     "email_general": "team@mariagabsfitness.com",
     "email_soporte": "buildup@mariagabsfitness.com",
     "horario": "Lun – Vie | 9:00 – 17:00",
-    "instagram": "#",
-    "tiktok": "#",
+    "instagram": "https://www.instagram.com/getbuildup/",
+    "tiktok": "https://www.tiktok.com/@mariagabsfitness",
     "prighter_portal": "https://app.prighter.com/portal/13541273953",
     "prighter_fecha": "2026-10-27",
 }
