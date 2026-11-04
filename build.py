@@ -384,6 +384,7 @@ def page_home():
   <h2 class="h-section">Resultados reales</h2>
   <p class="lede center" style="margin-top:18px">Cuando el entrenamiento, la nutrición y la rutina trabajan juntos, el progreso deja de ser suerte.</p>
   <div style="margin-top:44px">%s</div>
+  <div style="margin-top:52px">%s</div>
 </div></section>
 
 <section class="section"><div class="wrap">
@@ -397,7 +398,7 @@ def page_home():
        media("SmartFuel en BuildUp", False, "dentro-smartfuel"),
        media("Progreso en BuildUp", False, "dentro-progreso"), member_band(True),
        "".join(program_card(p) for p in C.PROGRAMAS), video_row(C.ENTRENOS_DEMO), vistazo("/nutricion/"),
-       comparator(), reviews_row(), P["prueba_dias"])
+       comparator(), before_after(6), reviews_row(), P["prueba_dias"])
 
 def page_membresia():
     return """<section class="hero full">%s
