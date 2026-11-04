@@ -431,7 +431,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 .scardx label{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:16px 0 7px}
 .scardx input{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff}
 .scardx input:focus{outline:none;border-color:var(--ink)}
-.scardx input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;display:block;height:47px;line-height:normal;font:inherit;color:var(--ink)}
+.scardx input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;display:block;height:auto;padding:12px 15px;line-height:1.6;font:inherit;color:var(--ink)}
 .scardx input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
 .scardx input[type=date]::-webkit-calendar-picker-indicator{margin:0;opacity:.55}
 .hint{font-size:12.5px;color:var(--muted);margin:16px 0 0}
