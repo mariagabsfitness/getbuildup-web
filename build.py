@@ -684,7 +684,7 @@ const panelDiag = (() => {
   (document.body || document.documentElement).appendChild(d);
   return d;
 })();
-const diag = (t) => { if (panelDiag) { panelDiag.textContent += "\n" + t; panelDiag.scrollTop = panelDiag.scrollHeight; } };
+const diag = (t) => { if (panelDiag) { panelDiag.textContent += "\\n" + t; panelDiag.scrollTop = panelDiag.scrollHeight; } };
 if (modoPrueba) {
   window.addEventListener("error", (e) => diag("JS ERROR: " + e.message));
   window.addEventListener("unhandledrejection", (e) => diag("PROMESA: " + ((e.reason && (e.reason.message || e.reason.code)) || e.reason)));
