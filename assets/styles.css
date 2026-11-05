@@ -371,7 +371,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;font-weight:600;text-wrap:balanc
 
 /* ---------- footer ---------- */
 .ftr{border-top:1px solid var(--line-soft);padding:64px 0 34px;background:#fff}
-.ftr-grid{display:grid;grid-template-columns:1.25fr .9fr 1.15fr 1.15fr;gap:38px}
+.ftr-grid{display:grid;grid-template-columns:1.2fr .85fr .8fr 1.05fr 1.05fr;gap:32px}
 .ftr h4{font-family:var(--body);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:600;margin-bottom:18px}
 .ftr ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .ftr a,.ftr li{font-size:13.5px;color:var(--grey)}

@@ -98,6 +98,13 @@ def footer():
       <li style="margin-top:16px;color:var(--muted)">Entrenamiento creado por %s</li>
       <li style="color:var(--muted)">%s</li>
     </ul></div>
+    <div><h4>Descargar</h4><ul>
+      <li><a href="%s" target="_blank" rel="noopener">App Store · iPhone</a></li>
+      <li><a href="%s" target="_blank" rel="noopener">Google Play · Android</a></li>
+      <li style="margin-top:16px"><a href="/crear-cuenta/">Empezar 7 días gratis</a></li>
+      <li style="margin-top:16px"><a href="/login/">Iniciar sesión</a></li>
+      <li><a href="/cuenta/">Mi cuenta</a></li>
+    </ul></div>
     <div><h4>La app</h4><ul>
       <li><a href="/programas/">Programas</a></li>
       <li><a href="/nutricion/">Nutrición</a></li>
@@ -121,7 +128,7 @@ def footer():
     <div>© 2026 — %s</div>
   </div>
 </div></footer>""" % (S["horario"], S["email_general"], S["email_general"], S["email_soporte"], S["email_soporte"],
-                      S["coach"], S["empresa"], li(C.LEGAL_ES), li(C.LEGAL_EN),
+                      S["coach"], S["empresa"], S["appstore"], S["googleplay"], li(C.LEGAL_ES), li(C.LEGAL_EN),
                       S["prighter_portal"], S["prighter_fecha"], S["instagram"], S["tiktok"], S["empresa"])
 
 def doc(path, title, desc, body, active=""):
