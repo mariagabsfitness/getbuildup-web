@@ -42,14 +42,11 @@
   }
   .hero-in{position:relative;z-index:2;width:100%;max-width:520px;text-align:center}
 
-  .logo{
-    font-family:"Inter Tight",sans-serif;
-    font-size:clamp(42px,12vw,70px);
-    letter-spacing:-.035em;line-height:1;margin:0 0 20px;
-    text-shadow:0 2px 30px rgba(0,0,0,.45);
+  .logo{margin:0 0 22px;display:flex;justify-content:center}
+  .logo img{
+    width:clamp(190px,56vw,320px);height:auto;
+    filter:drop-shadow(0 2px 26px rgba(0,0,0,.45));
   }
-  .logo b{font-weight:700}
-  .logo span{font-weight:300;opacity:.94}
 
   .lede{
     font-size:clamp(14.5px,3.7vw,17.5px);
@@ -78,7 +75,7 @@
   }
   .boton:hover{opacity:.87}
   .boton:active{transform:translateY(1px)}
-  .nota{font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.62);margin:18px auto 0;max-width:32ch}
+  .nota{font-size:12.5px;line-height:1.62;color:rgba(255,255,255,.62);margin:18px auto 0;max-width:34ch;text-wrap:balance}
 
   /* --------------------------------------------------------------- tarjetas */
   .dentro{padding:clamp(64px,11vw,110px) 24px clamp(56px,9vw,96px);background:#000}
@@ -118,7 +115,9 @@
     font-family:"Inter Tight",sans-serif;font-weight:600;
     font-size:clamp(21px,5vw,30px);letter-spacing:-.02em;line-height:1.22;margin:0 0 14px;
   }
-  .cierre p.sub{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.6);font-weight:300;margin:0 0 28px}
+  .cierre p.sub{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.66);font-weight:300;margin:0 0 28px}
+  .cohete{display:inline-flex;vertical-align:-4px;margin-right:8px;color:rgba(255,255,255,.8)}
+  .cohete svg{width:18px;height:18px;display:block}
   .cierre .campo{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.17);backdrop-filter:none}
   .cierre .nota{color:rgba(255,255,255,.45)}
 
@@ -145,7 +144,7 @@
     <video id="fondo" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
     <div class="hero-in">
 
-      <h1 class="logo"><b>Build</b><span>Up</span></h1>
+      <h1 class="logo"><img src="https://getbuildup.app/assets/img/logo-buildup.png" alt="BuildUp" width="960" height="290"></h1>
 
       <p class="lede">Tu entrenamiento, tu nutrición y tu progreso, en un solo lugar...</p>
 
@@ -157,7 +156,7 @@
         <button class="boton" type="submit">Quiero ser de las primeras</button>
       </form>
 
-      <p class="nota">Las primeras entran con precio de fundadora.</p>
+      <p class="nota">Precio de fundadora. Porque ser parte del comienzo tiene sus beneficios.</p>
 
       <div class="gracias">
         <h2>Listo, estás dentro.</h2>
@@ -170,7 +169,7 @@
   <section class="dentro">
     <div class="dentro-in">
       <p class="kicker">Lo que viene</p>
-      <h2 class="titulo">Todo lo que necesitas, en una sola app</h2>
+      <h2 class="titulo">Todo lo que necesitas, en un solo lugar</h2>
 
       <div class="tiles">
         <div class="tile">
@@ -195,8 +194,8 @@
 
   <section class="cierre">
     <div class="cierre-in">
-      <h2>Sé de las primeras en entrar</h2>
-      <p class="sub">Déjanos tu correo y te avisamos el día que abramos.</p>
+      <h2>Muy pronto.</h2>
+      <p class="sub"><span class="cohete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8c2.6 2 4.1 5.2 4.1 8.6v3.3l-1.9 1.9H9.8l-1.9-1.9v-3.3c0-3.4 1.5-6.6 4.1-8.6Z"/><circle cx="12" cy="9.9" r="1.7"/><path d="M7.9 13.1 5.2 15v2.6l2.7-1.3M16.1 13.1 18.8 15v2.6l-2.7-1.3"/><path d="M10.6 19.3c.5 1 1.4 1.9 1.4 1.9s.9-.9 1.4-1.9"/></svg></span>Déjanos tu correo y sé de las primeras en enterarte</p>
 
       <form class="form" method="post" action="/contact" accept-charset="UTF-8">
         <input type="hidden" name="form_type" value="customer">
@@ -206,7 +205,7 @@
         <button class="boton" type="submit">Quiero ser de las primeras</button>
       </form>
 
-      <p class="nota">Las primeras entran con precio de fundadora.</p>
+      <p class="nota">Precio de fundadora. Porque ser parte del comienzo tiene sus beneficios.</p>
     </div>
   </section>
 
