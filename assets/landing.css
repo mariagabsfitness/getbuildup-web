@@ -36,7 +36,7 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
     rgba(0,0,0,.52) 0%, rgba(0,0,0,.28) 32%,
     rgba(0,0,0,.62) 72%, rgba(0,0,0,.92) 100%);
 }
-.lp .hero-in { position: relative; z-index: 2; width: 100%; max-width: 580px; text-align: center; }
+.lp .hero-in { position: relative; z-index: 2; width: 100%; max-width: 640px; text-align: center; }
 
 .lp .logo { margin: 0 0 30px; display: flex; justify-content: center; }
 .lp .logo img {
@@ -61,14 +61,15 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 }
 .lp .claim {
   font-family: "Inter Tight", sans-serif; font-weight: 600;
-  font-size: clamp(23px, 6.4vw, 42px); line-height: 1.14;
+  font-size: clamp(23px, 6.3vw, 40px); line-height: 1.16;
   letter-spacing: -.005em; text-transform: uppercase;
-  margin: 0 auto 20px; max-width: 15ch; text-wrap: balance;
+  margin: 0 auto 20px; max-width: none; text-wrap: balance;
   text-shadow: 0 2px 26px rgba(0,0,0,.55);
 }
 .lp .sub2 {
-  font-size: clamp(13px, 3.4vw, 15px); line-height: 1.62; font-weight: 300;
-  color: rgba(255,255,255,.76); margin: 0 auto 34px; max-width: 34ch;
+  font-size: clamp(11.5px, 2.85vw, 13.5px); line-height: 1.68; font-weight: 300;
+  letter-spacing: .012em; color: rgba(255,255,255,.72);
+  margin: 0 auto 34px; max-width: none;
   text-wrap: balance; text-shadow: 0 1px 16px rgba(0,0,0,.5);
 }
 .lp .fecha {
@@ -104,7 +105,7 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 .lp .errores { font-size: 13px; color: #ff9a8f; margin: 14px 0 0; list-style: none; padding: 0; }
 
 /* --------------------------------------------------------------- tarjetas */
-.lp .dentro { padding: clamp(64px,11vw,110px) 24px clamp(56px,9vw,96px); background: #000; }
+.lp .dentro { padding: clamp(58px,10vw,96px) 24px clamp(72px,12vw,120px); background: #000; }
 .lp .dentro-in { max-width: 1000px; margin: 0 auto; }
 .lp .kicker {
   font-family: "Inter Tight", sans-serif; font-size: 11px; font-weight: 600;
@@ -113,22 +114,22 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 }
 .lp .titulo {
   font-family: "Inter Tight", sans-serif; font-weight: 600;
-  font-size: clamp(23px,5.6vw,36px); letter-spacing: -.022em; line-height: 1.18;
-  text-align: center; margin: 0 auto 52px; max-width: 17ch;
+  font-size: clamp(19px,4.6vw,27px); letter-spacing: -.012em; line-height: 1.2;
+  text-align: center; margin: 0 auto 44px;
 }
 .lp .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 @media (max-width: 767px) { .lp .tiles { grid-template-columns: repeat(2, 1fr); } }
 .lp .tile {
   background: #101011; border: 1px solid rgba(255,255,255,.1);
-  border-radius: 16px; padding: 28px 18px;
-  display: flex; flex-direction: column; align-items: center; gap: 11px; text-align: center;
+  border-radius: 16px; padding: 34px 18px;
+  display: flex; align-items: center; justify-content: center;
 }
 .lp .tile .ic {
-  width: 44px; height: 44px; display: grid; place-items: center;
+  width: 52px; height: 52px; display: grid; place-items: center;
   border: 1px solid rgba(255,255,255,.24); border-radius: 50%;
 }
 .lp .tile .ic::before {
-  content: ""; width: 23px; height: 23px; display: block;
+  content: ""; width: 26px; height: 26px; display: block;
   background: #fff;
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   -webkit-mask-position: center; mask-position: center;
@@ -191,7 +192,8 @@ body.lp.enviado .hero .claim,
 body.lp.enviado .hero .sub2,
 body.lp.enviado .hero .fecha { display: none; }
 body.lp.enviado .hero .gracias { display: block; }
-body.lp.enviado .cierre { display: none; }
+body.lp.enviado .cierre,
+body.lp.enviado .dentro { display: none; }
 .lp .gracias h2 {
   font-family: "Inter Tight", sans-serif; font-weight: 600;
   font-size: clamp(21px,5.4vw,30px); letter-spacing: -.005em;
