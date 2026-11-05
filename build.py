@@ -910,8 +910,8 @@ def page_listo():
   <h2 class="h-section" style="margin-top:26px">Tu prueba empieza hoy</h2>
   <p class="lede" style="margin-top:18px">Ya tienes acceso completo a BuildUp durante %d días. Descarga la app y entra con el mismo correo con el que acabas de crear tu cuenta.</p>
   <div class="stores">
-    <a class="store" href="#"><b>App Store</b><span>Descargar para iPhone</span></a>
-    <a class="store" href="#"><b>Google Play</b><span>Descargar para Android</span></a>
+    <a class="store" href="%s" target="_blank" rel="noopener"><b>App Store</b><span>Descargar para iPhone</span></a>
+    <a class="store" href="%s" target="_blank" rel="noopener"><b>Google Play</b><span>Descargar para Android</span></a>
   </div>
   <div class="nextsteps"><h4>Qué sigue</h4><ol>
     <li>Descarga la app e inicia sesión con tu correo.</li>
@@ -919,7 +919,7 @@ def page_listo():
     <li>Elige tu programa, o deja que la guía te recomiende uno.</li>
     <li>Empieza tu primer entrenamiento y registra tus pesos.</li>
   </ol></div>
-</div></section>""" % P["prueba_dias"]
+</div></section>""" % (P["prueba_dias"], S["appstore"], S["googleplay"])
 
 def page_login():
     return """<section class="section" style="padding:110px 0 130px"><div class="wrap" style="max-width:440px">

@@ -28,6 +28,8 @@ SITE = {
     "email_general": "team@mariagabsfitness.com",
     "email_soporte": "buildup@mariagabsfitness.com",
     "horario": "Lun – Vie | 9:00 – 17:00",
+    "appstore": "https://apps.apple.com/app/id6825502059",
+    "googleplay": "https://play.google.com/store/apps/details?id=com.mariagabsfitness.buildup",
     "instagram": "https://www.instagram.com/getbuildup/",
     "tiktok": "https://www.tiktok.com/@mariagabsfitness",
     "prighter_portal": "https://app.prighter.com/portal/13541273953",
