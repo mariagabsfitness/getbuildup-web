@@ -17,8 +17,8 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 /* ---------------------------------------------------------------- hero */
 .lp .hero {
   position: relative; min-height: 100svh;
-  display: grid; align-items: end; justify-items: center;
-  padding: 72px 24px clamp(40px, 7vw, 70px);
+  display: grid; align-items: center; justify-items: center;
+  padding: 92px 24px clamp(56px, 8vw, 86px);
   overflow: hidden;
   background: #000 center / cover no-repeat;
   background-image: url("https://getbuildup.app/assets/img/hero-home-movil.jpg");
@@ -36,11 +36,11 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
     rgba(0,0,0,.52) 0%, rgba(0,0,0,.28) 32%,
     rgba(0,0,0,.62) 72%, rgba(0,0,0,.92) 100%);
 }
-.lp .hero-in { position: relative; z-index: 2; width: 100%; max-width: 520px; text-align: center; }
+.lp .hero-in { position: relative; z-index: 2; width: 100%; max-width: 580px; text-align: center; }
 
-.lp .logo { margin: 0 0 22px; display: flex; justify-content: center; }
+.lp .logo { margin: 0 0 30px; display: flex; justify-content: center; }
 .lp .logo img {
-  width: clamp(190px, 56vw, 320px); height: auto;
+  width: clamp(158px, 44vw, 250px); height: auto;
   filter: drop-shadow(0 2px 26px rgba(0,0,0,.45));
 }
 
@@ -49,6 +49,32 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
   line-height: 1.6; color: rgba(255,255,255,.88); font-weight: 300;
   margin: 0 auto 32px; max-width: 27ch;
   text-shadow: 0 1px 18px rgba(0,0,0,.5);
+}
+
+
+/* ------------------------------------------------- titulares del hero */
+.lp .eyebrow {
+  font-family: "Inter Tight", sans-serif; font-size: clamp(10px, 2.7vw, 11px);
+  font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.6); margin: 0 0 15px;
+  text-shadow: 0 1px 14px rgba(0,0,0,.6);
+}
+.lp .claim {
+  font-family: "Inter Tight", sans-serif; font-weight: 600;
+  font-size: clamp(23px, 6.4vw, 42px); line-height: 1.14;
+  letter-spacing: -.005em; text-transform: uppercase;
+  margin: 0 auto 20px; max-width: 15ch; text-wrap: balance;
+  text-shadow: 0 2px 26px rgba(0,0,0,.55);
+}
+.lp .sub2 {
+  font-size: clamp(13px, 3.4vw, 15px); line-height: 1.62; font-weight: 300;
+  color: rgba(255,255,255,.76); margin: 0 auto 34px; max-width: 34ch;
+  text-wrap: balance; text-shadow: 0 1px 16px rgba(0,0,0,.5);
+}
+.lp .fecha {
+  font-size: clamp(12.5px, 3.3vw, 14px); font-weight: 500; line-height: 1.5;
+  color: rgba(255,255,255,.95); margin: 0 0 14px;
+  text-shadow: 0 1px 16px rgba(0,0,0,.55);
 }
 
 /* ------------------------------------------------------------ formulario */
@@ -159,11 +185,16 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 .lp .gracias { display: none; }
 body.lp.enviado .hero .form,
 body.lp.enviado .hero .nota,
-body.lp.enviado .hero .lede { display: none; }
+body.lp.enviado .hero .lede,
+body.lp.enviado .hero .eyebrow,
+body.lp.enviado .hero .claim,
+body.lp.enviado .hero .sub2,
+body.lp.enviado .hero .fecha { display: none; }
 body.lp.enviado .hero .gracias { display: block; }
 body.lp.enviado .cierre { display: none; }
 .lp .gracias h2 {
   font-family: "Inter Tight", sans-serif; font-weight: 600;
-  font-size: clamp(20px,5vw,27px); letter-spacing: -.015em; margin: 0 0 12px;
+  font-size: clamp(21px,5.4vw,30px); letter-spacing: -.005em;
+  text-transform: uppercase; margin: 0 0 14px;
 }
-.lp .gracias p { font-size: 14.5px; line-height: 1.65; color: rgba(255,255,255,.78); font-weight: 300; margin: 0; }
+.lp .gracias p { font-size: clamp(13.5px,3.5vw,15px); line-height: 1.65; color: rgba(255,255,255,.78); font-weight: 300; margin: 0; }
