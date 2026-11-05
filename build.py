@@ -274,7 +274,7 @@ def all_in_one():
   <a class="tile" href="/programas/"><span class="ic">%s</span><b>Entreno</b><span>6 programas</span></a>
   <a class="tile" href="/nutricion/"><span class="ic">%s</span><b>SmartFuel</b><span>Macros y recetas</span></a>
   <a class="tile" href="/comunidad/"><span class="ic">%s</span><b>BuildFam</b><span>Chat de la comunidad</span></a>
-  <a class="tile" href="/membresia/"><span class="ic">%s</span><b>Progreso</b><span>Pesos, reps y selfies</span></a>
+  <a class="tile" href="/membresia/"><span class="ic">%s</span><b>Progreso</b><span>Pesos, reps y evolución</span></a>
 </div>""" % (media("Capturas de la app BuildUp", True, "collage"),
                   icono("mancuerna"), icono("aguacate"), icono("comunidad"), icono("grafica"))
 
