@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>BuildUp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@300;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:#000;color:#fff;
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  img,video{display:block;max-width:100%}
+
+  /* ---------------------------------------------------------------- hero */
+  .hero{
+    position:relative;min-height:100svh;
+    display:grid;align-items:end;justify-items:center;
+    padding:72px 24px clamp(40px,7vw,70px);
+    overflow:hidden;
+    background:#000 center/cover no-repeat;
+    background-image:url("https://getbuildup.app/assets/img/hero-home-movil.jpg");
+  }
+  @media (min-width:768px){
+    .hero{background-image:url("https://getbuildup.app/assets/img/hero-home.jpg")}
+  }
+  .hero video{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 35%;z-index:0;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(to bottom,
+      rgba(0,0,0,.52) 0%, rgba(0,0,0,.28) 32%,
+      rgba(0,0,0,.62) 72%, rgba(0,0,0,.92) 100%);
+  }
+  .hero-in{position:relative;z-index:2;width:100%;max-width:520px;text-align:center}
+
+  .logo{
+    font-family:"Inter Tight",sans-serif;
+    font-size:clamp(42px,12vw,70px);
+    letter-spacing:-.035em;line-height:1;margin:0 0 20px;
+    text-shadow:0 2px 30px rgba(0,0,0,.45);
+  }
+  .logo b{font-weight:700}
+  .logo span{font-weight:300;opacity:.94}
+
+  .lede{
+    font-size:clamp(14.5px,3.7vw,17.5px);
+    line-height:1.6;color:rgba(255,255,255,.88);font-weight:300;
+    margin:0 auto 32px;max-width:27ch;
+    text-shadow:0 1px 18px rgba(0,0,0,.5);
+  }
+
+  /* ------------------------------------------------------------ formulario */
+  .form{display:flex;flex-direction:column;gap:11px}
+  .campo{
+    width:100%;padding:16px 18px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.26);
+    border-radius:12px;color:#fff;font:inherit;font-size:15px;
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    transition:border-color .18s ease,background .18s ease;
+  }
+  .campo::placeholder{color:rgba(255,255,255,.55)}
+  .campo:focus{outline:none;border-color:rgba(255,255,255,.75);background:rgba(255,255,255,.16)}
+  .boton{
+    width:100%;padding:16px 18px;border:0;border-radius:12px;
+    background:#fff;color:#000;font:inherit;font-size:12.5px;font-weight:600;
+    letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+    transition:opacity .18s ease,transform .18s ease;
+  }
+  .boton:hover{opacity:.87}
+  .boton:active{transform:translateY(1px)}
+  .nota{font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.62);margin:18px auto 0;max-width:32ch}
+
+  /* --------------------------------------------------------------- tarjetas */
+  .dentro{padding:clamp(64px,11vw,110px) 24px clamp(56px,9vw,96px);background:#000}
+  .dentro-in{max-width:1000px;margin:0 auto}
+  .kicker{
+    font-family:"Inter Tight",sans-serif;font-size:11px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.42);
+    text-align:center;margin:0 0 16px;
+  }
+  .titulo{
+    font-family:"Inter Tight",sans-serif;font-weight:600;
+    font-size:clamp(23px,5.6vw,36px);letter-spacing:-.022em;line-height:1.18;
+    text-align:center;margin:0 auto 52px;max-width:17ch;
+  }
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media (max-width:767px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{
+    background:#101011;border:1px solid rgba(255,255,255,.1);
+    border-radius:16px;padding:28px 18px;
+    display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;
+  }
+  .tile .ic{
+    width:44px;height:44px;display:grid;place-items:center;
+    border:1px solid rgba(255,255,255,.24);border-radius:50%;
+  }
+  .tile .ic svg{width:23px;height:23px;display:block}
+  .tile b{
+    font-family:"Inter Tight",sans-serif;font-size:11.5px;font-weight:600;
+    letter-spacing:.18em;text-transform:uppercase;color:#fff;
+  }
+  .tile i{font-style:normal;font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.5}
+
+  /* ----------------------------------------------------------------- cierre */
+  .cierre{padding:0 24px clamp(70px,11vw,120px);background:#000;text-align:center}
+  .cierre-in{max-width:460px;margin:0 auto}
+  .cierre h2{
+    font-family:"Inter Tight",sans-serif;font-weight:600;
+    font-size:clamp(21px,5vw,30px);letter-spacing:-.02em;line-height:1.22;margin:0 0 14px;
+  }
+  .cierre p.sub{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.6);font-weight:300;margin:0 0 28px}
+  .cierre .campo{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.17);backdrop-filter:none}
+  .cierre .nota{color:rgba(255,255,255,.45)}
+
+  .pie{
+    padding:0 24px 34px;text-align:center;font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:#4a4a4a;background:#000;
+  }
+
+  /* ---------------------------------------------------------------- gracias */
+  .gracias{display:none}
+  body.enviado .hero .form,body.enviado .hero .nota,body.enviado .hero .lede{display:none}
+  body.enviado .hero .gracias{display:block}
+  body.enviado .cierre{display:none}
+  .gracias h2{
+    font-family:"Inter Tight",sans-serif;font-weight:600;
+    font-size:clamp(20px,5vw,27px);letter-spacing:-.015em;margin:0 0 12px;
+  }
+  .gracias p{font-size:14.5px;line-height:1.65;color:rgba(255,255,255,.78);font-weight:300;margin:0}
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <video id="fondo" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+    <div class="hero-in">
+
+      <h1 class="logo"><b>Build</b><span>Up</span></h1>
+
+      <p class="lede">Tu entrenamiento, tu nutrición y tu progreso, en un solo lugar...</p>
+
+      <form class="form" method="post" action="/contact" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="&#x2713;">
+        <input type="hidden" name="contact[tags]" value="lista-espera-buildup">
+        <input class="campo" type="email" name="contact[email]" placeholder="Tu correo" autocomplete="email" required>
+        <button class="boton" type="submit">Quiero ser de las primeras</button>
+      </form>
+
+      <p class="nota">Las primeras entran con precio de fundadora.</p>
+
+      <div class="gracias">
+        <h2>Listo, estás dentro.</h2>
+        <p>Te escribimos a ese correo en cuanto abramos. Vas a ser de las primeras en entrar.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="dentro">
+    <div class="dentro-in">
+      <p class="kicker">Lo que viene</p>
+      <h2 class="titulo">Todo lo que necesitas, en una sola app</h2>
+
+      <div class="tiles">
+        <div class="tile">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 8.4v7.2M4 10.2v3.6M17.4 8.4v7.2M20 10.2v3.6M6.6 12h10.8"/></svg></span>
+          <b>Entrenamiento</b><i>Tu plan, cada día</i>
+        </div>
+        <div class="tile">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c3.5 0 6.3 3.3 6.3 7.4 0 4.5-2.8 9.4-6.3 9.4s-6.3-4.9-6.3-9.4c0-4.1 2.8-7.4 6.3-7.4Z"/><circle cx="12" cy="13.6" r="2.5"/></svg></span>
+          <b>Nutrición</b><i>Tus macros y tus recetas</i>
+        </div>
+        <div class="tile">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.4h16"/><path d="M7.4 19.4v-4.6M12 19.4v-8.4M16.6 19.4v-12"/></svg></span>
+          <b>Progreso</b><i>Pesos, reps y fotos</i>
+        </div>
+        <div class="tile">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.4" cy="8.8" r="2.9"/><path d="M3.8 19.2c0-3.1 2.5-5 5.6-5s5.6 1.9 5.6 5"/><path d="M16.6 6.6a3 3 0 0 1 0 5.6"/><path d="M17.8 14.4c1.6.7 2.4 2.2 2.4 4.1"/></svg></span>
+          <b>Comunidad</b><i>No entrenas sola</i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cierre">
+    <div class="cierre-in">
+      <h2>Sé de las primeras en entrar</h2>
+      <p class="sub">Déjanos tu correo y te avisamos el día que abramos.</p>
+
+      <form class="form" method="post" action="/contact" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="&#x2713;">
+        <input type="hidden" name="contact[tags]" value="lista-espera-buildup">
+        <input class="campo" type="email" name="contact[email]" placeholder="Tu correo" autocomplete="email" required>
+        <button class="boton" type="submit">Quiero ser de las primeras</button>
+      </form>
+
+      <p class="nota">Las primeras entran con precio de fundadora.</p>
+    </div>
+  </section>
+
+  <div class="pie">Maria Gabs Fitness LLC</div>
+
+<script>
+  (function () {
+    var base = "https://getbuildup.app/assets/img/";
+    var movil = window.matchMedia("(max-width: 767px)").matches;
+    var v = document.getElementById("fondo");
+    if (v) {
+      v.poster = base + (movil ? "hero-home-movil.jpg" : "hero-home.jpg");
+      v.src    = base + (movil ? "hero-home-movil.mp4" : "hero-home.mp4");
+      var intento = v.play();
+      if (intento && intento.catch) { intento.catch(function () {}); }
+    }
+    try {
+      if (new URLSearchParams(location.search).get("customer_posted") === "true") {
+        document.body.classList.add("enviado");
+      }
+    } catch (e) {}
+  })();
+</script>
+</body>
+</html>
