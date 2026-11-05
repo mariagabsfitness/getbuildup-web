@@ -18,7 +18,7 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 .lp .hero {
   position: relative; min-height: 100svh;
   display: grid; align-items: end; justify-items: center;
-  padding: clamp(210px, 38vh, 480px) 24px clamp(64px, 8.5vw, 120px);
+  padding: clamp(210px, 38vh, 480px) 24px clamp(26px, 3.2vw, 46px);
   overflow: hidden;
   background: #000 center / cover no-repeat;
   background-image: url("https://getbuildup.app/assets/img/hero-home-movil.jpg");
@@ -104,7 +104,7 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 .lp .errores { font-size: 13px; color: #ff9a8f; margin: 14px 0 0; list-style: none; padding: 0; }
 
 /* --------------------------------------------------------------- tarjetas */
-.lp .dentro { padding: clamp(58px,10vw,96px) 24px clamp(72px,12vw,120px); background: #000; }
+.lp .dentro { padding: clamp(34px,4.2vw,58px) 24px clamp(72px,12vw,120px); background: #000; }
 .lp .dentro-in { max-width: 1000px; margin: 0 auto; }
 .lp .kicker {
   font-family: "Inter Tight", sans-serif; font-size: 11px; font-weight: 600;
