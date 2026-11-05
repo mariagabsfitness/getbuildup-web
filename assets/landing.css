@@ -16,15 +16,15 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 
 /* ---------------------------------------------------------------- hero */
 .lp .hero {
-  position: relative; min-height: 100svh;
+  position: relative; aspect-ratio: 4 / 5; min-height: 0;
   display: grid; align-items: end; justify-items: center;
-  padding: clamp(210px, 38vh, 480px) 24px clamp(26px, 3.2vw, 46px);
+  padding: 64px 24px clamp(40px, 7vw, 86px);
   overflow: hidden;
   background: #000 center / cover no-repeat;
   background-image: url("https://getbuildup.app/assets/img/hero-home-movil.jpg");
 }
 @media (min-width: 768px) {
-  .lp .hero { background-image: url("https://getbuildup.app/assets/img/hero-home.jpg"); }
+  .lp .hero { background-image: url("https://getbuildup.app/assets/img/hero-home.jpg"); aspect-ratio: 16 / 9; }
 }
 .lp .hero video {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -102,6 +102,11 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 .lp .boton:active { transform: translateY(1px); }
 .lp .nota { margin: 17px auto 0; }
 .lp .errores { font-size: 13px; color: #ff9a8f; margin: 14px 0 0; list-style: none; padding: 0; }
+
+
+/* ------------------------------------------- franja negra bajo el video */
+.lp .banda { background: #000; padding: clamp(30px,5.2vw,52px) 24px clamp(10px,2vw,22px); }
+.lp .banda-in { max-width: 640px; margin: 0 auto; text-align: center; }
 
 /* --------------------------------------------------------------- tarjetas */
 .lp .dentro { padding: clamp(34px,4.2vw,58px) 24px clamp(72px,12vw,120px); background: #000; }
@@ -183,15 +188,12 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 
 /* ---------------------------------------------------------------- gracias */
 .lp .gracias { display: none; }
-body.lp.enviado .hero .form,
-body.lp.enviado .hero .nota,
-body.lp.enviado .hero .lede,
-body.lp.enviado .hero .eyebrow,
-body.lp.enviado .hero .claim,
-body.lp.enviado .hero .sub2,
-body.lp.enviado .hero .fecha { display: none; }
-body.lp.enviado .hero .gracias { display: block; }
-body.lp.enviado .cierre,
+body.lp.enviado .form,
+body.lp.enviado .nota,
+body.lp.enviado .claim,
+body.lp.enviado .sub2,
+body.lp.enviado .fecha { display: none; }
+body.lp.enviado .gracias { display: block; }
 body.lp.enviado .dentro { display: none; }
 .lp .gracias h2 {
   font-family: "Inter Tight", sans-serif; font-weight: 600;
