@@ -31,6 +31,22 @@
 </div></header>
 <main>
 <section class="section" style="padding:66px 0 92px"><div class="wrap" style="max-width:880px">
+  <div id="descarga-app" style="text-align:center">
+    <p class="section-kicker">Empieza hoy</p>
+    <h2 class="h-section">Descarga BuildUp</h2>
+    <p class="lede" style="margin-top:16px;margin-left:auto;margin-right:auto">Crea tu cuenta dentro de la app y empieza tus 7 días gratis con acceso completo. Cancela cuando quieras.</p>
+    <div class="stores">
+      <a class="store" href="https://apps.apple.com/app/id6825502059" target="_blank" rel="noopener"><b>App Store</b><span>Descargar para iPhone</span></a>
+      <a class="store" href="https://play.google.com/store/apps/details?id=com.mariagabsfitness.buildup" target="_blank" rel="noopener"><b>Google Play</b><span>Descargar para Android</span></a>
+    </div>
+    <div class="nextsteps" style="text-align:left"><h4>Qué sigue</h4><ol>
+      <li>Descarga la app y crea tu cuenta con tu correo.</li>
+      <li>Responde el cuestionario: tu objetivo, dónde entrenas y cuántos días.</li>
+      <li>Elige tu programa, o deja que la guía te recomiende uno.</li>
+      <li>Empieza tu primer entrenamiento y registra tus pesos.</li>
+    </ol></div>
+  </div>
+  <div id="alta-web" hidden>
   <p class="section-kicker">Empieza hoy</p>
   <h2 class="h-section">Crea tu cuenta</h2>
   <p class="lede center" style="margin-top:16px">7 días gratis con acceso a toda la app. Cancela cuando quieras.</p>
@@ -62,6 +78,7 @@
       <p class="legalnote">Al continuar aceptas los <a href="/legal/terminos/" target="_blank" rel="noopener">Términos de servicio</a> y la <a href="/legal/privacidad/" target="_blank" rel="noopener">Política de privacidad</a>. Te avisamos por correo antes de que terminen los 7 días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
     </div>
   </div>
+  </div>
   <div id="checkout" hidden></div>
 </div></section>
 <script type="module">
@@ -78,6 +95,9 @@ if (modoPrueba && !CFG.activo) {
   bandera.style.cssText = "position:fixed;left:14px;bottom:14px;z-index:99999;background:#111;color:#fff;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.28)";
   (document.body || document.documentElement).appendChild(bandera);
 }
+const bloqueAlta = document.getElementById("alta-web");
+const bloqueDescarga = document.getElementById("descarga-app");
+if (bloqueAlta && bloqueDescarga) { bloqueAlta.hidden = !activo; bloqueDescarga.hidden = activo; }
 const boton = document.getElementById("btn-pagar");
 const panelDiag = (() => {
   if (!modoPrueba || CFG.activo) return null;

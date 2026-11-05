@@ -672,6 +672,9 @@ if (modoPrueba && !CFG.activo) {
   bandera.style.cssText = "position:fixed;left:14px;bottom:14px;z-index:99999;background:#111;color:#fff;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.28)";
   (document.body || document.documentElement).appendChild(bandera);
 }
+const bloqueAlta = document.getElementById("alta-web");
+const bloqueDescarga = document.getElementById("descarga-app");
+if (bloqueAlta && bloqueDescarga) { bloqueAlta.hidden = !activo; bloqueDescarga.hidden = activo; }
 const boton = document.getElementById("btn-pagar");
 const panelDiag = (() => {
   if (!modoPrueba || CFG.activo) return null;
@@ -874,6 +877,22 @@ if (boton) {
 def page_crear_cuenta():
     a, m = P["anual"], P["mensual"]
     return """<section class="section" style="padding:66px 0 92px"><div class="wrap" style="max-width:880px">
+  <div id="descarga-app" style="text-align:center">
+    <p class="section-kicker">Empieza hoy</p>
+    <h2 class="h-section">Descarga BuildUp</h2>
+    <p class="lede" style="margin-top:16px;margin-left:auto;margin-right:auto">Crea tu cuenta dentro de la app y empieza tus %d días gratis con acceso completo. Cancela cuando quieras.</p>
+    <div class="stores">
+      <a class="store" href="%s" target="_blank" rel="noopener"><b>App Store</b><span>Descargar para iPhone</span></a>
+      <a class="store" href="%s" target="_blank" rel="noopener"><b>Google Play</b><span>Descargar para Android</span></a>
+    </div>
+    <div class="nextsteps" style="text-align:left"><h4>Qué sigue</h4><ol>
+      <li>Descarga la app y crea tu cuenta con tu correo.</li>
+      <li>Responde el cuestionario: tu objetivo, dónde entrenas y cuántos días.</li>
+      <li>Elige tu programa, o deja que la guía te recomiende uno.</li>
+      <li>Empieza tu primer entrenamiento y registra tus pesos.</li>
+    </ol></div>
+  </div>
+  <div id="alta-web" hidden>
   <p class="section-kicker">Empieza hoy</p>
   <h2 class="h-section">Crea tu cuenta</h2>
   <p class="lede center" style="margin-top:16px">%d días gratis con acceso a toda la app. Cancela cuando quieras.</p>
@@ -905,8 +924,10 @@ def page_crear_cuenta():
       <p class="legalnote">Al continuar aceptas los <a href="%s" target="_blank" rel="noopener">Términos de servicio</a> y la <a href="%s" target="_blank" rel="noopener">Política de privacidad</a>. Te avisamos por correo antes de que terminen los %d días, y puedes cancelar en cualquier momento desde tu cuenta.</p>
     </div>
   </div>
+  </div>
   <div id="checkout" hidden></div>
-</div></section>""" % (P["prueba_dias"], C.legal_url("consentimiento-datos-salud"),
+</div></section>""" % (P["prueba_dias"], S["appstore"], S["googleplay"],
+    P["prueba_dias"], C.legal_url("consentimiento-datos-salud"),
     a["importe"], a["cinta"], a["importe"], a["periodo"], a["mensualizado"],
     m["importe"], m["importe"], m["periodo"], m["renovacion"], P["prueba_dias"]+1, a["importe"],
     P["prueba_dias"], C.legal_url("terminos"), C.legal_url("privacidad"), P["prueba_dias"]) + script_pago()
