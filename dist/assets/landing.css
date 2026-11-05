@@ -17,8 +17,8 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 /* ---------------------------------------------------------------- hero */
 .lp .hero {
   position: relative; min-height: 100svh;
-  display: grid; align-items: center; justify-items: center;
-  padding: 92px 24px clamp(56px, 8vw, 86px);
+  display: grid; align-items: end; justify-items: center;
+  padding: clamp(104px, 17vh, 190px) 24px clamp(58px, 8vw, 92px);
   overflow: hidden;
   background: #000 center / cover no-repeat;
   background-image: url("https://getbuildup.app/assets/img/hero-home-movil.jpg");
