@@ -18,7 +18,7 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 .lp .hero {
   position: relative; min-height: 100svh;
   display: grid; align-items: end; justify-items: center;
-  padding: clamp(104px, 17vh, 190px) 24px clamp(58px, 8vw, 92px);
+  padding: clamp(150px, 27vh, 320px) 24px clamp(52px, 7vw, 82px);
   overflow: hidden;
   background: #000 center / cover no-repeat;
   background-image: url("https://getbuildup.app/assets/img/hero-home-movil.jpg");
@@ -38,9 +38,9 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 }
 .lp .hero-in { position: relative; z-index: 2; width: 100%; max-width: 640px; text-align: center; }
 
-.lp .logo { margin: 0 0 30px; display: flex; justify-content: center; }
+.lp .logo { margin: 0 0 22px; display: flex; justify-content: center; }
 .lp .logo img {
-  width: clamp(158px, 44vw, 250px); height: auto;
+  width: clamp(140px, 38vw, 210px); height: auto;
   filter: drop-shadow(0 2px 26px rgba(0,0,0,.45));
 }
 
@@ -54,52 +54,52 @@ body.lp img, body.lp video { display: block; max-width: 100%; }
 
 /* ------------------------------------------------- titulares del hero */
 .lp .eyebrow {
-  font-family: "Inter Tight", sans-serif; font-size: clamp(10px, 2.7vw, 11px);
-  font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
-  color: rgba(255,255,255,.6); margin: 0 0 15px;
+  font-size: 11px; font-weight: 400; letter-spacing: .24em; text-transform: uppercase;
+  color: rgba(255,255,255,.66); margin: 0 0 14px;
   text-shadow: 0 1px 14px rgba(0,0,0,.6);
 }
 .lp .claim {
-  font-family: "Inter Tight", sans-serif; font-weight: 600;
-  font-size: clamp(23px, 6.3vw, 40px); line-height: 1.16;
-  letter-spacing: -.005em; text-transform: uppercase;
-  margin: 0 auto 20px; max-width: none; text-wrap: balance;
+  font-family: "Inter Tight", sans-serif; font-weight: 500;
+  font-size: clamp(18px, 4.1vw, 29px); line-height: 1.24;
+  letter-spacing: .08em; text-transform: uppercase;
+  margin: 13px auto 0; max-width: none; text-wrap: balance;
   text-shadow: 0 2px 26px rgba(0,0,0,.55);
 }
 .lp .sub2 {
-  font-size: clamp(11.5px, 2.85vw, 13.5px); line-height: 1.68; font-weight: 300;
-  letter-spacing: .012em; color: rgba(255,255,255,.72);
-  margin: 0 auto 34px; max-width: none;
+  font-size: clamp(10.5px, 2.5vw, 12.5px); line-height: 1.6; font-weight: 300;
+  letter-spacing: .012em; color: rgba(255,255,255,.82);
+  margin: 10px auto 30px; max-width: none;
   text-wrap: balance; text-shadow: 0 1px 16px rgba(0,0,0,.5);
 }
 .lp .fecha {
-  font-size: clamp(12.5px, 3.3vw, 14px); font-weight: 500; line-height: 1.5;
-  color: rgba(255,255,255,.95); margin: 0 0 14px;
+  font-size: clamp(11px, 2.7vw, 12.5px); font-weight: 500; line-height: 1.5;
+  color: rgba(255,255,255,.95); margin: 0 0 16px;
   text-shadow: 0 1px 16px rgba(0,0,0,.55);
 }
 
 /* ------------------------------------------------------------ formulario */
-.lp .form { display: flex; flex-direction: column; gap: 11px; margin: 0; }
+.lp .form { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0 auto; max-width: 380px; }
 .lp .campo {
-  width: 100%; padding: 16px 18px;
+  width: 100%; padding: 12px 22px;
   background: rgba(255,255,255,.1);
-  border: 1px solid rgba(255,255,255,.26);
-  border-radius: 12px; color: #fff; font: inherit; font-size: 15px;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 999px; color: #fff; font: inherit; font-size: 13.5px; text-align: center;
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   transition: border-color .18s ease, background .18s ease;
 }
 .lp .campo::placeholder { color: rgba(255,255,255,.55); }
 .lp .campo:focus { outline: none; border-color: rgba(255,255,255,.75); background: rgba(255,255,255,.16); }
 .lp .boton {
-  width: 100%; padding: 16px 18px; border: 0; border-radius: 12px;
-  background: #fff; color: #000; font: inherit; font-size: 12.5px; font-weight: 600;
-  letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: auto; padding: 15px 44px; border: 0; border-radius: 999px;
+  background: #fff; color: #000; font: inherit; font-size: 11.5px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; cursor: pointer;
   transition: opacity .18s ease, transform .18s ease;
 }
 .lp .boton:hover { opacity: .87; }
 .lp .boton:active { transform: translateY(1px); }
 .lp .nota {
-  font-size: 12.5px; line-height: 1.62; color: rgba(255,255,255,.62);
+  font-size: 11.5px; line-height: 1.6; color: rgba(255,255,255,.58);
   margin: 18px auto 0; max-width: 34ch; text-wrap: balance;
 }
 .lp .errores { font-size: 13px; color: #ff9a8f; margin: 14px 0 0; list-style: none; padding: 0; }
