@@ -661,15 +661,25 @@ def script_pago():
 <script type="module">
 const CFG = %s;
 const qsPrueba = new URLSearchParams(location.search).get("pago") === "prueba";
-if (qsPrueba) { try { sessionStorage.setItem("bu_prueba", "1"); } catch (_) {} }
+if (qsPrueba) { try { sessionStorage.setItem("bu_prueba", String(Date.now())); } catch (_) {} }
 let pruebaGuardada = false;
-try { pruebaGuardada = sessionStorage.getItem("bu_prueba") === "1"; } catch (_) {}
+try {
+  const guardado = sessionStorage.getItem("bu_prueba");
+  const desde = guardado === "1" ? Date.now() : Number(guardado);
+  pruebaGuardada = !!guardado && Date.now() - desde < 3 * 60 * 60 * 1000;
+  if (guardado && !pruebaGuardada) sessionStorage.removeItem("bu_prueba");
+} catch (_) {}
 const modoPrueba = qsPrueba || pruebaGuardada;
 const activo = CFG.activo || modoPrueba;
 if (modoPrueba && !CFG.activo) {
   const bandera = document.createElement("div");
-  bandera.textContent = "MODO PRUEBA \u00b7 el cobro es de mentira";
-  bandera.style.cssText = "position:fixed;left:14px;bottom:14px;z-index:99999;background:#111;color:#fff;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.28)";
+  bandera.textContent = "MODO PRUEBA \u00b7 el cobro es de mentira \u00b7 SALIR \u2715";
+  bandera.title = "Pulsa para volver a la web normal";
+  bandera.addEventListener("click", () => {
+    try { sessionStorage.removeItem("bu_prueba"); } catch (_) {}
+    location.href = location.pathname;
+  });
+  bandera.style.cssText = "position:fixed;left:14px;bottom:14px;z-index:99999;background:#111;color:#fff;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.28);cursor:pointer";
   (document.body || document.documentElement).appendChild(bandera);
 }
 const bloqueAlta = document.getElementById("alta-web");
