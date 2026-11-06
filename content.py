@@ -46,6 +46,12 @@ PAGO = {
     "activo": True,
     "rc_api_key": "pdl_GenDDooikbTVxhZdTAwiWSyAwhYM",   # produccion
     "entitlement": "acceso",
+    # Codigos de Paddle para el precio de fundadora. Se aplican solos cuando
+    # la persona entra por el enlace del correo (.../crear-cuenta/?fundadora=1).
+    "descuentos": {
+        "mensual": "FUNDADORA",
+        "anual": "FUNDADORAANUAL",
+    },
     "firebase": {
         "apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego",
         "authDomain": "buildup-40951.firebaseapp.com",

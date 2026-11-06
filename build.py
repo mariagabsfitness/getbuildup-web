@@ -645,6 +645,7 @@ def cfg_json():
         "rcKey": C.PAGO["rc_api_key"],
         "ent": C.PAGO["entitlement"],
         "fb": C.PAGO["firebase"],
+        "desc": C.PAGO["descuentos"],
         "terminos": C.legal_url("terminos"),
     }, ensure_ascii=False)
 
@@ -655,6 +656,7 @@ def script_pago():
         "rcKey": C.PAGO["rc_api_key"],
         "ent": C.PAGO["entitlement"],
         "fb": C.PAGO["firebase"],
+        "desc": C.PAGO["descuentos"],
         "terminos": C.legal_url("terminos"),
     }, ensure_ascii=False)
     return """
@@ -670,6 +672,15 @@ try {
   if (guardado && !pruebaGuardada) sessionStorage.removeItem("bu_prueba");
 } catch (_) {}
 const modoPrueba = qsPrueba || pruebaGuardada;
+const qsFund = new URLSearchParams(location.search).get("fundadora") === "1";
+if (qsFund) { try { sessionStorage.setItem("bu_fundadora", String(Date.now())); } catch (_) {} }
+let fundGuardada = false;
+try {
+  const gf = sessionStorage.getItem("bu_fundadora");
+  fundGuardada = !!gf && Date.now() - Number(gf) < 6 * 60 * 60 * 1000;
+  if (gf && !fundGuardada) sessionStorage.removeItem("bu_fundadora");
+} catch (_) {}
+const fundadora = qsFund || fundGuardada;
 const activo = CFG.activo || modoPrueba;
 if (modoPrueba && !CFG.activo) {
   const bandera = document.createElement("div");
@@ -682,6 +693,8 @@ if (modoPrueba && !CFG.activo) {
   bandera.style.cssText = "position:fixed;left:14px;bottom:14px;z-index:99999;background:#111;color:#fff;font:600 11px/1 Inter,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.28);cursor:pointer";
   (document.body || document.documentElement).appendChild(bandera);
 }
+const notaFund = document.getElementById("nota-fundadora");
+if (notaFund) notaFund.hidden = !fundadora;
 const bloqueAlta = document.getElementById("alta-web");
 const bloqueDescarga = document.getElementById("descarga-app");
 if (bloqueAlta && bloqueDescarga) { bloqueAlta.hidden = !activo; bloqueDescarga.hidden = activo; }
@@ -858,9 +871,12 @@ if (boton) {
           }
         }, 9000);
         diag("6 llamando a purchase()");
+        const codigo = fundadora ? (CFG.desc || {})[planSel()] : null;
+        if (codigo) diag("6b descuento de fundadora: " + codigo);
         const res = await rc.purchase({
           rcPackage: pkg,
           customerEmail: correo,
+          ...(codigo ? { discountCode: codigo } : {}),
           htmlTarget: caja,
           selectedLocale: "es",
           termsAndConditionsUrl: location.origin + CFG.terminos,
@@ -932,6 +948,7 @@ def page_crear_cuenta():
       <div class="plan" data-plan="mensual" data-price="%s al mes" role="button" tabindex="0">
         <div><div class="mini">Cancela cuando quieras</div><div class="nm">Mensual</div><div class="pr">%s %s</div><div class="rn">%s</div></div>
         <span class="dot"></span></div>
+      <p class="hint" id="nota-fundadora" hidden style="margin-top:14px;color:var(--ink)"><b>★ Precio de fundadora aplicado</b> — 25%% de descuento. Lo verás en el resumen del pago.</p>
       <div class="summary">
         <div class="big"><span>Hoy pagas</span><b>$0.00</b></div>
         <div><span>A partir del día %d</span><b data-after>%s al año</b></div>
