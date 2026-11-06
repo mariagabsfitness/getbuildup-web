@@ -464,7 +464,7 @@ def page_programas():
     return """<div class="pagehead"><div class="wrap">
   <p class="eyebrow">Programas</p>
   <h1>Encuentra tu programa ideal</h1>
-  <p>Con tantos programas para elegir sabemos que puede ser difícil decidir por dónde empezar. Seis programas, un mismo método: ciclos de 8 semanas, progresión medida y versión gym o casa.</p>
+  <p>Con tantos programas para elegir sabemos que puede ser difícil decidir por dónde empezar. Seis programas para elegir el que se adapta a tu vida: ciclos de 8 semanas, progresión medida y versión gym o casa.</p>
 </div><div class="rule"></div></div>
 <section class="section"><div class="wrap"><div class="pgrid two">%s</div></div></section>
 <section class="section wash" id="faq"><div class="wrap">
