@@ -251,6 +251,14 @@ if (boton) {
         const irAlPago = () => { try { caja.scrollIntoView({ behavior: "auto", block: "start" }); } catch (_) {} };
         irAlPago(); setTimeout(irAlPago, 900); setTimeout(irAlPago, 2400);
         const ajustarCaja = () => {
+          const lay = caja.querySelector(".rcb-ui-layout");
+          if (lay) {
+            const altoLay = Math.max(lay.scrollHeight, Math.round(lay.getBoundingClientRect().height)) + 12;
+            if (altoLay > 240) {
+              caja.style.height = Math.min(1700, altoLay) + "px";
+              return;
+            }
+          }
           const k = caja.firstElementChild;
           if (!k) return;
           const sc = Array.from(k.querySelectorAll("div")).find(
@@ -259,9 +267,9 @@ if (boton) {
           if (!sc) return;
           const extra = sc.scrollHeight - sc.clientHeight;
           const alto = caja.getBoundingClientRect().height + extra + 12;
-          caja.style.height = Math.min(1600, Math.round(alto)) + "px";
+          caja.style.height = Math.min(1700, Math.round(alto)) + "px";
         };
-        [700, 1400, 2200, 3200, 4500, 6000].forEach((ms) => setTimeout(ajustarCaja, ms));
+        [700, 1400, 2200, 3200, 4500, 6000, 8000, 11000].forEach((ms) => setTimeout(ajustarCaja, ms));
         window.addEventListener("resize", () => {
           caja.style.height = "";
           setTimeout(ajustarCaja, 300);
