@@ -44,7 +44,7 @@ SITE = {
 # clave de produccion y se pone activo=True. Nada mas cambia.
 PAGO = {
     "activo": False,
-    "rc_api_key": "pdl_ipkHDTDyCXEIJgZjsTHzfbwIoJWg",   # sandbox
+    "rc_api_key": "pdl_GenDDooikbTVxhZdTAwiWSyAwhYM",   # produccion
     "entitlement": "acceso",
     "firebase": {
         "apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego",
