@@ -49,8 +49,8 @@ PAGO = {
     # Codigos de Paddle para el precio de fundadora. Se aplican solos cuando
     # la persona entra por el enlace del correo (.../crear-cuenta/?fundadora=1).
     "descuentos": {
-        "mensual": "FUNDADORA",
-        "anual": "FUNDADORAANUAL",
+        "mensual": "BUILD",
+        "anual": "BUILDANUAL",
     },
     "firebase": {
         "apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego",
