@@ -43,7 +43,7 @@ SITE = {
 # Cuando Paddle apruebe la cuenta de produccion, se cambia rc_api_key por la
 # clave de produccion y se pone activo=True. Nada mas cambia.
 PAGO = {
-    "activo": False,
+    "activo": True,
     "rc_api_key": "pdl_GenDDooikbTVxhZdTAwiWSyAwhYM",   # produccion
     "entitlement": "acceso",
     "firebase": {
