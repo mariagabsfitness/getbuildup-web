@@ -57,6 +57,22 @@ async function manejarWebhook(request, env, ctx) {
   const ev = cuerpo && cuerpo.event ? cuerpo.event : {};
   const tipo = ev.type || "";
 
+  // Prueba manual: el boton "Send Test Event" de RevenueCat manda un evento
+  // TEST. Si hay un TEST_UID configurado, hacemos el recorrido completo con
+  // ese usuario para comprobar Firebase + Resend sin tener que comprar nada.
+  if (tipo === "TEST") {
+    if (!env.TEST_UID) return respuestaOk("ignorado: TEST (sin TEST_UID)");
+    const falso = {
+      type: "INITIAL_PURCHASE",
+      app_user_id: env.TEST_UID,
+      store: "PRUEBA",
+      expiration_at_ms: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      subscriber_attributes: {},
+    };
+    ctx.waitUntil(enviarBienvenida(falso, env));
+    return respuestaOk("prueba encolada para " + env.TEST_UID);
+  }
+
   // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
   if (tipo !== "INITIAL_PURCHASE") {
     return respuestaOk("ignorado: " + tipo);
