@@ -14,7 +14,8 @@
   // cuando se pulsa "Send Test Event" en RevenueCat, para comprobar que el
   // correo de bienvenida sale bien. No es un dato secreto.
   "vars": {
-    "TEST_UID": "scBKEdN5ngQz60QlxWWCrBciTyP2"
+    "TEST_UID": "scBKEdN5ngQz60QlxWWCrBciTyP2",
+    "TEST_PLANTILLA": "lanzamiento"
   },
   "observability": { "enabled": true },
   "assets": {

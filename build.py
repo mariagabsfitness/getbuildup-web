@@ -1263,19 +1263,32 @@ def main():
     print("Generadas %d páginas en %s/" % (len(urls) + 1, OUT))
 
 def plantilla_correo():
-    """Convierte correos/correo-bienvenida.html en un modulo JS que el Worker
-       importa. Asi la plantilla vive en un solo sitio."""
-    src = os.path.join("correos", "correo-bienvenida.html")
-    if not os.path.isfile(src):
-        print("  (falta %s, no se genera la plantilla del Worker)" % src); return
-    html_txt = io.open(src, encoding="utf-8").read()
-    js = "// Generado por build.py desde correos/correo-bienvenida.html. No editar a mano.\n"
-    js += "export default " + json.dumps(html_txt, ensure_ascii=False) + ";\n"
-    dst = os.path.join("worker", "plantilla-bienvenida.js")
+    """Convierte los correos de correos/*.html en un modulo JS que el Worker
+       importa. Asi las plantillas viven en un solo sitio."""
+    nombres = {
+        "bienvenida": "correo-bienvenida.html",
+        "lanzamiento": "correo-lanzamiento.html",
+        "primeras": "correo-primeras.html",
+    }
+    datos = {}
+    for clave, arch in sorted(nombres.items()):
+        src = os.path.join("correos", arch)
+        if not os.path.isfile(src):
+            print("  (falta %s)" % src); continue
+        datos[clave] = io.open(src, encoding="utf-8").read()
+    if not datos:
+        return
+    js = "// Generado por build.py desde correos/*.html. No editar a mano.\n"
+    js += "export default " + json.dumps(datos, ensure_ascii=False, indent=0) + ";\n"
     if not os.path.isdir("worker"):
         os.makedirs("worker")
+    dst = os.path.join("worker", "plantillas.js")
     io.open(dst, "w", encoding="utf-8").write(js)
-    print("  plantilla del Worker: %s (%d bytes)" % (dst, len(html_txt)))
+    viejo = os.path.join("worker", "plantilla-bienvenida.js")
+    if os.path.isfile(viejo):
+        try: os.remove(viejo)
+        except Exception: pass
+    print("  plantillas del Worker: %s (%s)" % (dst, ", ".join(sorted(datos))))
 
 if __name__ == "__main__":
     main()

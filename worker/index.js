@@ -12,11 +12,15 @@
 //    FIREBASE_SA         el JSON completo de la cuenta de servicio de Firebase
 // ---------------------------------------------------------------------------
 
-import PLANTILLA from "./plantilla-bienvenida.js";
+import PLANTILLAS from "./plantillas.js";
 
 const REMITENTE = "BuildUp <hola@getbuildup.app>";
 const RESPONDER_A = "buildup@mariagabsfitness.com";
-const ASUNTO = "Ya estas dentro de BuildUp";
+const ASUNTOS = {
+  bienvenida: "Ya estás dentro de BuildUp \u2661",
+  lanzamiento: "BuildUp ya está aquí \u2661",
+  primeras: "Tú ya estabas aquí \u2661",
+};
 
 export default {
   async fetch(request, env, ctx) {
@@ -69,8 +73,9 @@ async function manejarWebhook(request, env, ctx) {
       expiration_at_ms: Date.now() + 7 * 24 * 60 * 60 * 1000,
       subscriber_attributes: {},
     };
-    ctx.waitUntil(enviarBienvenida(falso, env));
-    return respuestaOk("prueba encolada para " + env.TEST_UID);
+    const cual = env.TEST_PLANTILLA || "bienvenida";
+    ctx.waitUntil(enviarBienvenida(falso, env, cual));
+    return respuestaOk("prueba (" + cual + ") encolada para " + env.TEST_UID);
   }
 
   // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
@@ -105,7 +110,8 @@ function iguales(a, b) {
 //  Armar y mandar el correo
 // ---------------------------------------------------------------------------
 
-async function enviarBienvenida(ev, env) {
+async function enviarBienvenida(ev, env, plantilla) {
+  const cual = plantilla || "bienvenida";
   try {
     const uid = ev.app_user_id || ev.original_app_user_id || "";
 
@@ -137,7 +143,7 @@ async function enviarBienvenida(ev, env) {
 
     // 3. Rellenar la plantilla.
     const primerNombre = (nombre || "").trim().split(/\s+/)[0] || "";
-    let html = PLANTILLA;
+    let html = PLANTILLAS[cual] || PLANTILLAS.bienvenida;
     if (primerNombre) {
       html = html.split("{{NOMBRE}}").join(escapar(primerNombre));
     } else {
@@ -159,16 +165,16 @@ async function enviarBienvenida(ev, env) {
         from: REMITENTE,
         to: [correo],
         reply_to: RESPONDER_A,
-        subject: ASUNTO,
+        subject: ASUNTOS[cual] || ASUNTOS.bienvenida,
         html,
-        tags: [{ name: "tipo", value: "bienvenida" }],
+        tags: [{ name: "tipo", value: cual }],
       }),
     });
 
     if (!r.ok) {
       console.log("resend fallo " + r.status + " " + (await r.text()));
     } else {
-      console.log("bienvenida enviada a " + correo + " (" + (ev.store || "?") + ")");
+      console.log(cual + " enviado a " + correo + " (" + (ev.store || "?") + ")");
     }
   } catch (e) {
     console.log("error en enviarBienvenida: " + (e && e.message ? e.message : e));
