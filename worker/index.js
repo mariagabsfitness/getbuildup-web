@@ -62,6 +62,16 @@ async function manejarWebhook(request, env, ctx) {
   const ev = cuerpo && cuerpo.event ? cuerpo.event : {};
   const tipo = ev.type || "";
 
+  // Crear las campanas en Resend con el HTML exacto, sin pasar por el editor
+  // del panel (que reordena las tablas y descoloca el diseno).
+  if (tipo === "TEST" && env.TEST_PLANTILLA === "crear-campanas") {
+    const r = await crearCampanas(env);
+    return new Response(JSON.stringify(r, null, 1), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  }
+
   // Prueba manual: el boton "Send Test Event" de RevenueCat manda un evento
   // TEST. Si hay un TEST_UID configurado, hacemos el recorrido completo con
   // ese usuario para comprobar Firebase + Resend sin tener que comprar nada.
@@ -215,6 +225,60 @@ function formatearFecha(ms) {
     d = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   }
   return d.getUTCDate() + " de " + MESES[d.getUTCMonth()];
+}
+
+// ---------------------------------------------------------------------------
+//  Campanas (Broadcasts) de Resend
+// ---------------------------------------------------------------------------
+
+const CAMPANAS = [
+  {
+    clave: "lanzamiento",
+    nombre: "Lanzamiento - lista de espera (precio de fundadora)",
+    segmento: "dcba5589-6dce-4750-8840-44ca164875c5",
+    asunto: "BuildUp ya está aquí (y tú entras con precio de fundadora)",
+  },
+  {
+    clave: "general",
+    nombre: "Lanzamiento - resto de Shopify (precio normal)",
+    segmento: "e86ac9fd-2a43-415c-bcbf-e30342fc3e0d",
+    asunto: "BuildUp ya está aquí \u2661",
+  },
+  {
+    clave: "primeras",
+    nombre: "Gracias - las que ya estaban suscritas",
+    segmento: "0a6a3666-d6ba-4d44-9524-31b8d1e7114b",
+    asunto: "Tú ya estabas aquí \u2661",
+  },
+];
+
+async function crearCampanas(env) {
+  const salida = [];
+  for (const c of CAMPANAS) {
+    const html = (PLANTILLAS.envio || {})[c.clave];
+    if (!html) {
+      salida.push({ campana: c.clave, error: "sin plantilla de envio" });
+      continue;
+    }
+    const r = await fetch("https://api.resend.com/broadcasts", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + env.RESEND_API_KEY,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        segment_id: c.segmento,
+        name: c.nombre,
+        from: REMITENTE,
+        reply_to: RESPONDER_A,
+        subject: c.asunto,
+        html,
+      }),
+    });
+    const texto = await r.text();
+    salida.push({ campana: c.clave, estado: r.status, respuesta: texto.slice(0, 300) });
+  }
+  return { ok: true, campanas: salida };
 }
 
 // ---------------------------------------------------------------------------

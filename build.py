@@ -1302,6 +1302,14 @@ def plantilla_correo():
         datos[clave] = io.open(src, encoding="utf-8").read()
     if not datos:
         return
+    # Version de campana (con el enlace de baja de Resend) para los Broadcasts
+    envio = {}
+    for clave, texto in datos.items():
+        if clave == "bienvenida":
+            continue
+        envio[clave] = texto.replace('href="#"', 'href="{{{RESEND_UNSUBSCRIBE_URL}}}"')
+    datos = dict(datos)
+    datos["envio"] = envio
     js = "// Generado por build.py desde correos/*.html. No editar a mano.\n"
     js += "export default " + json.dumps(datos, ensure_ascii=False, indent=0) + ";\n"
     if not os.path.isdir("worker"):
