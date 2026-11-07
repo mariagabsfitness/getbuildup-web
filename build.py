@@ -1259,7 +1259,23 @@ def main():
         sm.append("  <url><loc>%s%s</loc></url>" % (S["dominio"], u))
     sm.append("</urlset>")
     io.open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(sm) + "\n")
+    plantilla_correo()
     print("Generadas %d páginas en %s/" % (len(urls) + 1, OUT))
+
+def plantilla_correo():
+    """Convierte correos/correo-bienvenida.html en un modulo JS que el Worker
+       importa. Asi la plantilla vive en un solo sitio."""
+    src = os.path.join("correos", "correo-bienvenida.html")
+    if not os.path.isfile(src):
+        print("  (falta %s, no se genera la plantilla del Worker)" % src); return
+    html_txt = io.open(src, encoding="utf-8").read()
+    js = "// Generado por build.py desde correos/correo-bienvenida.html. No editar a mano.\n"
+    js += "export default " + json.dumps(html_txt, ensure_ascii=False) + ";\n"
+    dst = os.path.join("worker", "plantilla-bienvenida.js")
+    if not os.path.isdir("worker"):
+        os.makedirs("worker")
+    io.open(dst, "w", encoding="utf-8").write(js)
+    print("  plantilla del Worker: %s (%d bytes)" % (dst, len(html_txt)))
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,331 @@
+// ---------------------------------------------------------------------------
+//  getbuildup.app — Worker
+//
+//  1. Sirve el sitio estatico (dist/) igual que antes.
+//  2. Escucha el webhook de RevenueCat en /api/rc-webhook y manda el correo
+//     de bienvenida con Resend, funcione la compra por web, App Store o
+//     Google Play.
+//
+//  Secretos que necesita (se ponen en Cloudflare, nunca en el repo):
+//    RESEND_API_KEY      clave de Resend (empieza por re_)
+//    RC_WEBHOOK_SECRET   la misma palabra secreta que se pone en RevenueCat
+//    FIREBASE_SA         el JSON completo de la cuenta de servicio de Firebase
+// ---------------------------------------------------------------------------
+
+import PLANTILLA from "./plantilla-bienvenida.js";
+
+const REMITENTE = "BuildUp <hola@getbuildup.app>";
+const RESPONDER_A = "buildup@mariagabsfitness.com";
+const ASUNTO = "Ya estas dentro de BuildUp";
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    if (url.pathname === "/api/rc-webhook") {
+      return manejarWebhook(request, env, ctx);
+    }
+
+    // Cualquier otra cosa: el sitio estatico de siempre.
+    return env.ASSETS.fetch(request);
+  },
+};
+
+// ---------------------------------------------------------------------------
+//  Webhook
+// ---------------------------------------------------------------------------
+
+async function manejarWebhook(request, env, ctx) {
+  if (request.method !== "POST") {
+    return new Response("Method not allowed", { status: 405 });
+  }
+
+  // Autenticacion: RevenueCat manda la cabecera Authorization que configuramos.
+  const esperado = env.RC_WEBHOOK_SECRET || "";
+  const recibido = request.headers.get("Authorization") || "";
+  if (!esperado || !iguales(recibido, esperado)) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  let cuerpo;
+  try {
+    cuerpo = await request.json();
+  } catch (_) {
+    return new Response("Bad JSON", { status: 400 });
+  }
+
+  const ev = cuerpo && cuerpo.event ? cuerpo.event : {};
+  const tipo = ev.type || "";
+
+  // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
+  if (tipo !== "INITIAL_PURCHASE") {
+    return respuestaOk("ignorado: " + tipo);
+  }
+
+  // Trabajo en segundo plano: contestamos 200 ya para que RevenueCat no
+  // reintente, y mandamos el correo despues.
+  ctx.waitUntil(enviarBienvenida(ev, env));
+  return respuestaOk("encolado");
+}
+
+function respuestaOk(nota) {
+  return new Response(JSON.stringify({ ok: true, nota }), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
+}
+
+// Comparacion en tiempo constante, para no filtrar el secreto.
+function iguales(a, b) {
+  const ea = new TextEncoder().encode(a);
+  const eb = new TextEncoder().encode(b);
+  if (ea.length !== eb.length) return false;
+  let d = 0;
+  for (let i = 0; i < ea.length; i++) d |= ea[i] ^ eb[i];
+  return d === 0;
+}
+
+// ---------------------------------------------------------------------------
+//  Armar y mandar el correo
+// ---------------------------------------------------------------------------
+
+async function enviarBienvenida(ev, env) {
+  try {
+    const uid = ev.app_user_id || ev.original_app_user_id || "";
+
+    // 1. El correo. En compras web RevenueCat ya lo trae; en App Store y
+    //    Google Play no, asi que lo buscamos en Firebase por el UID.
+    let correo = atributo(ev, "$email");
+    let nombre = atributo(ev, "$displayName");
+
+    if ((!correo || !nombre) && uid) {
+      const u = await buscarEnFirebase(uid, env);
+      if (u) {
+        if (!correo) correo = u.email || "";
+        if (!nombre) nombre = u.displayName || "";
+      }
+    }
+
+    if (!correo) {
+      console.log("sin correo para uid=" + uid + " store=" + (ev.store || "?"));
+      return;
+    }
+
+    // 2. Fecha del primer cobro.
+    const fecha = formatearFecha(ev.expiration_at_ms);
+
+    // 3. Rellenar la plantilla.
+    const primerNombre = (nombre || "").trim().split(/\s+/)[0] || "";
+    let html = PLANTILLA;
+    if (primerNombre) {
+      html = html.split("{{NOMBRE}}").join(escapar(primerNombre));
+    } else {
+      // Sin nombre: "Hola, que alegria tenerte aqui."
+      html = html.split("Hola {{NOMBRE}},").join("Hola,");
+      html = html.split("{{NOMBRE}}").join("");
+    }
+    html = html.split("{{CORREO}}").join(escapar(correo));
+    html = html.split("{{FECHA_COBRO}}").join(fecha);
+
+    // 4. Mandar con Resend.
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + env.RESEND_API_KEY,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        from: REMITENTE,
+        to: [correo],
+        reply_to: RESPONDER_A,
+        subject: ASUNTO,
+        html,
+        tags: [{ name: "tipo", value: "bienvenida" }],
+      }),
+    });
+
+    if (!r.ok) {
+      console.log("resend fallo " + r.status + " " + (await r.text()));
+    } else {
+      console.log("bienvenida enviada a " + correo + " (" + (ev.store || "?") + ")");
+    }
+  } catch (e) {
+    console.log("error en enviarBienvenida: " + (e && e.message ? e.message : e));
+  }
+}
+
+function atributo(ev, clave) {
+  const a = ev.subscriber_attributes || {};
+  const v = a[clave];
+  if (!v) return "";
+  return (typeof v === "object" ? v.value : v) || "";
+}
+
+function escapar(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+const MESES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
+function formatearFecha(ms) {
+  let d;
+  if (ms && Number(ms) > 0) {
+    d = new Date(Number(ms));
+  } else {
+    d = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  }
+  return d.getUTCDate() + " de " + MESES[d.getUTCMonth()];
+}
+
+// ---------------------------------------------------------------------------
+//  Firebase: UID -> correo y nombre
+// ---------------------------------------------------------------------------
+
+let tokenCache = { valor: null, expira: 0 };
+
+async function buscarEnFirebase(uid, env) {
+  const sa = leerCuentaServicio(env);
+  if (!sa) return null;
+
+  const token = await tokenDeAcceso(sa);
+  if (!token) return null;
+
+  const r = await fetch(
+    "https://identitytoolkit.googleapis.com/v1/projects/" +
+      encodeURIComponent(sa.project_id) +
+      "/accounts:lookup",
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ localId: [uid] }),
+    }
+  );
+
+  if (!r.ok) {
+    console.log("firebase lookup fallo " + r.status + " " + (await r.text()));
+    return null;
+  }
+
+  const j = await r.json();
+  const u = j.users && j.users[0];
+  if (!u) return null;
+
+  let correo = u.email || "";
+  let nombre = u.displayName || "";
+
+  // Si entro con Apple/Google, a veces el correo solo esta en providerUserInfo.
+  if (!correo && Array.isArray(u.providerUserInfo)) {
+    for (const p of u.providerUserInfo) {
+      if (p.email) { correo = p.email; break; }
+    }
+  }
+  if (!nombre && Array.isArray(u.providerUserInfo)) {
+    for (const p of u.providerUserInfo) {
+      if (p.displayName) { nombre = p.displayName; break; }
+    }
+  }
+
+  return { email: correo, displayName: nombre };
+}
+
+function leerCuentaServicio(env) {
+  try {
+    const raw = env.FIREBASE_SA;
+    if (!raw) return null;
+    return typeof raw === "string" ? JSON.parse(raw) : raw;
+  } catch (e) {
+    console.log("FIREBASE_SA no es un JSON valido");
+    return null;
+  }
+}
+
+async function tokenDeAcceso(sa) {
+  const ahora = Math.floor(Date.now() / 1000);
+  if (tokenCache.valor && tokenCache.expira > ahora + 60) {
+    return tokenCache.valor;
+  }
+
+  const cabecera = { alg: "RS256", typ: "JWT" };
+  const reclamos = {
+    iss: sa.client_email,
+    scope: "https://www.googleapis.com/auth/identitytoolkit",
+    aud: "https://oauth2.googleapis.com/token",
+    iat: ahora,
+    exp: ahora + 3600,
+  };
+
+  const sinFirma =
+    b64url(JSON.stringify(cabecera)) + "." + b64url(JSON.stringify(reclamos));
+
+  const clave = await importarClave(sa.private_key);
+  if (!clave) return null;
+
+  const firma = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    clave,
+    new TextEncoder().encode(sinFirma)
+  );
+  const jwt = sinFirma + "." + b64urlBytes(new Uint8Array(firma));
+
+  const r = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body:
+      "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=" +
+      encodeURIComponent(jwt),
+  });
+
+  if (!r.ok) {
+    console.log("google token fallo " + r.status + " " + (await r.text()));
+    return null;
+  }
+
+  const j = await r.json();
+  tokenCache = {
+    valor: j.access_token,
+    expira: ahora + (j.expires_in || 3600),
+  };
+  return j.access_token;
+}
+
+async function importarClave(pem) {
+  try {
+    const limpio = String(pem)
+      .replace(/\\n/g, "\n")
+      .replace(/-----BEGIN PRIVATE KEY-----/, "")
+      .replace(/-----END PRIVATE KEY-----/, "")
+      .replace(/\s+/g, "");
+    const bin = atob(limpio);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return await crypto.subtle.importKey(
+      "pkcs8",
+      bytes.buffer,
+      { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
+  } catch (e) {
+    console.log("no se pudo leer private_key: " + (e && e.message));
+    return null;
+  }
+}
+
+function b64url(texto) {
+  return b64urlBytes(new TextEncoder().encode(texto));
+}
+
+function b64urlBytes(bytes) {
+  let s = "";
+  for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
