@@ -15,7 +15,7 @@
   // correo de bienvenida sale bien. No es un dato secreto.
   "vars": {
     "TEST_UID": "scBKEdN5ngQz60QlxWWCrBciTyP2",
-    "TEST_PLANTILLA": "crear-campanas"
+    "TEST_PLANTILLA": "bienvenida"
   },
   "observability": { "enabled": true },
   "assets": {
