@@ -1260,7 +1260,30 @@ def main():
     sm.append("</urlset>")
     io.open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(sm) + "\n")
     plantilla_correo()
+    correos_para_envio()
     print("Generadas %d páginas en %s/" % (len(urls) + 1, OUT))
+
+def correos_para_envio():
+    """Copias de los correos de campana con el enlace de baja real que pone
+       Resend. Se guardan en correos/envio/ y son las que se pegan en el
+       Broadcast."""
+    import glob
+    destino = os.path.join("correos", "envio")
+    if not os.path.isdir(destino):
+        os.makedirs(destino)
+    hechos = []
+    for src in sorted(glob.glob(os.path.join("correos", "correo-*.html"))):
+        nombre = os.path.basename(src)
+        if nombre == "correo-bienvenida.html":
+            continue  # no es campana: no lleva baja
+        html_txt = io.open(src, encoding="utf-8").read()
+        if 'href="#"' not in html_txt:
+            continue
+        html_txt = html_txt.replace('href="#"', 'href="{{{RESEND_UNSUBSCRIBE_URL}}}"')
+        io.open(os.path.join(destino, nombre), "w", encoding="utf-8").write(html_txt)
+        hechos.append(nombre)
+    if hechos:
+        print("  listos para Resend: %s" % ", ".join(hechos))
 
 def plantilla_correo():
     """Convierte los correos de correos/*.html en un modulo JS que el Worker
