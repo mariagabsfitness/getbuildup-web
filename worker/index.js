@@ -166,7 +166,13 @@ async function enviarBienvenida(ev, env, plantilla) {
         from: REMITENTE,
         to: [correo],
         reply_to: RESPONDER_A,
-        subject: ASUNTOS[cual] || ASUNTOS.bienvenida,
+        subject:
+          (ASUNTOS[cual] || ASUNTOS.bienvenida) +
+          // En las pruebas añadimos la hora para que Gmail no las agrupe en
+          // una misma conversación y recorte el contenido repetido.
+          (ev.store === "PRUEBA"
+            ? " · prueba " + cual + " " + new Date().toISOString().slice(11, 19)
+            : ""),
         html,
         tags: [{ name: "tipo", value: cual }],
       }),
