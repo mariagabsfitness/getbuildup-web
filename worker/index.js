@@ -19,6 +19,7 @@ const RESPONDER_A = "buildup@mariagabsfitness.com";
 const ASUNTOS = {
   bienvenida: "Ya estás dentro de BuildUp \u2661",
   lanzamiento: "BuildUp ya está aquí \u2661",
+  general: "BuildUp ya está aquí \u2661",
   primeras: "Tú ya estabas aquí \u2661",
 };
 

@@ -1268,6 +1268,7 @@ def plantilla_correo():
     nombres = {
         "bienvenida": "correo-bienvenida.html",
         "lanzamiento": "correo-lanzamiento.html",
+        "general": "correo-lanzamiento-general.html",
         "primeras": "correo-primeras.html",
     }
     datos = {}
