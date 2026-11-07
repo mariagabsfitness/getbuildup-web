@@ -10,6 +10,12 @@
   "name": "getbuildup-web",
   "main": "worker/index.js",
   "compatibility_date": "2026-10-27",
+  // UID de la cuenta de prueba (team@mariagabsfitness.com). Solo se usa
+  // cuando se pulsa "Send Test Event" en RevenueCat, para comprobar que el
+  // correo de bienvenida sale bien. No es un dato secreto.
+  "vars": {
+    "TEST_UID": "scBKEdN5ngQz60QlxWWCrBciTyP2"
+  },
   "observability": { "enabled": true },
   "assets": {
     "directory": "./dist",
