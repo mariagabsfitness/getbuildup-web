@@ -14,7 +14,7 @@
 
 import PLANTILLAS from "./plantillas.js";
 
-const REMITENTE = "BuildUp <hola@getbuildup.app>";
+const REMITENTE = '"BuildUp by MariaGabsFitness" <hola@getbuildup.app>';
 const RESPONDER_A = "buildup@mariagabsfitness.com";
 const ASUNTOS = {
   bienvenida: "Ya estás dentro de BuildUp \u2661",
