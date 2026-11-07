@@ -263,7 +263,10 @@ async function crearCampanas(env) {
     const r = await fetch("https://api.resend.com/broadcasts", {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + env.RESEND_API_KEY,
+        // Crear campanas necesita una clave con permiso completo. La clave de
+        // siempre solo puede enviar, y asi se queda: es la que usa el correo
+        // automatico todos los dias.
+        Authorization: "Bearer " + (env.RESEND_ADMIN_KEY || env.RESEND_API_KEY),
         "content-type": "application/json",
       },
       body: JSON.stringify({
