@@ -93,18 +93,23 @@ async function enviarBienvenida(ev, env) {
   try {
     const uid = ev.app_user_id || ev.original_app_user_id || "";
 
-    // 1. El correo. En compras web RevenueCat ya lo trae; en App Store y
-    //    Google Play no, asi que lo buscamos en Firebase por el UID.
-    let correo = atributo(ev, "$email");
-    let nombre = atributo(ev, "$displayName");
+    // 1. El correo. Mandamos siempre al correo con el que la persona entra
+    //    en la app (Firebase), que es el que aparece en el correo como
+    //    "tu membresia esta ligada a ...". Si por lo que sea no se puede
+    //    consultar Firebase, usamos lo que venga de RevenueCat (solo llega
+    //    en las compras por web).
+    let correo = "";
+    let nombre = "";
 
-    if ((!correo || !nombre) && uid) {
+    if (uid) {
       const u = await buscarEnFirebase(uid, env);
       if (u) {
-        if (!correo) correo = u.email || "";
-        if (!nombre) nombre = u.displayName || "";
+        correo = u.email || "";
+        nombre = u.displayName || "";
       }
     }
+    if (!correo) correo = atributo(ev, "$email");
+    if (!nombre) nombre = atributo(ev, "$displayName");
 
     if (!correo) {
       console.log("sin correo para uid=" + uid + " store=" + (ev.store || "?"));
