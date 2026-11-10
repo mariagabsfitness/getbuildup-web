@@ -69,6 +69,7 @@
         <div><div class="mini">Cancela cuando quieras</div><div class="nm">Mensual</div><div class="pr">$24.99 por mes</div><div class="rn">Se renueva cada mes</div></div>
         <span class="dot"></span></div>
       <p class="hint" id="nota-fundadora" hidden style="margin-top:14px;color:var(--ink)"><b>★ Precio de fundadora aplicado</b> — 25% de descuento. Lo verás en el resumen del pago.</p>
+      <p class="hint" id="nota-vuelve" hidden style="margin-top:14px;color:var(--ink)"><b>★ Descuento de bienvenida de vuelta</b> — 50% los 3 primeros meses en el plan mensual. Lo verás en el resumen del pago.</p>
       <div class="summary">
         <div class="big"><span>Hoy pagas</span><b>$0.00</b></div>
         <div><span>A partir del día 8</span><b data-after>$179.99 al año</b></div>
@@ -83,7 +84,7 @@
   <div id="checkout" hidden></div>
 </div></section>
 <script type="module">
-const CFG = {"activo": true, "rcKey": "pdl_GenDDooikbTVxhZdTAwiWSyAwhYM", "ent": "acceso", "fb": {"apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego", "authDomain": "buildup-40951.firebaseapp.com", "projectId": "buildup-40951", "appId": "1:869364925842:web:d78fc11ef48bf437ce2d4b"}, "desc": {"mensual": "BUILD", "anual": "BUILDANUAL"}, "terminos": "/legal/terminos/"};
+const CFG = {"activo": true, "rcKey": "pdl_GenDDooikbTVxhZdTAwiWSyAwhYM", "ent": "acceso", "fb": {"apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego", "authDomain": "buildup-40951.firebaseapp.com", "projectId": "buildup-40951", "appId": "1:869364925842:web:d78fc11ef48bf437ce2d4b"}, "desc": {"mensual": "BUILD", "anual": "BUILDANUAL"}, "descv": {"mensual": "VUELVE"}, "terminos": "/legal/terminos/"};
 const qsPrueba = new URLSearchParams(location.search).get("pago") === "prueba";
 if (qsPrueba) { try { sessionStorage.setItem("bu_prueba", String(Date.now())); } catch (_) {} }
 let pruebaGuardada = false;
@@ -103,6 +104,15 @@ try {
   if (gf && !fundGuardada) sessionStorage.removeItem("bu_fundadora");
 } catch (_) {}
 const fundadora = qsFund || fundGuardada;
+const qsVuelve = new URLSearchParams(location.search).get("vuelve") === "1";
+if (qsVuelve) { try { sessionStorage.setItem("bu_vuelve", String(Date.now())); } catch (_) {} }
+let vuelveGuardada = false;
+try {
+  const gv = sessionStorage.getItem("bu_vuelve");
+  vuelveGuardada = !!gv && Date.now() - Number(gv) < 6 * 60 * 60 * 1000;
+  if (gv && !vuelveGuardada) sessionStorage.removeItem("bu_vuelve");
+} catch (_) {}
+const vuelve = !fundadora && (qsVuelve || vuelveGuardada);
 const activo = CFG.activo || modoPrueba;
 if (modoPrueba && !CFG.activo) {
   const bandera = document.createElement("div");
@@ -117,6 +127,8 @@ if (modoPrueba && !CFG.activo) {
 }
 const notaFund = document.getElementById("nota-fundadora");
 if (notaFund) notaFund.hidden = !fundadora;
+const notaVuelve = document.getElementById("nota-vuelve");
+if (notaVuelve) notaVuelve.hidden = !vuelve;
 const bloqueAlta = document.getElementById("alta-web");
 const bloqueDescarga = document.getElementById("descarga-app");
 if (bloqueAlta && bloqueDescarga) { bloqueAlta.hidden = !activo; bloqueDescarga.hidden = activo; }
@@ -293,9 +305,13 @@ if (boton) {
           }
         }, 9000);
         diag("6 llamando a purchase()");
-        const codigo = fundadora ? (CFG.desc || {})[planSel()] : null;
-        if (codigo) diag("6b descuento de fundadora: " + codigo);
-        const res = await rc.purchase({
+        const codigo = fundadora
+          ? (CFG.desc || {})[planSel()]
+          : vuelve
+          ? (CFG.descv || {})[planSel()]
+          : null;
+        if (codigo) diag("6b descuento aplicado: " + codigo);
+        const opc = {
           rcPackage: pkg,
           customerEmail: correo,
           ...(codigo ? { discountCode: codigo } : {}),
@@ -314,7 +330,20 @@ if (boton) {
             shapes: "rounded",
             show_product_description: true,
           },
-        });
+        };
+        let res;
+        try {
+          res = await rc.purchase(opc);
+        } catch (e1) {
+          const cancelo = e1 && (e1.errorCode === 1 || String(e1.message || "").toLowerCase().includes("cancel"));
+          if (!codigo || cancelo) throw e1;
+          // Si el codigo de descuento no existe o ya no vale, no dejamos a la
+          // persona sin poder pagar: reintentamos con el precio normal.
+          diag("6c el descuento fallo, reintento sin codigo: " + (e1 && (e1.message || e1.errorCode)));
+          delete opc.discountCode;
+          caja.innerHTML = "";
+          res = await rc.purchase(opc);
+        }
         if (res) { location.href = "/listo/"; return; }
       } catch (err) {
         caja.hidden = true; caja.innerHTML = "";

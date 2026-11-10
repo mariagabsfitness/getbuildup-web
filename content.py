@@ -52,6 +52,12 @@ PAGO = {
         "mensual": "BUILD",
         "anual": "BUILDANUAL",
     },
+    # Codigo para recuperar a quien cancelo. Se aplica solo cuando la persona
+    # entra por el enlace del correo de cancelacion (.../crear-cuenta/?vuelve=1).
+    # Solo existe para el plan mensual: 50% los 3 primeros meses.
+    "descuentos_vuelve": {
+        "mensual": "VUELVE",
+    },
     "firebase": {
         "apiKey": "AIzaSyBKMmf-LA-4OIAfi2ptCiemva7AEDE2ego",
         "authDomain": "buildup-40951.firebaseapp.com",

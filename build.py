@@ -646,6 +646,7 @@ def cfg_json():
         "ent": C.PAGO["entitlement"],
         "fb": C.PAGO["firebase"],
         "desc": C.PAGO["descuentos"],
+        "descv": C.PAGO["descuentos_vuelve"],
         "terminos": C.legal_url("terminos"),
     }, ensure_ascii=False)
 
@@ -657,6 +658,7 @@ def script_pago():
         "ent": C.PAGO["entitlement"],
         "fb": C.PAGO["firebase"],
         "desc": C.PAGO["descuentos"],
+        "descv": C.PAGO["descuentos_vuelve"],
         "terminos": C.legal_url("terminos"),
     }, ensure_ascii=False)
     return """
@@ -681,6 +683,15 @@ try {
   if (gf && !fundGuardada) sessionStorage.removeItem("bu_fundadora");
 } catch (_) {}
 const fundadora = qsFund || fundGuardada;
+const qsVuelve = new URLSearchParams(location.search).get("vuelve") === "1";
+if (qsVuelve) { try { sessionStorage.setItem("bu_vuelve", String(Date.now())); } catch (_) {} }
+let vuelveGuardada = false;
+try {
+  const gv = sessionStorage.getItem("bu_vuelve");
+  vuelveGuardada = !!gv && Date.now() - Number(gv) < 6 * 60 * 60 * 1000;
+  if (gv && !vuelveGuardada) sessionStorage.removeItem("bu_vuelve");
+} catch (_) {}
+const vuelve = !fundadora && (qsVuelve || vuelveGuardada);
 const activo = CFG.activo || modoPrueba;
 if (modoPrueba && !CFG.activo) {
   const bandera = document.createElement("div");
@@ -695,6 +706,8 @@ if (modoPrueba && !CFG.activo) {
 }
 const notaFund = document.getElementById("nota-fundadora");
 if (notaFund) notaFund.hidden = !fundadora;
+const notaVuelve = document.getElementById("nota-vuelve");
+if (notaVuelve) notaVuelve.hidden = !vuelve;
 const bloqueAlta = document.getElementById("alta-web");
 const bloqueDescarga = document.getElementById("descarga-app");
 if (bloqueAlta && bloqueDescarga) { bloqueAlta.hidden = !activo; bloqueDescarga.hidden = activo; }
@@ -871,9 +884,13 @@ if (boton) {
           }
         }, 9000);
         diag("6 llamando a purchase()");
-        const codigo = fundadora ? (CFG.desc || {})[planSel()] : null;
-        if (codigo) diag("6b descuento de fundadora: " + codigo);
-        const res = await rc.purchase({
+        const codigo = fundadora
+          ? (CFG.desc || {})[planSel()]
+          : vuelve
+          ? (CFG.descv || {})[planSel()]
+          : null;
+        if (codigo) diag("6b descuento aplicado: " + codigo);
+        const opc = {
           rcPackage: pkg,
           customerEmail: correo,
           ...(codigo ? { discountCode: codigo } : {}),
@@ -892,7 +909,20 @@ if (boton) {
             shapes: "rounded",
             show_product_description: true,
           },
-        });
+        };
+        let res;
+        try {
+          res = await rc.purchase(opc);
+        } catch (e1) {
+          const cancelo = e1 && (e1.errorCode === 1 || String(e1.message || "").toLowerCase().includes("cancel"));
+          if (!codigo || cancelo) throw e1;
+          // Si el codigo de descuento no existe o ya no vale, no dejamos a la
+          // persona sin poder pagar: reintentamos con el precio normal.
+          diag("6c el descuento fallo, reintento sin codigo: " + (e1 && (e1.message || e1.errorCode)));
+          delete opc.discountCode;
+          caja.innerHTML = "";
+          res = await rc.purchase(opc);
+        }
         if (res) { location.href = "/listo/"; return; }
       } catch (err) {
         caja.hidden = true; caja.innerHTML = "";
@@ -949,6 +979,7 @@ def page_crear_cuenta():
         <div><div class="mini">Cancela cuando quieras</div><div class="nm">Mensual</div><div class="pr">%s %s</div><div class="rn">%s</div></div>
         <span class="dot"></span></div>
       <p class="hint" id="nota-fundadora" hidden style="margin-top:14px;color:var(--ink)"><b>★ Precio de fundadora aplicado</b> — 25%% de descuento. Lo verás en el resumen del pago.</p>
+      <p class="hint" id="nota-vuelve" hidden style="margin-top:14px;color:var(--ink)"><b>★ Descuento de bienvenida de vuelta</b> — 50%% los 3 primeros meses en el plan mensual. Lo verás en el resumen del pago.</p>
       <div class="summary">
         <div class="big"><span>Hoy pagas</span><b>$0.00</b></div>
         <div><span>A partir del día %d</span><b data-after>%s al año</b></div>
