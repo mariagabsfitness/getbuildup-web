@@ -22,6 +22,7 @@ const ASUNTOS = {
   general: "BuildUp ya está aquí \u2661",
   primeras: "Tú ya estabas aquí \u2661",
   cancelacion: "¿Me cuentas qué pasó?",
+  clave: "Crea una contraseña nueva",
 };
 
 export default {
@@ -30,6 +31,10 @@ export default {
 
     if (url.pathname === "/api/rc-webhook") {
       return manejarWebhook(request, env, ctx);
+    }
+
+    if (url.pathname === "/api/clave") {
+      return manejarClave(request, env, ctx);
     }
 
     // Cualquier otra cosa: el sitio estatico de siempre.
@@ -296,6 +301,97 @@ async function crearCampanas(env) {
     salida.push({ campana: c.clave, estado: r.status, respuesta: texto.slice(0, 300) });
   }
   return { ok: true, campanas: salida };
+}
+
+// ---------------------------------------------------------------------------
+//  Contrasena nueva
+//
+//  Firebase tiene bloqueada la edicion de sus plantillas en este proyecto, asi
+//  que el correo lo mandamos nosotros: le pedimos a Firebase el enlace (sin
+//  que lo mande el), lo apuntamos a nuestra pagina /clave/ y enviamos el
+//  correo de BuildUp con Resend.
+// ---------------------------------------------------------------------------
+
+async function manejarClave(request, env, ctx) {
+  if (request.method !== "POST") {
+    return new Response("Method not allowed", { status: 405 });
+  }
+  let correo = "";
+  try {
+    const cuerpo = await request.json();
+    correo = String((cuerpo && cuerpo.correo) || "").trim().toLowerCase();
+  } catch (_) {}
+
+  // Contestamos siempre lo mismo, exista la cuenta o no: asi nadie puede usar
+  // esto para averiguar quien esta registrada.
+  if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
+    ctx.waitUntil(enviarClave(correo, env));
+  }
+  return respuestaOk("recibido");
+}
+
+async function enviarClave(correo, env) {
+  try {
+    const sa = leerCuentaServicio(env);
+    if (!sa) return;
+    const token = await tokenDeAcceso(sa);
+    if (!token) return;
+
+    const r = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/projects/" +
+        encodeURIComponent(sa.project_id) + "/accounts:sendOobCode",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          requestType: "PASSWORD_RESET",
+          email: correo,
+          returnOobLink: true,
+        }),
+      }
+    );
+
+    if (!r.ok) {
+      // EMAIL_NOT_FOUND es lo normal cuando alguien escribe mal su correo.
+      console.log("oobCode fallo " + r.status + " " + (await r.text()));
+      return;
+    }
+
+    const j = await r.json();
+    let codigo = "";
+    try { codigo = new URL(j.oobLink || "").searchParams.get("oobCode") || ""; } catch (_) {}
+    if (!codigo) { console.log("sin oobCode en la respuesta"); return; }
+
+    const enlace = "https://getbuildup.app/clave/?c=" + encodeURIComponent(codigo);
+
+    let html = PLANTILLAS.clave || "";
+    html = html.split("{{ENLACE}}").join(enlace);
+    html = html.split("{{CORREO}}").join(escapar(correo));
+
+    const envio = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + env.RESEND_API_KEY,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        from: REMITENTE,
+        to: [correo],
+        reply_to: RESPONDER_A,
+        subject: ASUNTOS.clave,
+        html,
+        tags: [{ name: "tipo", value: "clave" }],
+      }),
+    });
+
+    if (!envio.ok) console.log("resend fallo " + envio.status + " " + (await envio.text()));
+    else console.log("correo de contrasena enviado a " + correo);
+  } catch (e) {
+    console.log("error en enviarClave: " + (e && e.message ? e.message : e));
+  }
 }
 
 // ---------------------------------------------------------------------------

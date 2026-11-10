@@ -40,7 +40,7 @@
     <input id="lc" type="password" placeholder="••••••••" style="width:100%;margin:8px 0 24px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
     <button class="btn" id="btn-entrar" style="width:100%">Entrar</button>
     <p class="formerr" id="login-error" hidden></p>
-    <p id="login-ok" hidden style="color:var(--success);font-size:13px;margin:14px 0 0">Te enviamos un correo para crear una contraseña nueva.</p>
+    <p id="login-ok" hidden style="color:var(--success);font-size:13px;margin:14px 0 0">Si esa cuenta existe, te acabamos de enviar un correo para crear una contraseña nueva.</p>
     <p style="text-align:center;font-size:13px;color:var(--grey);margin:18px 0 0"><a href="#" id="olvide" style="border-bottom:1px solid var(--line)">Olvidé mi contraseña</a></p>
     <p style="text-align:center;font-size:13px;color:var(--grey);margin:12px 0 0">¿No tienes cuenta? <a href="/crear-cuenta/" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
   </div>
@@ -85,9 +85,11 @@ if (olvide) olvide.addEventListener("click", async (e) => {
   const correo = (document.getElementById("le").value || "").trim();
   if (!correo) return di("Escribe tu correo arriba y vuelve a pulsar aquí.");
   try {
-    const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js"), import("https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js")]);
-    const app = getApps()[0] || initializeApp(CFG.fb);
-    await fbAuth.sendPasswordResetEmail(fbAuth.getAuth(app), correo);
+    await fetch("/api/clave", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ correo }),
+    });
     di("");
     document.getElementById("login-ok").hidden = false;
   } catch (_) { di("No pudimos enviar el correo. Revísalo e inténtalo otra vez."); }

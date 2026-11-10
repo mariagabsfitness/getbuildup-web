@@ -1026,7 +1026,7 @@ def page_login():
     <input id="lc" type="password" placeholder="••••••••" style="width:100%;margin:8px 0 24px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
     <button class="btn" id="btn-entrar" style="width:100%">Entrar</button>
     <p class="formerr" id="login-error" hidden></p>
-    <p id="login-ok" hidden style="color:var(--success);font-size:13px;margin:14px 0 0">Te enviamos un correo para crear una contraseña nueva.</p>
+    <p id="login-ok" hidden style="color:var(--success);font-size:13px;margin:14px 0 0">Si esa cuenta existe, te acabamos de enviar un correo para crear una contraseña nueva.</p>
     <p style="text-align:center;font-size:13px;color:var(--grey);margin:18px 0 0"><a href="#" id="olvide" style="border-bottom:1px solid var(--line)">Olvidé mi contraseña</a></p>
     <p style="text-align:center;font-size:13px;color:var(--grey);margin:12px 0 0">¿No tienes cuenta? <a href="/crear-cuenta/" style="border-bottom:1px solid var(--line)">Crea la tuya y empieza 7 días gratis</a></p>
   </div>
@@ -1074,14 +1074,83 @@ if (olvide) olvide.addEventListener("click", async (e) => {
   const correo = (document.getElementById("le").value || "").trim();
   if (!correo) return di("Escribe tu correo arriba y vuelve a pulsar aqu\u00ed.");
   try {
-    const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("%s"), import("%s")]);
-    const app = getApps()[0] || initializeApp(CFG.fb);
-    await fbAuth.sendPasswordResetEmail(fbAuth.getAuth(app), correo);
+    await fetch("/api/clave", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ correo }),
+    });
     di("");
     document.getElementById("login-ok").hidden = false;
   } catch (_) { di("No pudimos enviar el correo. Rev\u00edsalo e int\u00e9ntalo otra vez."); }
 });
-</script>""" % (cfg_json(), FB_APP, FB_AUTH, FB_APP, FB_AUTH)
+</script>""" % (cfg_json(), FB_APP, FB_AUTH)
+
+
+def page_clave():
+    return """<section class="section" style="padding:110px 0 130px"><div class="wrap" style="max-width:440px">
+  <div style="border:1px solid var(--line);border-radius:var(--r-md);padding:38px 34px">
+    <h2 style="font-size:26px;letter-spacing:-.01em">Crea tu contrase\u00f1a</h2>
+    <p id="k-sub" style="color:var(--grey);font-size:14px;margin:10px 0 26px">Comprobando el enlace...</p>
+    <div id="k-form" hidden>
+      <label style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)" for="k1">Contrase\u00f1a nueva</label>
+      <input id="k1" type="password" placeholder="M\u00ednimo 8 caracteres" style="width:100%%;margin:8px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
+      <label style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)" for="k2">Rep\u00edtela</label>
+      <input id="k2" type="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" style="width:100%%;margin:8px 0 24px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff">
+      <button class="btn" id="k-btn" style="width:100%%">Guardar contrase\u00f1a</button>
+    </div>
+    <p class="formerr" id="k-error" hidden></p>
+    <p style="text-align:center;font-size:13px;color:var(--grey);margin:18px 0 0"><a href="/login/" style="border-bottom:1px solid var(--line)">Volver a iniciar sesi\u00f3n</a></p>
+  </div>
+</div></section>""" + script_clave()
+
+
+def script_clave():
+    return """
+<script type="module">
+const CFG = %s;
+const sub = document.getElementById("k-sub");
+const caja = document.getElementById("k-form");
+const aviso = document.getElementById("k-error");
+const boton = document.getElementById("k-btn");
+const di = (m) => { aviso.textContent = m; aviso.hidden = !m; };
+const codigo = new URLSearchParams(location.search).get("c") || "";
+const [{ initializeApp, getApps }, fbAuth] = await Promise.all([import("%s"), import("%s")]);
+const app = getApps()[0] || initializeApp(CFG.fb);
+const auth = fbAuth.getAuth(app);
+let correo = "";
+if (!codigo) {
+  sub.textContent = "Este enlace no es v\u00e1lido. Pide uno nuevo desde la p\u00e1gina de iniciar sesi\u00f3n.";
+} else {
+  try {
+    correo = await fbAuth.verifyPasswordResetCode(auth, codigo);
+    sub.textContent = "Elige una contrase\u00f1a nueva para " + correo + ".";
+    caja.hidden = false;
+  } catch (_) {
+    sub.textContent = "Este enlace ya se us\u00f3 o ha caducado. Pide uno nuevo desde la p\u00e1gina de iniciar sesi\u00f3n.";
+  }
+}
+if (boton) boton.addEventListener("click", async () => {
+  const a = document.getElementById("k1").value || "";
+  const b = document.getElementById("k2").value || "";
+  di("");
+  if (a.length < 8) return di("La contrase\u00f1a necesita al menos 8 caracteres.");
+  if (a !== b) return di("Las dos contrase\u00f1as no son iguales.");
+  const texto = boton.textContent;
+  boton.disabled = true; boton.textContent = "Guardando...";
+  try {
+    await fbAuth.confirmPasswordReset(auth, codigo, a);
+    try { await fbAuth.signInWithEmailAndPassword(auth, correo, a); location.href = "/cuenta/"; return; } catch (_) {}
+    location.href = "/login/";
+  } catch (err) {
+    boton.disabled = false; boton.textContent = texto;
+    const c = err && err.code;
+    if (c === "auth/weak-password") di("Esa contrase\u00f1a es muy sencilla. Prueba con uno m\u00e1s larga.");
+    else if (c === "auth/expired-action-code" || c === "auth/invalid-action-code")
+      di("Este enlace ya se us\u00f3 o ha caducado. Pide uno nuevo desde iniciar sesi\u00f3n.");
+    else { console.error(err); di("No pudimos guardarla ahora mismo. Int\u00e9ntalo de nuevo en un momento."); }
+  }
+});
+</script>""" % (cfg_json(), FB_APP, FB_AUTH)
 
 
 def page_cuenta():
@@ -1247,6 +1316,8 @@ PAGES = [
    "Descarga la app y entra con tu cuenta para empezar tus 7 días gratis.", page_listo, ""),
   ("/login/", "Iniciar sesión — BuildUp",
    "Entra a tu cuenta de BuildUp.", page_login, "login"),
+  ("/clave/", "Crea tu contraseña — BuildUp",
+   "Elige una contraseña nueva para tu cuenta de BuildUp.", page_clave, "login"),
   ("/cuenta/", "Mi cuenta — BuildUp",
    "Tu membresía de BuildUp: estado, renovación y gestión de la suscripción.", page_cuenta, "login"),
 ]
@@ -1285,7 +1356,7 @@ def main():
         "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % S["dominio"])
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
-        if u in ("/cuenta/", "/listo/"):
+        if u in ("/cuenta/", "/listo/", "/clave/"):
             continue  # paginas privadas: no van al sitemap
         sm.append("  <url><loc>%s%s</loc></url>" % (S["dominio"], u))
     sm.append("</urlset>")
@@ -1325,6 +1396,7 @@ def plantilla_correo():
         "general": "correo-lanzamiento-general.html",
         "primeras": "correo-primeras.html",
         "cancelacion": "correo-cancelacion.html",
+        "clave": "correo-clave.html",
     }
     datos = {}
     for clave, arch in sorted(nombres.items()):
@@ -1337,7 +1409,7 @@ def plantilla_correo():
     # Version de campana (con el enlace de baja de Resend) para los Broadcasts
     envio = {}
     for clave, texto in datos.items():
-        if clave in ("bienvenida", "cancelacion"):
+        if clave in ("bienvenida", "cancelacion", "clave"):
             continue
         envio[clave] = texto.replace('href="#"', 'href="{{{RESEND_UNSUBSCRIBE_URL}}}"')
     datos = dict(datos)
