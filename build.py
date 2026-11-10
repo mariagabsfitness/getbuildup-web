@@ -1293,6 +1293,7 @@ def plantilla_correo():
         "lanzamiento": "correo-lanzamiento.html",
         "general": "correo-lanzamiento-general.html",
         "primeras": "correo-primeras.html",
+        "cancelacion": "correo-cancelacion.html",
     }
     datos = {}
     for clave, arch in sorted(nombres.items()):
@@ -1305,7 +1306,7 @@ def plantilla_correo():
     # Version de campana (con el enlace de baja de Resend) para los Broadcasts
     envio = {}
     for clave, texto in datos.items():
-        if clave == "bienvenida":
+        if clave in ("bienvenida", "cancelacion"):
             continue
         envio[clave] = texto.replace('href="#"', 'href="{{{RESEND_UNSUBSCRIBE_URL}}}"')
     datos = dict(datos)

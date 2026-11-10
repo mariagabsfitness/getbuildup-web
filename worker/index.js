@@ -21,6 +21,7 @@ const ASUNTOS = {
   lanzamiento: "BuildUp ya está aquí \u2661",
   general: "BuildUp ya está aquí \u2661",
   primeras: "Tú ya estabas aquí \u2661",
+  cancelacion: "¿Me cuentas qué pasó?",
 };
 
 export default {
@@ -87,6 +88,18 @@ async function manejarWebhook(request, env, ctx) {
     const cual = env.TEST_PLANTILLA || "bienvenida";
     ctx.waitUntil(enviarBienvenida(falso, env, cual));
     return respuestaOk("prueba (" + cual + ") encolada para " + env.TEST_UID);
+  }
+
+  // Cancelacion voluntaria: le escribimos para saber por que se va.
+  // Solo cuando la persona lo cancela ella misma. Si fue un fallo de cobro,
+  // una devolucion o algo nuestro, no le mandamos nada.
+  if (tipo === "CANCELLATION") {
+    const motivo = ev.cancellation_reason || "";
+    if (motivo !== "UNSUBSCRIBE") {
+      return respuestaOk("cancelacion ignorada: " + (motivo || "sin motivo"));
+    }
+    ctx.waitUntil(enviarBienvenida(ev, env, "cancelacion"));
+    return respuestaOk("correo de cancelacion encolado");
   }
 
   // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
@@ -164,6 +177,7 @@ async function enviarBienvenida(ev, env, plantilla) {
     }
     html = html.split("{{CORREO}}").join(escapar(correo));
     html = html.split("{{FECHA_COBRO}}").join(fecha);
+    html = html.split("{{FECHA_FIN}}").join(fecha);
 
     // 4. Mandar con Resend.
     const r = await fetch("https://api.resend.com/emails", {
