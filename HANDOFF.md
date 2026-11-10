@@ -92,6 +92,28 @@ El mismo Worker escucha `CANCELLATION`. Si el motivo es `UNSUBSCRIBE` (la
 persona canceló ella misma, no un fallo de cobro) manda el correo de
 cancelación con la oferta del 50 %. Cualquier otro motivo se ignora.
 
+### Correo de contraseña nueva
+
+Firebase tiene **bloqueada la edición de sus plantillas** en este proyecto
+("Email template updates are currently unavailable for this project"), así que
+ese correo lo mandamos nosotros:
+
+```
+Alguien pulsa "Olvidé mi contraseña" en /login/
+  → la web llama a getbuildup.app/api/clave
+  → el Worker le pide a Firebase el enlace (returnOobLink, sin que lo mande él)
+  → lo convierte en getbuildup.app/clave/?c=CODIGO
+  → Resend envía el correo de BuildUp en español
+  → la persona elige su contraseña en /clave/ y entra
+```
+
+`/api/clave` contesta siempre lo mismo exista la cuenta o no, para que nadie
+pueda usarlo para averiguar quién está registrada.
+
+En Firebase quedó configurado el SMTP de Resend (`smtp.resend.com`, puerto 587,
+usuario `resend`, remitente `hola@getbuildup.app`). Eso afecta a los demás
+correos de Firebase, que siguen en inglés porque no se pueden editar.
+
 ### Secretos (en Cloudflare, nunca en el repositorio)
 
 | Nombre | Qué es |
@@ -131,6 +153,7 @@ Viven en `correos/`. `build.py` genera dos cosas a partir de ellos:
 | `correo-lanzamiento-general.html` | Resto de Shopify, precios normales |
 | `correo-primeras.html` | Las que ya estaban suscritas antes del lanzamiento |
 | `correo-cancelacion.html` | Automático, al cancelar. Oferta: 50 % los 3 primeros meses |
+| `correo-clave.html` | Automático, al pedir una contraseña nueva |
 
 Remitente: **BuildUp by MariaGabsFitness `<hola@getbuildup.app>`**
 Responder a: `buildup@mariagabsfitness.com`
