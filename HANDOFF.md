@@ -1,6 +1,6 @@
 # BuildUp — estado del proyecto
 
-Última actualización: **9 de noviembre de 2026**
+Última actualización: **10 de noviembre de 2026**
 
 Documento de traspaso. Si esta conversación se pierde o empieza una nueva,
 todo lo necesario para seguir está aquí.
@@ -40,6 +40,7 @@ No se edita `dist/` a mano. El flujo es:
 - `PAGO["rc_api_key"]` = clave **de producción** de RevenueCat Web Billing
 - `PAGO["activo"] = True` → el cobro está encendido
 - `PAGO["descuentos"]` = `{"mensual": "BUILD", "anual": "BUILDANUAL"}`
+- `PAGO["descuentos_vuelve"]` = `{"mensual": "VUELVE"}`
 
 ### El descuento de fundadora
 
@@ -49,6 +50,16 @@ No se edita `dist/` a mano. El flujo es:
 - Se guarda en `sessionStorage` 6 horas, por si navega y vuelve
 - Solo funciona **desde la web**. Dentro de la app (App Store / Google Play)
   no se puede aplicar
+
+### El descuento de vuelta
+
+- Código creado en **Paddle**: `VUELVE` (50 % los 3 primeros meses, solo plan
+  mensual, sin fecha de caducidad)
+- Se aplica **solo** si la persona entra por `getbuildup.app/crear-cuenta/?vuelve=1`,
+  que es el enlace del correo de cancelación
+- Mismo mecanismo que el de fundadora: se guarda en `sessionStorage` 6 horas
+- Si el código fallara, el pago se reintenta solo sin descuento, para que nadie
+  se quede sin poder pagar
 
 ### Precios
 
@@ -65,7 +76,7 @@ Todas empiezan con **7 días gratis**.
 
 Un solo Worker hace dos cosas: sirve la web y recibe el webhook de RevenueCat.
 
-### Correo de bienvenida automático
+### Correos automáticos
 
 ```
 Alguien se suscribe (web, App Store o Google Play)
@@ -76,6 +87,10 @@ Alguien se suscribe (web, App Store o Google Play)
 
 Funciona para las tres tiendas. El correo **siempre** se manda a la dirección
 con la que la persona entra en la app (Firebase), no a la que escribió al pagar.
+
+El mismo Worker escucha `CANCELLATION`. Si el motivo es `UNSUBSCRIBE` (la
+persona canceló ella misma, no un fallo de cobro) manda el correo de
+cancelación con la oferta del 50 %. Cualquier otro motivo se ignora.
 
 ### Secretos (en Cloudflare, nunca en el repositorio)
 
@@ -92,7 +107,8 @@ Variables normales: `TEST_UID`, `TEST_PLANTILLA`.
 
 En RevenueCat → Integrations → Webhooks → *Correo de bienvenida* → **Send Test Event**.
 El Worker, al recibir un evento `TEST`, manda la plantilla que diga
-`TEST_PLANTILLA` (`bienvenida`, `lanzamiento`, `general`, `primeras`) al usuario
+`TEST_PLANTILLA` (`bienvenida`, `lanzamiento`, `general`, `primeras`,
+`cancelacion`) al usuario
 de `TEST_UID`. Los asuntos de prueba llevan la hora para que Gmail no los agrupe.
 
 ⚠️ `TEST_PLANTILLA = "crear-campanas"` **crea las tres campañas en Resend**.
@@ -114,6 +130,7 @@ Viven en `correos/`. `build.py` genera dos cosas a partir de ellos:
 | `correo-lanzamiento.html` | Lista de espera, con precio de fundadora |
 | `correo-lanzamiento-general.html` | Resto de Shopify, precios normales |
 | `correo-primeras.html` | Las que ya estaban suscritas antes del lanzamiento |
+| `correo-cancelacion.html` | Automático, al cancelar. Oferta: 50 % los 3 primeros meses |
 
 Remitente: **BuildUp by MariaGabsFitness `<hola@getbuildup.app>`**
 Responder a: `buildup@mariagabsfitness.com`
@@ -182,11 +199,12 @@ para recibir todo lo que se envíe.
 - [ ] **Verificación en dos pasos en Cloudflare** — esa cuenta controla el dominio
 - [ ] Bajar el plan de marketing de Resend cuando ya no haga falta
       (ojo: el gratis son 1.000 contactos y ahora hay ~1.070)
-- [ ] Correos de retención: para quien cancela y para quien descargó pero no
-      creó cuenta ni empezó la prueba
+- [ ] Correo de retención para quien creó cuenta pero no empezó la prueba
+      (hace falta una tarea diaria que compare Firebase con RevenueCat)
 - [ ] El onboarding de la app no se ve si la cuenta se crea desde la web.
       Debería dispararse con un campo `onboardingCompleto` en Firestore,
       no al registrarse
+- [ ] Quitar `RESEND_ADMIN_KEY` de Cloudflare (apunta a una clave borrada)
 - [ ] Borrar los archivos de vista previa en `assets/vista/`
 - [ ] Quitar el `snippets/page.buildup.liquid` huérfano de Shopify
 - [ ] Convertir mariagabsfitness.com en página de marca personal
