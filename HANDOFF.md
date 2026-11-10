@@ -219,6 +219,12 @@ para recibir todo lo que se envíe.
 
 ## 8. Pendiente
 
+- [ ] **Que la app use también nuestro correo de contraseña.** En FlutterFlow,
+      cambiar la acción *Send Password Reset Email* por una llamada a
+      `POST https://getbuildup.app/api/clave` con `{"correo": "..."}`.
+      Hasta entonces, desde la app sigue llegando el correo de Firebase en inglés.
+- [ ] Corregir el correo de la clienta gloredor@gmail.com en Paddle
+      (está guardado como gloredoe@gmail.com y no recibe sus facturas)
 - [ ] **Verificación en dos pasos en Cloudflare** — esa cuenta controla el dominio
 - [ ] Bajar el plan de marketing de Resend cuando ya no haga falta
       (ojo: el gratis son 1.000 contactos y ahora hay ~1.070)
