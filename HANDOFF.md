@@ -88,9 +88,21 @@ Alguien se suscribe (web, App Store o Google Play)
 Funciona para las tres tiendas. El correo **siempre** se manda a la dirección
 con la que la persona entra en la app (Firebase), no a la que escribió al pagar.
 
-El mismo Worker escucha `CANCELLATION`. Si el motivo es `UNSUBSCRIBE` (la
-persona canceló ella misma, no un fallo de cobro) manda el correo de
-cancelación con la oferta del 50 %. Cualquier otro motivo se ignora.
+### Correo de vuelta (el del 50 %)
+
+El Worker **no** escribe cuando alguien cancela, porque el descuento solo se
+puede usar en una suscripción nueva y mientras tenga acceso no le sirve de
+nada. Escribe cuando el acceso se acaba de verdad:
+
+```
+Alguien cancela  → CANCELLATION → solo se anota en el registro
+Se le acaba el acceso → EXPIRATION → si el motivo es UNSUBSCRIBE,
+                                     sale el correo con el 50 %
+```
+
+Si el acceso se pierde por un fallo de cobro o por algo nuestro, no se manda
+nada. Todos los eventos del webhook dejan rastro en el registro de Cloudflare,
+así que se puede comprobar qué llegó y qué se hizo con ello.
 
 ### Correo de contraseña nueva
 
@@ -152,7 +164,7 @@ Viven en `correos/`. `build.py` genera dos cosas a partir de ellos:
 | `correo-lanzamiento.html` | Lista de espera, con precio de fundadora |
 | `correo-lanzamiento-general.html` | Resto de Shopify, precios normales |
 | `correo-primeras.html` | Las que ya estaban suscritas antes del lanzamiento |
-| `correo-cancelacion.html` | Automático, al cancelar. Oferta: 50 % los 3 primeros meses |
+| `correo-cancelacion.html` | Automático, al acabarse el acceso. Oferta: 50 % los 3 primeros meses |
 | `correo-clave.html` | Automático, al pedir una contraseña nueva |
 
 Remitente: **BuildUp by MariaGabsFitness `<hola@getbuildup.app>`**
