@@ -42,6 +42,17 @@ export default {
     // Cualquier otra cosa: el sitio estatico de siempre.
     return env.ASSETS.fetch(request);
   },
+
+  // El reloj de Cloudflare nos despierta a las 20:00 y a las 21:00 UTC. Solo
+  // una de las dos es la tarde de Miami, segun el horario de verano.
+  async scheduled(evento, env, ctx) {
+    const hora = new Date(evento.scheduledTime + desfaseMiami(new Date(evento.scheduledTime))).getUTCHours();
+    if (hora !== HORA_ENVIO) {
+      console.log("reloj a las " + hora + "h de Miami: no toca");
+      return;
+    }
+    ctx.waitUntil(revisarCola(env, false));
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -92,9 +103,9 @@ async function manejarWebhook(request, env, ctx) {
       expiration_at_ms: Date.now(),
       subscriber_attributes: {},
     };
-    await enviarBienvenida(falso, env, "cancelacion", { programar: true });
-    await cancelarPendiente(env.TEST_UID, env);
-    return respuestaOk("prueba de programar y cancelar hecha, mira el registro");
+    await apuntarPendiente(falso, env);
+    const mandados = await revisarCola(env, true);
+    return respuestaOk("prueba de la cola hecha, mandados: " + mandados);
   }
 
   // Prueba manual: el boton "Send Test Event" de RevenueCat manda un evento
@@ -133,9 +144,9 @@ async function manejarWebhook(request, env, ctx) {
       console.log("fin de acceso de " + (ev.app_user_id || "?") + " ignorado: " + motivo);
       return respuestaOk("fin de acceso ignorado: " + motivo);
     }
-    console.log("fin de acceso de " + (ev.app_user_id || "?") + ": programamos el correo");
-    ctx.waitUntil(enviarBienvenida(ev, env, "cancelacion", { programar: true }));
-    return respuestaOk("correo de vuelta programado");
+    console.log("fin de acceso de " + (ev.app_user_id || "?") + ": lo dejamos en la cola");
+    ctx.waitUntil(apuntarPendiente(ev, env));
+    return respuestaOk("correo de vuelta en la cola");
   }
 
   // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
@@ -146,8 +157,8 @@ async function manejarWebhook(request, env, ctx) {
 
   // Trabajo en segundo plano: contestamos 200 ya para que RevenueCat no
   // reintente, y mandamos el correo despues.
-  // Si tenia un correo de vuelta programado, ya no hace falta: ha vuelto.
-  ctx.waitUntil(cancelarPendiente(ev.app_user_id || ev.original_app_user_id || "", env));
+  // Si estaba en la cola del correo de vuelta, ya no hace falta: ha vuelto.
+  ctx.waitUntil(quitarDeLaCola(ev.app_user_id || ev.original_app_user_id || "", env));
   ctx.waitUntil(enviarBienvenida(ev, env));
   return respuestaOk("encolado");
 }
@@ -173,9 +184,8 @@ function iguales(a, b) {
 //  Armar y mandar el correo
 // ---------------------------------------------------------------------------
 
-async function enviarBienvenida(ev, env, plantilla, opciones) {
+async function enviarBienvenida(ev, env, plantilla) {
   const cual = plantilla || "bienvenida";
-  const op = opciones || {};
   try {
     const uid = ev.app_user_id || ev.original_app_user_id || "";
 
@@ -239,9 +249,6 @@ async function enviarBienvenida(ev, env, plantilla, opciones) {
             : ""),
         html,
         tags: [{ name: "tipo", value: cual }],
-        // Los correos de vuelta no salen al momento: esperamos a la tarde del
-        // dia siguiente, por si la persona se vuelve a suscribir sola.
-        ...(op.programar ? { scheduled_at: siguienteTarde() } : {}),
       }),
     });
 
@@ -249,22 +256,7 @@ async function enviarBienvenida(ev, env, plantilla, opciones) {
       console.log("resend fallo " + r.status + " " + (await r.text()));
       return;
     }
-
-    if (!op.programar) {
-      console.log(cual + " enviado a " + correo + " (" + (ev.store || "?") + ")");
-      return;
-    }
-
-    // Guardamos el identificador para poder cancelarlo si vuelve antes.
-    const datos = await r.json().catch(() => ({}));
-    console.log(cual + " programado para " + correo + " el " + siguienteTarde());
-    if (datos.id && uid && env.PENDIENTES) {
-      await env.PENDIENTES.put(
-        "pendiente:" + uid,
-        JSON.stringify({ id: datos.id, correo, cuando: siguienteTarde() }),
-        { expirationTtl: 60 * 60 * 24 * 7 }
-      );
-    }
+    console.log(cual + " enviado a " + correo + " (" + (ev.store || "?") + ")");
   } catch (e) {
     console.log("error en enviarBienvenida: " + (e && e.message ? e.message : e));
   }
@@ -300,28 +292,70 @@ function desfaseMiami(fecha) {
   return comoSiFueraUTC - fecha.getTime();
 }
 
-// Alguien que tenia un correo de vuelta esperando se ha vuelto a suscribir:
-// lo quitamos de la cola antes de que salga.
-async function cancelarPendiente(uid, env) {
+// --------------------------------------------------------------------------
+//  La cola del correo de vuelta
+//
+//  No mandamos el correo en el momento en que alguien pierde el acceso: lo
+//  apuntamos aqui y lo manda la tarea de las 16:00 de Miami del dia siguiente.
+//  Asi le damos un dia por si se vuelve a suscribir sola; si lo hace, la
+//  quitamos de la cola y no le llega nada.
+// --------------------------------------------------------------------------
+
+async function apuntarPendiente(ev, env) {
+  try {
+    const uid = ev.app_user_id || ev.original_app_user_id || "";
+    if (!uid || !env.PENDIENTES) return;
+    const cuando = siguienteTarde();
+    await env.PENDIENTES.put(
+      "pendiente:" + uid,
+      JSON.stringify({ uid, desde: Date.now(), cuando, store: ev.store || "" }),
+      { expirationTtl: 60 * 60 * 24 * 14 }
+    );
+    console.log("en la cola: " + uid + ", le toca el " + new Date(cuando).toISOString());
+  } catch (e) {
+    console.log("error apuntando en la cola: " + (e && e.message ? e.message : e));
+  }
+}
+
+async function quitarDeLaCola(uid, env) {
   try {
     if (!uid || !env.PENDIENTES) return;
     const clave = "pendiente:" + uid;
-    const guardado = await env.PENDIENTES.get(clave);
-    if (!guardado) return;
-    let id = "";
-    try { id = (JSON.parse(guardado) || {}).id || ""; } catch (_) { id = guardado; }
+    if (!(await env.PENDIENTES.get(clave))) return;
     await env.PENDIENTES.delete(clave);
-    if (!id) return;
-    const r = await fetch("https://api.resend.com/emails/" + id + "/cancel", {
-      method: "POST",
-      headers: { Authorization: "Bearer " + env.RESEND_API_KEY },
-    });
-    if (r.ok) console.log("correo de vuelta cancelado: " + uid + " se ha vuelto a suscribir");
-    else console.log("NO se pudo cancelar el correo de vuelta de " + uid + ": " +
-      r.status + " " + (await r.text()));
+    console.log("fuera de la cola: " + uid + " se ha vuelto a suscribir");
   } catch (e) {
-    console.log("error cancelando el correo de vuelta: " + (e && e.message ? e.message : e));
+    console.log("error quitando de la cola: " + (e && e.message ? e.message : e));
   }
+}
+
+// Recorre la cola y manda lo que ya toca. La llama el reloj de Cloudflare.
+async function revisarCola(env, forzar) {
+  if (!env.PENDIENTES) return 0;
+  const ahora = Date.now();
+  let mandados = 0;
+  let cursor;
+  do {
+    const lista = await env.PENDIENTES.list({ prefix: "pendiente:", cursor });
+    cursor = lista.list_complete ? null : lista.cursor;
+    for (const clave of lista.keys) {
+      const crudo = await env.PENDIENTES.get(clave.name);
+      if (!crudo) continue;
+      let dato = {};
+      try { dato = JSON.parse(crudo) || {}; } catch (_) {}
+      const toca = dato.cuando ? Date.parse(dato.cuando) : 0;
+      if (!forzar && toca && ahora < toca) continue;
+      await env.PENDIENTES.delete(clave.name);
+      await enviarBienvenida(
+        { type: "EXPIRATION", app_user_id: dato.uid, store: dato.store || "" },
+        env,
+        "cancelacion"
+      );
+      mandados++;
+    }
+  } while (cursor);
+  if (mandados) console.log("correos de vuelta mandados: " + mandados);
+  return mandados;
 }
 
 function atributo(ev, clave) {

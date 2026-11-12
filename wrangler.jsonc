@@ -15,13 +15,16 @@
   // correo de bienvenida sale bien. No es un dato secreto.
   "vars": {
     "TEST_UID": "scBKEdN5ngQz60QlxWWCrBciTyP2",
-    "TEST_PLANTILLA": "probar-programado"
+    "TEST_PLANTILLA": "bienvenida"
   },
   // Donde apuntamos los correos de vuelta que quedan programados, para poder
   // cancelarlos si la persona se suscribe antes de que salgan.
   "kv_namespaces": [
     { "binding": "PENDIENTES", "id": "d7badad70a0c4de792ed39307556e54b" }
   ],
+  // El reloj que manda los correos de vuelta. Las dos horas cubren el cambio
+  // de horario: el Worker comprueba cual de las dos es la tarde en Miami.
+  "triggers": { "crons": ["0 20 * * *", "0 21 * * *"] },
   "observability": { "enabled": true },
   "assets": {
     "directory": "./dist",
