@@ -95,10 +95,22 @@ puede usar en una suscripción nueva y mientras tenga acceso no le sirve de
 nada. Escribe cuando el acceso se acaba de verdad:
 
 ```
-Alguien cancela  → CANCELLATION → solo se anota en el registro
-Se le acaba el acceso → EXPIRATION → si el motivo es UNSUBSCRIBE,
-                                     sale el correo con el 50 %
+Alguien cancela        → CANCELLATION → solo se anota en el registro
+Se le acaba el acceso  → EXPIRATION   → entra en una cola (KV)
+Se vuelve a suscribir  → INITIAL_PURCHASE → sale de la cola, no le llega nada
+Las 16:00 de Miami     → el reloj revisa la cola y manda lo que toca
 ```
+
+La espera de un día es a propósito: así le damos la oportunidad de volver sola
+antes de ofrecerle el descuento. La cola vive en el KV `buildup-envios-programados`
+(binding `PENDIENTES`), con claves `pendiente:<uid>` que caducan a los 14 días.
+
+El reloj se despierta a las 20:00 y a las 21:00 UTC; el Worker comprueba cuál de
+las dos es la tarde en Miami, para que el cambio de horario no lo descoloque.
+
+⚠️ No se programan los correos en Resend, aunque Resend lo permita: **la clave de
+envío no tiene permiso para cancelarlos** (da 401), así que una vez programado
+saldría aunque la persona volviera. Por eso la espera la llevamos nosotros.
 
 Si el acceso se pierde por un fallo de cobro o por algo nuestro, no se manda
 nada. Todos los eventos del webhook dejan rastro en el registro de Cloudflare,
