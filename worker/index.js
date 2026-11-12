@@ -95,20 +95,33 @@ async function manejarWebhook(request, env, ctx) {
     return respuestaOk("prueba (" + cual + ") encolada para " + env.TEST_UID);
   }
 
-  // Cancelacion voluntaria: le escribimos para saber por que se va.
-  // Solo cuando la persona lo cancela ella misma. Si fue un fallo de cobro,
-  // una devolucion o algo nuestro, no le mandamos nada.
+  // Cuando alguien cancela no le escribimos todavia: el descuento solo se
+  // puede usar en una suscripcion nueva, asi que no le sirve mientras siga
+  // teniendo acceso. Lo dejamos apuntado y esperamos.
   if (tipo === "CANCELLATION") {
-    const motivo = ev.cancellation_reason || "";
+    const motivo = ev.cancellation_reason || "sin motivo";
+    console.log("cancelacion de " + (ev.app_user_id || "?") + " (" + motivo +
+      "): esperamos a que se le acabe el acceso");
+    return respuestaOk("cancelacion anotada: " + motivo);
+  }
+
+  // Se le acabo el acceso. Si se fue ella misma, este es el momento de
+  // escribirle: ya puede volver con el descuento. Si fue un fallo de cobro
+  // o algo nuestro, no le mandamos nada.
+  if (tipo === "EXPIRATION") {
+    const motivo = ev.expiration_reason || "sin motivo";
     if (motivo !== "UNSUBSCRIBE") {
-      return respuestaOk("cancelacion ignorada: " + (motivo || "sin motivo"));
+      console.log("fin de acceso de " + (ev.app_user_id || "?") + " ignorado: " + motivo);
+      return respuestaOk("fin de acceso ignorado: " + motivo);
     }
+    console.log("fin de acceso de " + (ev.app_user_id || "?") + ": mandamos el correo");
     ctx.waitUntil(enviarBienvenida(ev, env, "cancelacion"));
-    return respuestaOk("correo de cancelacion encolado");
+    return respuestaOk("correo de vuelta encolado");
   }
 
   // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
   if (tipo !== "INITIAL_PURCHASE") {
+    console.log("evento sin correo: " + tipo);
     return respuestaOk("ignorado: " + tipo);
   }
 
