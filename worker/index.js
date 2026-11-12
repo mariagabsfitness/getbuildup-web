@@ -16,6 +16,8 @@ import PLANTILLAS from "./plantillas.js";
 
 const REMITENTE = '"BuildUp by MariaGabsFitness" <hola@getbuildup.app>';
 const RESPONDER_A = "buildup@mariagabsfitness.com";
+// Hora de Miami a la que sale el correo de vuelta, la tarde siguiente.
+const HORA_ENVIO = 16;
 const ASUNTOS = {
   bienvenida: "Ya estás dentro de BuildUp \u2661",
   lanzamiento: "BuildUp ya está aquí \u2661",
@@ -78,6 +80,23 @@ async function manejarWebhook(request, env, ctx) {
     });
   }
 
+  // Prueba del correo programado: lo deja en la cola de Resend para manana y
+  // acto seguido lo cancela, como si la persona se hubiera vuelto a suscribir.
+  // Sirve para comprobar que las dos mitades funcionan sin esperar un dia.
+  if (tipo === "TEST" && env.TEST_PLANTILLA === "probar-programado") {
+    if (!env.TEST_UID) return respuestaOk("ignorado: falta TEST_UID");
+    const falso = {
+      type: "EXPIRATION",
+      app_user_id: env.TEST_UID,
+      store: "PRUEBA",
+      expiration_at_ms: Date.now(),
+      subscriber_attributes: {},
+    };
+    await enviarBienvenida(falso, env, "cancelacion", { programar: true });
+    await cancelarPendiente(env.TEST_UID, env);
+    return respuestaOk("prueba de programar y cancelar hecha, mira el registro");
+  }
+
   // Prueba manual: el boton "Send Test Event" de RevenueCat manda un evento
   // TEST. Si hay un TEST_UID configurado, hacemos el recorrido completo con
   // ese usuario para comprobar Firebase + Resend sin tener que comprar nada.
@@ -114,9 +133,9 @@ async function manejarWebhook(request, env, ctx) {
       console.log("fin de acceso de " + (ev.app_user_id || "?") + " ignorado: " + motivo);
       return respuestaOk("fin de acceso ignorado: " + motivo);
     }
-    console.log("fin de acceso de " + (ev.app_user_id || "?") + ": mandamos el correo");
-    ctx.waitUntil(enviarBienvenida(ev, env, "cancelacion"));
-    return respuestaOk("correo de vuelta encolado");
+    console.log("fin de acceso de " + (ev.app_user_id || "?") + ": programamos el correo");
+    ctx.waitUntil(enviarBienvenida(ev, env, "cancelacion", { programar: true }));
+    return respuestaOk("correo de vuelta programado");
   }
 
   // Solo la primera compra / inicio de prueba. Las renovaciones no mandan nada.
@@ -127,6 +146,8 @@ async function manejarWebhook(request, env, ctx) {
 
   // Trabajo en segundo plano: contestamos 200 ya para que RevenueCat no
   // reintente, y mandamos el correo despues.
+  // Si tenia un correo de vuelta programado, ya no hace falta: ha vuelto.
+  ctx.waitUntil(cancelarPendiente(ev.app_user_id || ev.original_app_user_id || "", env));
   ctx.waitUntil(enviarBienvenida(ev, env));
   return respuestaOk("encolado");
 }
@@ -152,8 +173,9 @@ function iguales(a, b) {
 //  Armar y mandar el correo
 // ---------------------------------------------------------------------------
 
-async function enviarBienvenida(ev, env, plantilla) {
+async function enviarBienvenida(ev, env, plantilla, opciones) {
   const cual = plantilla || "bienvenida";
+  const op = opciones || {};
   try {
     const uid = ev.app_user_id || ev.original_app_user_id || "";
 
@@ -217,16 +239,88 @@ async function enviarBienvenida(ev, env, plantilla) {
             : ""),
         html,
         tags: [{ name: "tipo", value: cual }],
+        // Los correos de vuelta no salen al momento: esperamos a la tarde del
+        // dia siguiente, por si la persona se vuelve a suscribir sola.
+        ...(op.programar ? { scheduled_at: siguienteTarde() } : {}),
       }),
     });
 
     if (!r.ok) {
       console.log("resend fallo " + r.status + " " + (await r.text()));
-    } else {
+      return;
+    }
+
+    if (!op.programar) {
       console.log(cual + " enviado a " + correo + " (" + (ev.store || "?") + ")");
+      return;
+    }
+
+    // Guardamos el identificador para poder cancelarlo si vuelve antes.
+    const datos = await r.json().catch(() => ({}));
+    console.log(cual + " programado para " + correo + " el " + siguienteTarde());
+    if (datos.id && uid && env.PENDIENTES) {
+      await env.PENDIENTES.put(
+        "pendiente:" + uid,
+        JSON.stringify({ id: datos.id, correo, cuando: siguienteTarde() }),
+        { expirationTtl: 60 * 60 * 24 * 7 }
+      );
     }
   } catch (e) {
     console.log("error en enviarBienvenida: " + (e && e.message ? e.message : e));
+  }
+}
+
+// La tarde del dia siguiente, hora de Miami, en el formato que entiende Resend.
+function siguienteTarde() {
+  const ahora = new Date();
+  const desfase = desfaseMiami(ahora);
+  const alla = new Date(ahora.getTime() + desfase);
+  const objetivo = Date.UTC(
+    alla.getUTCFullYear(), alla.getUTCMonth(), alla.getUTCDate() + 1, HORA_ENVIO, 0, 0
+  );
+  // El desfase puede cambiar entre hoy y manana (cambio de hora), asi que lo
+  // recalculamos ya situados en la fecha de destino.
+  const aprox = objetivo - desfase;
+  const utc = objetivo - desfaseMiami(new Date(aprox));
+  return new Date(utc).toISOString();
+}
+
+// Cuanto hay que sumarle a una fecha UTC para leerla como hora de Miami.
+function desfaseMiami(fecha) {
+  const f = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York", hour12: false,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  });
+  const p = {};
+  for (const parte of f.formatToParts(fecha)) p[parte.type] = parte.value;
+  const comoSiFueraUTC = Date.UTC(
+    +p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second
+  );
+  return comoSiFueraUTC - fecha.getTime();
+}
+
+// Alguien que tenia un correo de vuelta esperando se ha vuelto a suscribir:
+// lo quitamos de la cola antes de que salga.
+async function cancelarPendiente(uid, env) {
+  try {
+    if (!uid || !env.PENDIENTES) return;
+    const clave = "pendiente:" + uid;
+    const guardado = await env.PENDIENTES.get(clave);
+    if (!guardado) return;
+    let id = "";
+    try { id = (JSON.parse(guardado) || {}).id || ""; } catch (_) { id = guardado; }
+    await env.PENDIENTES.delete(clave);
+    if (!id) return;
+    const r = await fetch("https://api.resend.com/emails/" + id + "/cancel", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + env.RESEND_API_KEY },
+    });
+    if (r.ok) console.log("correo de vuelta cancelado: " + uid + " se ha vuelto a suscribir");
+    else console.log("NO se pudo cancelar el correo de vuelta de " + uid + ": " +
+      r.status + " " + (await r.text()));
+  } catch (e) {
+    console.log("error cancelando el correo de vuelta: " + (e && e.message ? e.message : e));
   }
 }
 

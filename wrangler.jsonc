@@ -17,6 +17,11 @@
     "TEST_UID": "scBKEdN5ngQz60QlxWWCrBciTyP2",
     "TEST_PLANTILLA": "bienvenida"
   },
+  // Donde apuntamos los correos de vuelta que quedan programados, para poder
+  // cancelarlos si la persona se suscribe antes de que salgan.
+  "kv_namespaces": [
+    { "binding": "PENDIENTES", "id": "d7badad70a0c4de792ed39307556e54b" }
+  ],
   "observability": { "enabled": true },
   "assets": {
     "directory": "./dist",
